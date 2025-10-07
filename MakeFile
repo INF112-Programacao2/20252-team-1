@@ -1,0 +1,33 @@
+CXX := g++
+CXXFLAGS := -Wall -Wextra -std=c++17
+
+LDFLAGS := -lsfml-graphics -lsfml-window -lsfml-system
+
+SRC_DIR := src
+OBJ_DIR := obj
+
+TARGET := main
+
+SRCS := $(wildcard $(SRC_DIR)/*.cpp)
+
+OBJS := $(patsubst $(SRC_DIR)/%.cpp,$(OBJ_DIR)/%.o,$(SRCS))
+
+all: $(TARGET)
+
+# gera .o
+$(TARGET): $(OBJS)
+	$(CXX) $(CXXFLAGS) -o $@ $^ $(LDFLAGS)
+
+# compila
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp | $(OBJ_DIR)
+	$(CXX) $(CXXFLAGS) -c $< -o $@
+
+# cria o /obj
+$(OBJ_DIR):
+	mkdir -p $(OBJ_DIR)
+
+# remove o /obj
+clean:
+	rm -rf $(OBJ_DIR) $(TARGET)
+
+.PHONY: all clean
