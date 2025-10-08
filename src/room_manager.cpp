@@ -58,5 +58,10 @@ void RoomManager::run(double dt) {
         return;
     }
 
-    _curr_room->run(dt);
+    _curr_room->run(dt, _event_queue);
+    _event_queue.clear();
+}
+
+void RoomManager::add_event(sf::Event event) {
+    _event_queue.push_back(event);
 }

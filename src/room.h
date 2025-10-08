@@ -18,7 +18,7 @@ public:
     virtual void start() = 0;
 
     // roda todo frame (dt e o delta time), tem que dar override
-    virtual void run(double _dt) = 0;
+    virtual void run(double _dt, const std::vector<sf::Event> &event_queue) = 0;
 
     // roda toda vez que a sala e fechada, tem que dar override
     virtual void end() = 0;

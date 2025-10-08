@@ -9,24 +9,29 @@ OBJ_DIR := obj
 TARGET := main
 
 SRCS := $(wildcard $(SRC_DIR)/*.cpp)
-
 OBJS := $(patsubst $(SRC_DIR)/%.cpp,$(OBJ_DIR)/%.o,$(SRCS))
+
+# arquivo de dependencia
+DEPS := $(OBJS:.o=.d)
 
 all: $(TARGET)
 
-# gera .o
+# gera o executável
 $(TARGET): $(OBJS)
 	$(CXX) $(CXXFLAGS) -o $@ $^ $(LDFLAGS)
 
-# compila
+# compila .cpp para .o e gera .d
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp | $(OBJ_DIR)
-	$(CXX) $(CXXFLAGS) -c $< -o $@
+	$(CXX) $(CXXFLAGS) -MMD -c $< -o $@
 
-# cria o /obj
+# cria o diretório /obj
 $(OBJ_DIR):
 	mkdir -p $(OBJ_DIR)
 
-# remove o /obj
+# inclui arquivos .d (dependências de headers)
+-include $(DEPS)
+
+# remove binário e objetos
 clean:
 	rm -rf $(OBJ_DIR) $(TARGET)
 

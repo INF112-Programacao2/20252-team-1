@@ -4,6 +4,8 @@
 #include "room.h"
 #include <string>
 #include <unordered_map>
+#include <vector>
+#include <SFML/Graphics.hpp>
 
 //? Talvez usar um enum ao inves de strings
 
@@ -12,6 +14,7 @@ class RoomManager {
 private:
     Room *_curr_room, *_last_room;
     std::unordered_map<std::string, Room *> _room_map;
+    std::vector<sf::Event> _event_queue;
 
 public:
     RoomManager(std::string start_room_name, Room *start_room);
@@ -29,7 +32,11 @@ public:
     // Muda para a ultima sala visitada (se existir)
     void rollback_room();
 
+    // Roda a sala atual
     void run(double dt);
+
+    // Adiciona eventos da window pra passar uma lista para a sala atual
+    void add_event(sf::Event event);
 };
 
 #endif

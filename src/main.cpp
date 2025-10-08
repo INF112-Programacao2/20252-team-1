@@ -1,25 +1,38 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
 #include "room_manager.h"
+#include "game_room.h"
 
 int main() {
-    sf::RenderWindow window(sf::VideoMode({800, 600}), "Jogo");
+    // deixa em tela cheia
+    sf::VideoMode desktop = sf::VideoMode::getDesktopMode();
+    sf::RenderWindow window(
+        sf::VideoMode(desktop.width, desktop.height),
+        "Jogo",
+        sf::Style::Titlebar | sf::Style::Close);
+
+    window.setPosition(sf::Vector2i(0, 0));
+    window.setVerticalSyncEnabled(true);
+
+    GameRoom game_room(window);
+    RoomManager room_manager("game", &game_room);
+
+    sf::Clock delta_clock; // calcula o delta time (segundos entre o ultimo frame)
 
     // loop principal
     while (window.isOpen()) {
         sf::Event event;
-        if (window.pollEvent(event)) {
-            if (event.type == sf::Event::Closed)
+        while (window.pollEvent(event)) {
+            //! fecha a janela quando aperta 'R' ou clica no botao (somente debug)
+            if ((event.type == sf::Event::Closed) ||
+                (event.type == sf::Event::KeyReleased && event.key.code == sf::Keyboard::R)) {
                 window.close();
+            }
+
+            room_manager.add_event(event);
         }
 
-        // exemplo:
-        sf::CircleShape circle = sf::CircleShape(75.0);
-        circle.setFillColor(sf::Color::Green);
-
-        window.clear();
-        window.draw(circle);
-        window.display();
+        room_manager.run(delta_clock.restart().asSeconds());
     }
 
     return 0;
