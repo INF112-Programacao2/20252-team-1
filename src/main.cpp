@@ -4,14 +4,21 @@
 #include "game_room.h"
 
 int main() {
+    //! somente para debug
+    const bool FULLSCREEN = false;
+
     // deixa em tela cheia
     sf::VideoMode desktop = sf::VideoMode::getDesktopMode();
     sf::RenderWindow window(
         sf::VideoMode(desktop.width, desktop.height),
         "Jogo",
-        sf::Style::Titlebar | sf::Style::Close);
+        (FULLSCREEN ? (sf::Style::Titlebar | sf::Style::Close) : 7));
 
-    window.setPosition(sf::Vector2i(0, 0));
+    if (FULLSCREEN)
+        window.setPosition(sf::Vector2i(0, 0));
+    else
+        window.setPosition(sf::Vector2i(50, 50));
+
     window.setVerticalSyncEnabled(true);
 
     GameRoom game_room(window);

@@ -12,8 +12,7 @@ void GameRoom::run(double dt, const std::vector<sf::Event> &event_queue) {
 
     _window.clear(sf::Color(50, 150, 50));
 
-    _troop_manager.draw_slots();
-    _troop_manager.draw_shop();
+    _troop_manager.draw();
 
     _window.display();
 }

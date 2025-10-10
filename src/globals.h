@@ -6,6 +6,7 @@
 // * constantes globais do projeto que fazem sentido compartilhar
 
 enum TroopType {
+    None = -1,
     Troop1 = 0,
     Troop2,
     Troop3,
@@ -16,5 +17,8 @@ enum TroopType {
 
 const int GAME_SIZE_X = sf::VideoMode::getDesktopMode().width - 400;
 const int TROOP_COUNT = 6;
+
+const int TROOP_ROWS = 4;
+const int TROOP_COLS = 3;
 
 #endif

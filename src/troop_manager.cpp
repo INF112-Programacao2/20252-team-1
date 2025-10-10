@@ -7,17 +7,18 @@ const float gap_y = 200;
 
 const float troop_radius = 75;
 
-const int rows = 4;
-const int cols = 3;
-
 TroopManager::TroopManager(Room &room) : _room(room) {
+    // inicializando array de tropas vazio
+    for (size_t i = 0; i < _troops.size(); i++)
+        _troops[i] = nullptr;
+
     // criando array de cartas (itens da loja)
-    const int cols = 2;
     const int item_width = 125;
 
     float size_x = get_window().getView().getSize().x;
     int shop_width = size_x - GAME_SIZE_X;
 
+    const int cols = 2;
     float gap = (shop_width - item_width * cols) / (float)(cols + 1);
 
     int idx = 0;
@@ -33,23 +34,25 @@ TroopManager::TroopManager(Room &room) : _room(room) {
 }
 
 TroopManager::~TroopManager() {
-    for (auto card : _shop_cards)
+    for (TroopCard *card : _shop_cards)
         delete card;
+
+    for (Troop *troop : _troops)
+        delete troop;
 };
 
 sf::RenderWindow &TroopManager::get_window() {
     return _room.get_window();
 }
 
-/// Retorna -1 se a posicao nao esta em nenhum slot, ou o numero do slot se
-/// estiver
+/// Retorna -1 se a posicao nao esta em nenhum slot, ou o numero do slot se estiver
 int TroopManager::position_to_slot(sf::Vector2f position) {
-    for (int i = 0; i < rows; i++) {
-        for (int j = 0; j < cols; j++) {
+    for (int i = 0; i < TROOP_ROWS; i++) {
+        for (int j = 0; j < TROOP_COLS; j++) {
             float dx = position.x - troop_radius - (offset.x + gap_x * j);
             float dy = position.y - troop_radius - (offset.y + gap_y * i);
             if (dx * dx + dy * dy < troop_radius * troop_radius)
-                return i * cols + j;
+                return i * TROOP_COLS + j;
         }
     }
 
@@ -67,13 +70,13 @@ void TroopManager::draw_slots() {
     sf::CircleShape slot_ui = sf::CircleShape(troop_radius);
     slot_ui.setFillColor(sf::Color(255, 255, 255, 100));
 
-    for (int i = 0; i < rows; i++) {
-        for (int j = 0; j < cols; j++) {
+    for (int i = 0; i < TROOP_ROWS; i++) {
+        for (int j = 0; j < TROOP_COLS; j++) {
             slot_ui.setPosition(
                 sf::Vector2f(offset.x + gap_x * j, offset.y + gap_y * i));
 
             // efeito hover
-            int slot_idx = i * cols + j;
+            int slot_idx = i * TROOP_COLS + j;
             if (position_to_slot(get_mouse_pos()) == slot_idx)
                 slot_ui.setFillColor(sf::Color(255, 255, 255, 200));
             else
@@ -101,13 +104,64 @@ void TroopManager::draw_shop() {
         card->draw();
 }
 
-void TroopManager::run(double _dt, const std::vector<sf::Event> &event_queue) {
+void TroopManager::draw() {
+    draw_slots();
+    draw_shop();
+
+    for (Troop *troop : _troops) {
+        if (troop == nullptr)
+            continue;
+
+        troop->draw();
+    }
+}
+
+// Coloca uma tropa no slot do mouse (se tiver em um slot)
+void TroopManager::place_troop() {
+    int slot = position_to_slot(get_mouse_pos());
+    if (slot != -1 && _troops[slot] == nullptr && _cursor_troop != TroopType::None) {
+        int row = slot / TROOP_COLS;
+        int col = slot % TROOP_COLS;
+        sf::Vector2f position(
+            25 + offset.x + gap_x * col,
+            25 + offset.y + gap_y * row);
+
+        // TODO: escolher a classe certa pra cada tipo de tropa
+        Troop *troop = new Troop(position, 5.0, _room);
+
+        _troops[slot] = troop;
+        _cursor_troop = TroopType::None;
+    }
+
+    if (_cursor_troop != TroopType::None)
+        return;
+
+    for (TroopCard *card : _shop_cards) {
+        if (card->position_meeting(get_mouse_pos()))
+            _cursor_troop = card->get_troop();
+    }
+}
+
+void TroopManager::run(double dt, const std::vector<sf::Event> &event_queue) {
+    for (Troop *troop : _troops) {
+        if (troop == nullptr)
+            continue;
+
+        troop->run(dt);
+    }
+
+    // colocando uma tropa no mapa
     for (const sf::Event &event : event_queue) {
-        if (event.type == sf::Event::MouseButtonReleased &&
-            event.mouseButton.button == sf::Mouse::Left) {
-            for (TroopCard *card : _shop_cards) {
-                if (card->position_meeting(get_mouse_pos()))
-                    std::cout << card->get_troop() << std::endl;
+        if (event.type == sf::Event::MouseButtonReleased) {
+            if (event.mouseButton.button == sf::Mouse::Left)
+                place_troop();
+            else if (event.mouseButton.button == sf::Mouse::Right) {
+                // remove a tropa do slot que o mouse esta (se estiver em um)
+                int slot = position_to_slot(get_mouse_pos());
+                if (slot != -1 && _troops[slot] != nullptr) {
+                    delete _troops[slot];
+                    _troops[slot] = nullptr;
+                }
             }
         }
     }
