@@ -15,6 +15,9 @@ enum TroopType {
     Troop6,
 };
 
+const sf::Vector2u DESKTOP_SIZE = sf::Vector2u(
+    sf::VideoMode::getDesktopMode().width, sf::VideoMode::getDesktopMode().height);
+
 const int GAME_SIZE_X = sf::VideoMode::getDesktopMode().width - 400;
 const int TROOP_COUNT = 6;
 

@@ -2,10 +2,11 @@
 #include <iostream>
 #include "room_manager.h"
 #include "game_room.h"
+#include "game_manager.h"
 
 int main() {
     //! somente para debug
-    const bool FULLSCREEN = false;
+    const bool FULLSCREEN = true;
 
     // deixa em tela cheia
     sf::VideoMode desktop = sf::VideoMode::getDesktopMode();
