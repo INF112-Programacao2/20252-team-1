@@ -23,6 +23,8 @@ public:
     // roda toda vez que a sala e fechada, tem que dar override
     virtual void end() = 0;
 
+    sf::Vector2i get_mouse_position() { return sf::Mouse::getPosition(_window); };
+
     sf::RenderWindow &get_window() { return _window; }
 };
 

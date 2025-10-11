@@ -1,5 +1,6 @@
 #include <iostream> //! DEBUG
 #include "troop_manager.h"
+#include "solar_energy_troop.h"
 
 const sf::Vector2f offset(50, 100);
 const float gap_x = 175;
@@ -28,7 +29,7 @@ TroopManager::TroopManager(Room &room) : _room(room) {
                 sf::Vector2f(
                     size_x - shop_width + (gap * (j + 1) + item_width * j),
                     75 + 200 * i),
-                item_width, (TroopType)idx, _room);
+                item_width, (TroopType)idx, TROOP_PRICES[idx], _room);
         }
     }
 }
@@ -59,12 +60,6 @@ int TroopManager::position_to_slot(sf::Vector2f position) {
     return -1;
 }
 
-sf::Vector2f TroopManager::get_mouse_pos() {
-    return sf::Vector2f(
-        sf::Mouse::getPosition(get_window()).x,
-        sf::Mouse::getPosition(get_window()).y);
-}
-
 /// Desenha os slots das tropas no canto esquerdo
 void TroopManager::draw_slots() {
     sf::CircleShape slot_ui = sf::CircleShape(troop_radius);
@@ -77,7 +72,7 @@ void TroopManager::draw_slots() {
 
             // efeito hover
             int slot_idx = i * TROOP_COLS + j;
-            if (position_to_slot(get_mouse_pos()) == slot_idx)
+            if (position_to_slot((sf::Vector2f)_room.get_mouse_position()) == slot_idx)
                 slot_ui.setFillColor(sf::Color(255, 255, 255, 200));
             else
                 slot_ui.setFillColor(sf::Color(255, 255, 255, 100));
@@ -118,7 +113,7 @@ void TroopManager::draw() {
 
 // Coloca uma tropa no slot do mouse (se tiver em um slot)
 void TroopManager::place_troop() {
-    int slot = position_to_slot(get_mouse_pos());
+    int slot = position_to_slot((sf::Vector2f)_room.get_mouse_position());
     if (slot != -1 && _troops[slot] == nullptr && _cursor_troop != TroopType::None) {
         int row = slot / TROOP_COLS;
         int col = slot % TROOP_COLS;
@@ -127,7 +122,16 @@ void TroopManager::place_troop() {
             25 + offset.y + gap_y * row);
 
         // TODO: escolher a classe certa pra cada tipo de tropa
-        Troop *troop = new Troop(position, 5.0, _room);
+        Troop *troop;
+        switch (_cursor_troop) {
+            case TroopType::SolarEnergy:
+                troop = new SolarEnergyTroop(position, 5.0, 100, _room);
+                break;
+
+            default:
+                troop = new Troop(position, 5.0, _room);
+                break;
+        }
 
         _troops[slot] = troop;
         _cursor_troop = TroopType::None;
@@ -137,17 +141,15 @@ void TroopManager::place_troop() {
         return;
 
     for (TroopCard *card : _shop_cards) {
-        if (card->position_meeting(get_mouse_pos()))
-            _cursor_troop = card->get_troop();
+        if (card->position_meeting((sf::Vector2f)_room.get_mouse_position()))
+            _cursor_troop = card->buy();
     }
 }
 
 void TroopManager::run(double dt, const std::vector<sf::Event> &event_queue) {
     for (Troop *troop : _troops) {
-        if (troop == nullptr)
-            continue;
-
-        troop->run(dt);
+        if (troop != nullptr)
+            troop->run(dt);
     }
 
     // colocando uma tropa no mapa
@@ -157,12 +159,19 @@ void TroopManager::run(double dt, const std::vector<sf::Event> &event_queue) {
                 place_troop();
             else if (event.mouseButton.button == sf::Mouse::Right) {
                 // remove a tropa do slot que o mouse esta (se estiver em um)
-                int slot = position_to_slot(get_mouse_pos());
+                int slot = position_to_slot((sf::Vector2f)_room.get_mouse_position());
                 if (slot != -1 && _troops[slot] != nullptr) {
                     delete _troops[slot];
                     _troops[slot] = nullptr;
                 }
             }
         }
+    }
+}
+
+void TroopManager::pause() {
+    for (Troop* troop : _troops) {
+        if (troop != nullptr)
+            troop->reset_timer();
     }
 }

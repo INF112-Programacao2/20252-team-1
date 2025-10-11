@@ -1,6 +1,13 @@
 CXX := g++
-CXXFLAGS := -Wall -Wextra -std=c++17
+DEBUG ?= 0
 
+ifeq ($(DEBUG), 1)
+	CXXFLAGS += -g
+else
+	CXXFLAGS += -O2
+endif
+
+CXXFLAGS += -Wall -Wextra -std=c++17
 LDFLAGS := -lsfml-graphics -lsfml-window -lsfml-system
 
 SRC_DIR := src
@@ -11,7 +18,7 @@ TARGET := main
 SRCS := $(wildcard $(SRC_DIR)/*.cpp)
 OBJS := $(patsubst $(SRC_DIR)/%.cpp,$(OBJ_DIR)/%.o,$(SRCS))
 
-# arquivo de dependencia
+# arquivo de dependência
 DEPS := $(OBJS:.o=.d)
 
 all: $(TARGET)

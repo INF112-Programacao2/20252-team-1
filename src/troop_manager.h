@@ -20,8 +20,6 @@ private:
 
     sf::RenderWindow &get_window();
 
-    sf::Vector2f get_mouse_pos();
-
     void draw_slots();
 
     void draw_shop();
@@ -36,6 +34,8 @@ public:
     void run(double dt, const std::vector<sf::Event> &event_queue);
 
     void draw();
+
+    void pause();
 };
 
 #endif

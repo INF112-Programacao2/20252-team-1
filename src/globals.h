@@ -12,14 +12,16 @@ enum TroopType {
     Troop3,
     Troop4,
     Troop5,
-    Troop6,
+    SolarEnergy,
 };
+
+const int TROOP_COUNT = 6;
+const int TROOP_PRICES[TROOP_COUNT] = {300, 300, 300, 300, 300, 300};
 
 const sf::Vector2u DESKTOP_SIZE = sf::Vector2u(
     sf::VideoMode::getDesktopMode().width, sf::VideoMode::getDesktopMode().height);
 
 const int GAME_SIZE_X = sf::VideoMode::getDesktopMode().width - 400;
-const int TROOP_COUNT = 6;
 
 const int TROOP_ROWS = 4;
 const int TROOP_COLS = 3;

@@ -36,7 +36,7 @@ void TextButton::run(const std::vector<sf::Event> &event_queue) {
     for (const sf::Event &event : event_queue) {
         if (event.type == sf::Event::MouseButtonReleased &&
             event.mouseButton.button == sf::Mouse::Left &&
-            position_meeting(sf::Mouse::getPosition()) &&
+            position_meeting(_room.get_mouse_position()) &&
             _on_click_callback) {
             _on_click_callback();
         }
@@ -46,10 +46,9 @@ void TextButton::run(const std::vector<sf::Event> &event_queue) {
 void TextButton::draw() {
     sf::Color normal = sf::Color::White;
     sf::Color hover(150, 150, 150);
-    _draw_text.setFillColor(position_meeting(sf::Mouse::getPosition()) ? hover : normal);
+    _draw_text.setFillColor(position_meeting(_room.get_mouse_position()) ? hover : normal);
 
-    // nao precisa setar a posicao porque o position meeting ja faz isso
-    //// _draw_text.setPosition(_position);
+    _draw_text.setPosition(_position);
     _room.get_window().draw(_draw_text);
 }
 
