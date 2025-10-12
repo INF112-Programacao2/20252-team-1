@@ -52,12 +52,12 @@ void GameRoom::run(double dt, const std::vector<sf::Event> &event_queue) {
         _window.draw(pause_rect);
 
         // criando botoes
-        TextButton option_1("Continuar", _font, 50, [this]() { _paused = false; }, *this);
+        TextButton option_1("Continuar", _font, 50, [this]() { this->_paused = false; }, *this);
         option_1.center();
         option_1.offset_position(sf::Vector2f(0, -50));
         option_1.run(event_queue);
 
-        TextButton option_2("Salvar e Sair", _font, 50, [this]() { _window.close(); }, *this);
+        TextButton option_2("Salvar e Sair", _font, 50, [this]() { this->_window.close(); }, *this);
         option_2.center();
         option_2.offset_position(sf::Vector2f(0, 50));
         option_2.run(event_queue);
