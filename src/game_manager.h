@@ -18,7 +18,10 @@ public:
     }
 
     int get_points();
+
+    /// Retorna true se puder remover e false se nao tiver pontos suficientes
     bool remove_points(int points);
+
     void add_points(int points);
 
     double get_cooldown_multiplier();

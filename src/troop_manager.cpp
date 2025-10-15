@@ -1,17 +1,22 @@
-#include <iostream> //! DEBUG
+#include <iostream>
 #include "troop_manager.h"
 #include "solar_energy_troop.h"
+#include "hedgehog_troop.h"
 
-const sf::Vector2f offset(50, 100);
-const float gap_x = 175;
-const float gap_y = 200;
+const sf::Vector2f offset(50, 100); // posicao inicial dos slots (superior esquerdo)
+const float gap_x = 175; // distancia horizontal dos slots
+const float gap_y = 200; // distancia vertical dos slots
 
-const float troop_radius = 75;
+const float troop_radius = 75; // raio do slot
 
 TroopManager::TroopManager(Room &room) : _room(room) {
     // inicializando array de tropas vazio
     for (size_t i = 0; i < _troops.size(); i++)
         _troops[i] = nullptr;
+
+    // atualizando tamanho da area dos inimigos
+    sf::Vector2f start(WALL_POSITION_X + WALL_WIDTH + 50, 100);
+    _enemy_area = sf::Rect(start, sf::Vector2f(GAME_SIZE_X - 50, DESKTOP_SIZE.y - 100) - start);
 
     // criando array de cartas (itens da loja)
     const int item_width = 125;
@@ -40,13 +45,15 @@ TroopManager::~TroopManager() {
 
     for (Troop *troop : _troops)
         delete troop;
+
+    for (FieldTroop *troop : _field_troops)
+        delete troop;
 };
 
 sf::RenderWindow &TroopManager::get_window() {
     return _room.get_window();
 }
 
-/// Retorna -1 se a posicao nao esta em nenhum slot, ou o numero do slot se estiver
 int TroopManager::position_to_slot(sf::Vector2f position) {
     for (int i = 0; i < TROOP_ROWS; i++) {
         for (int j = 0; j < TROOP_COLS; j++) {
@@ -60,7 +67,6 @@ int TroopManager::position_to_slot(sf::Vector2f position) {
     return -1;
 }
 
-/// Desenha os slots das tropas no canto esquerdo
 void TroopManager::draw_slots() {
     sf::CircleShape slot_ui = sf::CircleShape(troop_radius);
     slot_ui.setFillColor(sf::Color(255, 255, 255, 100));
@@ -104,16 +110,42 @@ void TroopManager::draw() {
     draw_shop();
 
     for (Troop *troop : _troops) {
-        if (troop == nullptr)
-            continue;
+        if (troop)
+            troop->draw();
+    }
 
-        troop->draw();
+    for (FieldTroop *field_troop : _field_troops) {
+        if (field_troop)
+            field_troop->draw();
     }
 }
 
-// Coloca uma tropa no slot do mouse (se tiver em um slot)
 void TroopManager::place_troop() {
-    int slot = position_to_slot((sf::Vector2f)_room.get_mouse_position());
+    sf::Vector2f mouse_pos = (sf::Vector2f)_room.get_mouse_position();
+
+    // TODO: adicionar as outras tropas que sao do tipo FieldTroop
+    if (_cursor_troop == TroopType::Hedgehog) {
+        if (_enemy_area.contains(mouse_pos)) {
+            FieldTroop *field_troop;
+
+            switch (_cursor_troop) {
+                case TroopType::Hedgehog:
+                    field_troop = new HedgehogTroop(mouse_pos, 30.0, 2, _room);
+                    break;
+
+                default:
+                    std::cerr << "Tropa nao adicionada!" << std::endl;
+                    break;
+            }
+
+            _field_troops.push_back(field_troop);
+            _cursor_troop = TroopType::None;
+        }
+
+        return;
+    }
+
+    int slot = position_to_slot(mouse_pos);
     if (slot != -1 && _troops[slot] == nullptr && _cursor_troop != TroopType::None) {
         int row = slot / TROOP_COLS;
         int col = slot % TROOP_COLS;
@@ -128,6 +160,7 @@ void TroopManager::place_troop() {
                 troop = new SolarEnergyTroop(position, 5.0, 100, _room);
                 break;
 
+            //! DEBUG (Troop deveria ser uma interface)
             default:
                 troop = new Troop(position, 5.0, _room);
                 break;
@@ -135,14 +168,15 @@ void TroopManager::place_troop() {
 
         _troops[slot] = troop;
         _cursor_troop = TroopType::None;
+
+        return;
     }
 
-    if (_cursor_troop != TroopType::None)
-        return;
-
-    for (TroopCard *card : _shop_cards) {
-        if (card->position_meeting((sf::Vector2f)_room.get_mouse_position()))
+    if (_cursor_troop == TroopType::None) {
+        for (TroopCard *card : _shop_cards) {
+            if (card->position_meeting(mouse_pos))
             _cursor_troop = card->buy();
+        }
     }
 }
 
@@ -150,6 +184,18 @@ void TroopManager::run(double dt, const std::vector<sf::Event> &event_queue) {
     for (Troop *troop : _troops) {
         if (troop != nullptr)
             troop->run(dt);
+    }
+
+    for (int i = 0; i < _field_troops.size(); i++) {
+        FieldTroop *field_troop = _field_troops[i];
+
+        if (!field_troop)
+            _field_troops.erase(_field_troops.begin() + i--); // tira do vetor e volta o i
+        else if (field_troop->is_dead()) {
+            delete field_troop;
+            _field_troops.erase(_field_troops.begin() + i--); // tira do vetor e volta o i
+        } else
+            field_troop->run(dt);
     }
 
     // colocando uma tropa no mapa

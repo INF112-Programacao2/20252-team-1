@@ -15,3 +15,7 @@
 
 # Sprites:
 - Todos
+
+# Davi Nobre:
+- Alinhar a FieldTroop nas linhas dos inimigos
+- Criar uma versão fantasma da Troop quando está no cursor do mouse

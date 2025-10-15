@@ -21,21 +21,21 @@ public:
 
     ~RoomManager();
 
-    // Adiciona uma sala nova com um nome unico
+    /// Adiciona uma sala nova com um nome unico
     void add_room(std::string room_name, Room *room);
 
-    // Muda para uma sala que ja foi salva, via nome da sala
+    /// Muda para uma sala que ja foi salva, via nome da sala
     void change_room(std::string new_room_name);
-    // Muda para uma sala temporaria que nao e salva na memoria
+    /// Muda para uma sala temporaria que nao e salva na memoria
     void change_room(Room *temp_rom);
 
-    // Muda para a ultima sala visitada (se existir)
+    /// Muda para a ultima sala visitada (se existir)
     void rollback_room();
 
-    // Roda a sala atual
+    /// Roda a sala atual
     void run(double dt);
 
-    // Adiciona eventos da window pra passar uma lista para a sala atual
+    /// Adiciona eventos da window pra passar uma lista para a sala atual
     void add_event(sf::Event event);
 };
 

@@ -37,6 +37,7 @@ void GameRoom::run(double dt, const std::vector<sf::Event> &event_queue) {
 
     _troop_manager.draw();
 
+    // UI de pontos:
     sf::Text points_text(
         "Pontos: " + std::to_string(GameManager::get_instance().get_points()), _font, 40);
 

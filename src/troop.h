@@ -20,7 +20,7 @@ public:
 
     virtual void run(double dt);
 
-    // ativa a habilidade
+    // Ativa a habilidade
     virtual void fire();
 
     virtual void draw();

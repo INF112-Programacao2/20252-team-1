@@ -16,8 +16,9 @@ bool TroopCard::position_meeting(sf::Vector2f position) {
 void TroopCard::draw() {
     sf::RectangleShape rect(sf::Vector2f(_width, _width));
 
-    sf::Color colors[] = {sf::Color::Red, sf::Color::Green, sf::Color::Blue,
-                          sf::Color::Magenta, sf::Color::Yellow, sf::Color::White};
+    sf::Color colors[TROOP_COUNT] = {
+        sf::Color::Red, sf::Color::Green, sf::Color::Blue, sf::Color::Magenta,
+        sf::Color::Yellow, sf::Color::White, sf::Color::Cyan};
 
     rect.setFillColor(colors[_troop]);
     rect.setPosition(_position);
