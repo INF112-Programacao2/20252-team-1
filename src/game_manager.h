@@ -12,7 +12,7 @@ private:
     ~GameManager() {}
 
 public:
-    static GameManager& get_instance() {
+    static GameManager &get_instance() {
         static GameManager instance;
         return instance;
     }
@@ -28,8 +28,8 @@ public:
     void set_cooldown_multiplier(double cooldown_multiplier);
 
     // garante que nao vai ter copias
-    GameManager(const GameManager&) = delete;
-    GameManager& operator=(const GameManager&) = delete;
+    GameManager(const GameManager &) = delete;
+    GameManager &operator=(const GameManager &) = delete;
 };
 
 #endif

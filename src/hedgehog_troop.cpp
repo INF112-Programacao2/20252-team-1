@@ -1,9 +1,11 @@
 #include <iostream> //! DEBUG
 #include "hedgehog_troop.h"
 
-HedgehogTroop::HedgehogTroop(sf::Vector2f position, float activation_radius, 
-                             double activation_delay, Room &room):
-    FieldTroop(position, activation_radius, activation_delay, room) {}
+sf::Texture HedgehogTroop::_texture;
+
+HedgehogTroop::HedgehogTroop(sf::Vector2f position, float activation_radius,
+                             double activation_delay, Room &room)
+    : FieldTroop(position, activation_radius, activation_delay, room) {}
 
 void HedgehogTroop::run(double dt) {
     // bloqueia o resto se estiver morto
@@ -12,7 +14,8 @@ void HedgehogTroop::run(double dt) {
 
     // bloqueia o resto ate o cooldown acabar e se destruir
     if (_waiting_cooldown) {
-        if (_timer.getElapsedTime().asSeconds() >= _activation_delay) {
+        _timer.update(dt);
+        if (_timer.get_seconds_elapsed() >= _activation_delay) {
             // apply_area_damage();
 
             destroy();
@@ -21,23 +24,30 @@ void HedgehogTroop::run(double dt) {
         return;
     }
 
-    _timer.restart();
-
     // if (is_enemy_in_activation_radius()) {
     //     _waiting_cooldown = true;
     // }
 }
 
 void HedgehogTroop::draw() {
-    float radius = 30;
-    sf::CircleShape circle(radius);
-    circle.setPosition(_position - sf::Vector2f(radius / 2, radius / 2));
-    circle.setFillColor(sf::Color::Black);
+    float side = 60;
 
-    _room.get_window().draw(circle);
+    sf::RectangleShape rect(sf::Vector2f(side, side));
+    rect.setPosition(_position - sf::Vector2f(side / 2, side / 2));
+    rect.setTexture(&_texture);
+
+    _room.get_window().draw(rect);
 }
 
 void HedgehogTroop::destroy() {
     std::cout << "BOOOM" << std::endl;
     _dead = true;
-};
+}
+
+bool HedgehogTroop::load_texture(std::string file_path) {
+    return _texture.loadFromFile(file_path);
+}
+
+sf::Texture &HedgehogTroop::get_texture() {
+    return _texture;
+}

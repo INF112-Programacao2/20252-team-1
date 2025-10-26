@@ -41,9 +41,6 @@ public:
     void run(double dt, const std::vector<sf::Event> &event_queue);
 
     void draw();
-
-    /// Logica de pause, pausa o timer das tropas (chamado todo frame enquanto pausado)
-    void pause();
 };
 
 #endif

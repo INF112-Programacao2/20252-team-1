@@ -13,7 +13,7 @@ bool GameManager::remove_points(int points) {
     return false;
 }
 
-void GameManager::add_points(int points)  {
+void GameManager::add_points(int points) {
     _points += points;
 }
 

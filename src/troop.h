@@ -3,13 +3,14 @@
 
 #include <SFML/Graphics.hpp>
 #include "room.h"
+#include "clock.h"
 
-//TODO: transformar numa interface
+// TODO: transformar numa classe abstrata
 class Troop {
 protected:
     sf::Vector2f _position;
     double _cooldown = 2.0;
-    sf::Clock _timer;
+    Clock _timer;
     Room &_room;
 
 public:
@@ -24,9 +25,6 @@ public:
     virtual void fire();
 
     virtual void draw();
-
-    /// Reseta o timer pra quando mudar de janela ou pausar o jogo
-    void reset_timer();
 };
 
 #endif

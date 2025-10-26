@@ -4,8 +4,8 @@
 #include "hedgehog_troop.h"
 
 const sf::Vector2f offset(50, 100); // posicao inicial dos slots (superior esquerdo)
-const float gap_x = 175; // distancia horizontal dos slots
-const float gap_y = 200; // distancia vertical dos slots
+const float gap_x = 175;            // distancia horizontal dos slots
+const float gap_y = 200;            // distancia vertical dos slots
 
 const float troop_radius = 75; // raio do slot
 
@@ -36,6 +36,17 @@ TroopManager::TroopManager(Room &room) : _room(room) {
                     75 + 200 * i),
                 item_width, (TroopType)idx, TROOP_PRICES[idx], _room);
         }
+    }
+
+    // inicializando texturas das tropas:
+    if (!HedgehogTroop::load_texture("assets/ourico.png")) {
+        std::cout << "Nao achou o asset do ourico!\n";
+        std::exit(0);
+    }
+
+    if (!SolarEnergyTroop::load_texture("assets/energia solar.png")) {
+        std::cout << "Nao achou o asset energia solar!\n";
+        std::exit(0);
     }
 }
 
@@ -109,14 +120,51 @@ void TroopManager::draw() {
     draw_slots();
     draw_shop();
 
+    // desenha tropas
     for (Troop *troop : _troops) {
         if (troop)
             troop->draw();
     }
 
+    // desenha tropas de campo
     for (FieldTroop *field_troop : _field_troops) {
         if (field_troop)
             field_troop->draw();
+    }
+
+    // desenha tropa no cursor
+    if (_cursor_troop == TroopType::None)
+        return;
+
+    sf::Texture *texture;
+
+    switch (_cursor_troop) {
+    case TroopType::Hedgehog:
+        texture = &HedgehogTroop::get_texture();
+        break;
+
+    case TroopType::SolarEnergy:
+        texture = &SolarEnergyTroop::get_texture();
+        break;
+
+    default:
+        texture = nullptr;
+        break;
+    }
+
+    if (texture) {
+        sf::RectangleShape sprite(sf::Vector2f(60, 60));
+        sprite.setPosition((sf::Vector2f)_room.get_mouse_position() - sf::Vector2f(30, 30));
+        sprite.setTexture(texture);
+        sprite.setFillColor(sf::Color(255, 255, 255, 150));
+
+        get_window().draw(sprite);
+    } else {
+        sf::CircleShape circle(30);
+        circle.setPosition((sf::Vector2f)_room.get_mouse_position() - sf::Vector2f(30, 30));
+        circle.setFillColor(sf::Color(255, 0, 0, 100));
+
+        get_window().draw(circle);
     }
 }
 
@@ -129,13 +177,13 @@ void TroopManager::place_troop() {
             FieldTroop *field_troop;
 
             switch (_cursor_troop) {
-                case TroopType::Hedgehog:
-                    field_troop = new HedgehogTroop(mouse_pos, 30.0, 2, _room);
-                    break;
+            case TroopType::Hedgehog:
+                field_troop = new HedgehogTroop(mouse_pos, 30.0, 2, _room);
+                break;
 
-                default:
-                    std::cerr << "Tropa nao adicionada!" << std::endl;
-                    break;
+            default:
+                std::cerr << "Tropa nao adicionada!" << std::endl;
+                break;
             }
 
             _field_troops.push_back(field_troop);
@@ -156,14 +204,14 @@ void TroopManager::place_troop() {
         // TODO: escolher a classe certa pra cada tipo de tropa
         Troop *troop;
         switch (_cursor_troop) {
-            case TroopType::SolarEnergy:
-                troop = new SolarEnergyTroop(position, 5.0, 100, _room);
-                break;
+        case TroopType::SolarEnergy:
+            troop = new SolarEnergyTroop(position, 5.0, 100, _room);
+            break;
 
-            //! DEBUG (Troop deveria ser uma interface)
-            default:
-                troop = new Troop(position, 5.0, _room);
-                break;
+        //! DEBUG (Troop deveria ser uma interface)
+        default:
+            troop = new Troop(position, 5.0, _room);
+            break;
         }
 
         _troops[slot] = troop;
@@ -175,7 +223,7 @@ void TroopManager::place_troop() {
     if (_cursor_troop == TroopType::None) {
         for (TroopCard *card : _shop_cards) {
             if (card->position_meeting(mouse_pos))
-            _cursor_troop = card->buy();
+                _cursor_troop = card->buy();
         }
     }
 }
@@ -212,12 +260,5 @@ void TroopManager::run(double dt, const std::vector<sf::Event> &event_queue) {
                 }
             }
         }
-    }
-}
-
-void TroopManager::pause() {
-    for (Troop* troop : _troops) {
-        if (troop != nullptr)
-            troop->reset_timer();
     }
 }

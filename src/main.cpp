@@ -8,6 +8,8 @@ int main() {
     //! somente para debug
     const bool FULLSCREEN = true;
 
+    //! CONCERTAR A RESOLUCAO DA TELA (NAO FUNCIONA EM TODO PC)
+
     // deixa em tela cheia
     sf::VideoMode desktop = sf::VideoMode::getDesktopMode();
     sf::RenderWindow window(

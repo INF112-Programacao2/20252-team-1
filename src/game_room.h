@@ -16,11 +16,11 @@ public:
 
     ~GameRoom();
 
-    void start() override;
+    void start();
 
-    void run(double dt, const std::vector<sf::Event> &event_queue) override;
+    void run(double dt, const std::vector<sf::Event> &event_queue);
 
-    void end() override;
+    void end();
 };
 
 #endif

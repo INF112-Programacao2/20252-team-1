@@ -3,12 +3,13 @@
 
 #include <SFML/Graphics.hpp>
 #include "room.h"
+#include "clock.h"
 
 // Classe abstrata para tropas que ficam na area dos inimigos
 class FieldTroop {
 protected:
     sf::Vector2f _position;
-    sf::Clock _timer;
+    Clock _timer;
     float _activation_radius;
     double _activation_delay;
     bool _dead = false;
@@ -18,9 +19,9 @@ protected:
     virtual void destroy() = 0;
 
 public:
-    FieldTroop(sf::Vector2f position, float activation_radius, double activation_delay, Room &room):
-        _position(position), _activation_radius(activation_radius),
-        _activation_delay(activation_delay), _room(room) {}
+    FieldTroop(sf::Vector2f position, float activation_radius, double activation_delay, Room &room)
+        : _position(position), _activation_radius(activation_radius),
+          _activation_delay(activation_delay), _room(room) {}
 
     virtual ~FieldTroop() = default;
 

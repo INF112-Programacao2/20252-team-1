@@ -1,7 +1,12 @@
 # Bug ou Feature?
 - O efeito de hover nos slots aparece mesmo durante o menu de pause
-- Os timers das tropas não são sincronizados de cara
-- Quando pausa o jogo os timers de todas as tropas ficam sincronizados
+- A tropa selecionada pra comprar aparece no menu de pause
+
+# Bugs:
+- Fullscreen não funciona em todos os PCs
+
+# Refatoração:
+- Usar um sistema melhor pra definir o tamanho da tela e onde posicionar as coisas
 
 # Pra fazer:
 - HealthManager
@@ -18,4 +23,3 @@
 
 # Davi Nobre:
 - Alinhar a FieldTroop nas linhas dos inimigos
-- Criar uma versão fantasma da Troop quando está no cursor do mouse

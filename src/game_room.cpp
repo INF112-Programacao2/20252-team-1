@@ -29,8 +29,6 @@ void GameRoom::run(double dt, const std::vector<sf::Event> &event_queue) {
 
     if (!_paused)
         _troop_manager.run(dt, event_queue);
-    else
-        _troop_manager.pause();
 
     //* desenhando:
     _window.clear(sf::Color(50, 150, 50));

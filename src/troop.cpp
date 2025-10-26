@@ -11,8 +11,10 @@ Troop::Troop(sf::Vector2f position, double cooldown, Room &room)
 Troop::~Troop() = default;
 
 void Troop::run(double dt) {
+    _timer.update(dt);
+
     double cooldown = _cooldown * GameManager::get_instance().get_cooldown_multiplier();
-    if (_timer.getElapsedTime().asSeconds() >= cooldown) {
+    if (_timer.get_seconds_elapsed() >= cooldown) {
         fire();
         _timer.restart();
     }
@@ -28,8 +30,4 @@ void Troop::draw() {
     circle.setFillColor(sf::Color::Red);
 
     _room.get_window().draw(circle);
-}
-
-void Troop::reset_timer() {
-    _timer.restart();
 }
