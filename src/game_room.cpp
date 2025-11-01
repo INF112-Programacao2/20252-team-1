@@ -5,16 +5,7 @@
 #include "game_manager.h"
 
 GameRoom::GameRoom(sf::RenderWindow &window)
-    : Room(window), _troop_manager(*this) {
-    // carrega a fonte pra ser usada nos menus
-    if (!_font.loadFromFile("assets/Minecraftia-Regular.ttf")) {
-        std::cerr << "***\nNao foi possivel encontrar a fonte em \""
-                  << "assets/Minecraftia-Regular.ttf"
-                  << "\"\n***" << std::endl;
-
-        std::exit(0);
-    }
-}
+    : Room(window), _troop_manager(*this), _font(GameManager::get_instance().get_font()) {}
 
 GameRoom::~GameRoom() = default;
 

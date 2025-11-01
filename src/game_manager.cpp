@@ -21,6 +21,14 @@ double GameManager::get_cooldown_multiplier() {
     return _cooldown_multiplier;
 }
 
+sf::Font &GameManager::get_font() {
+    return _font;
+}
+
+bool GameManager::load_font(std::string file_path) {
+    return _font.loadFromFile(file_path);
+}
+
 void GameManager::set_cooldown_multiplier(double cooldown_multiplier) {
     _cooldown_multiplier = cooldown_multiplier;
 }

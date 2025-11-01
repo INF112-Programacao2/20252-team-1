@@ -239,7 +239,7 @@ void TroopManager::run(double dt, const std::vector<sf::Event> &event_queue) {
 
         if (!field_troop)
             _field_troops.erase(_field_troops.begin() + i--); // tira do vetor e volta o i
-        else if (field_troop->is_dead()) {
+        else if (field_troop->is_destroyed()) {
             delete field_troop;
             _field_troops.erase(_field_troops.begin() + i--); // tira do vetor e volta o i
         } else

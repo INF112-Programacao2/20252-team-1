@@ -1,11 +1,24 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
+#include <random>
+#include <chrono>
 #include "room_manager.h"
 #include "game_room.h"
 #include "game_manager.h"
 
 int main() {
-    //! somente para debug
+    std::srand(std::time(0));
+
+    // carrega a fonte no game manager
+    if (!GameManager::get_instance().load_font("assets/Minecraftia-Regular.ttf")) {
+        std::cerr << "***\nNao foi possivel encontrar a fonte em \""
+                  << "assets/Minecraftia-Regular.ttf"
+                  << "\"\n***" << std::endl;
+
+        std::exit(0);
+    }
+
+    //! false somente para debug
     const bool FULLSCREEN = true;
 
     //! CONCERTAR A RESOLUCAO DA TELA (NAO FUNCIONA EM TODO PC)

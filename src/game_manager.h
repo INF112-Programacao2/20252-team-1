@@ -1,10 +1,13 @@
 #ifndef GAME_MANAGER_H
 #define GAME_MANAGER_H
 
+#include <SFML/Graphics.hpp>
+
 class GameManager {
 private:
     int _points = 1000;
     double _cooldown_multiplier = 1.0; // entre 0-1, quanto menor mais rapido o cooldown
+    sf::Font _font;
 
 private:
     GameManager() {}
@@ -26,6 +29,9 @@ public:
 
     double get_cooldown_multiplier();
     void set_cooldown_multiplier(double cooldown_multiplier);
+
+    sf::Font &get_font();
+    bool load_font(std::string file_path);
 
     // garante que nao vai ter copias
     GameManager(const GameManager &) = delete;

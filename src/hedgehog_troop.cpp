@@ -9,7 +9,7 @@ HedgehogTroop::HedgehogTroop(sf::Vector2f position, float activation_radius,
 
 void HedgehogTroop::run(double dt) {
     // bloqueia o resto se estiver morto
-    if (_dead)
+    if (_destroyed)
         return;
 
     // bloqueia o resto ate o cooldown acabar e se destruir
@@ -41,7 +41,7 @@ void HedgehogTroop::draw() {
 
 void HedgehogTroop::destroy() {
     std::cout << "BOOOM" << std::endl;
-    _dead = true;
+    _destroyed = true;
 }
 
 bool HedgehogTroop::load_texture(std::string file_path) {

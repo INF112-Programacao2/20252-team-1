@@ -2,11 +2,13 @@
 #define SOLAR_ENERGY_TROOP_H
 
 #include "troop.h"
+#include "dissolving_text.h"
 #include <string>
 
 class SolarEnergyTroop : public Troop {
 private:
     int _increase_points;
+    DissolvingText _points_text;
     static sf::Texture _texture;
 
 public:
@@ -14,6 +16,8 @@ public:
 
     /// Gera pontos
     void fire() override;
+
+    void run(double dt) override;
 
     void draw() override;
 

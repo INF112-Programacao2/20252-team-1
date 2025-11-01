@@ -1,15 +1,35 @@
 #include "solar_energy_troop.h"
 #include "game_manager.h"
+#include <random>
+#include <sstream>
 
 sf::Texture SolarEnergyTroop::_texture;
 
 SolarEnergyTroop::SolarEnergyTroop(sf::Vector2f position, double cooldown, int increase_points, Room &room)
-    : Troop(position, cooldown, room) {
+    : Troop(position, cooldown, room), _points_text(position, 1, room) {
+    sf::Text text("", GameManager::get_instance().get_font(), 30);
+    _points_text.set_text(text);
     _increase_points = increase_points;
 }
 
 void SolarEnergyTroop::fire() {
+    // spawna texto informando quantos pontos gerou
+    std::stringstream s;
+    s << "+" << _increase_points;
+
+    _points_text.set_string(s.str());
+    float rand_x = (std::rand() / (float)RAND_MAX) * 40 - 20;
+    _points_text.set_position(_position + sf::Vector2f(rand_x, 0));
+    _points_text.restart();
+
+    // aumenta a score
     GameManager::get_instance().add_points(_increase_points);
+}
+
+void SolarEnergyTroop::run(double dt) {
+    Troop::run(dt);
+
+    _points_text.run(dt);
 }
 
 void SolarEnergyTroop::draw() {
@@ -18,6 +38,7 @@ void SolarEnergyTroop::draw() {
     sprite.setTexture(&_texture);
 
     _room.get_window().draw(sprite);
+    _points_text.draw();
 }
 
 sf::Texture &SolarEnergyTroop::get_texture() {

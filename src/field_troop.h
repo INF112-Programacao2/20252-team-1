@@ -12,7 +12,7 @@ protected:
     Clock _timer;
     float _activation_radius;
     double _activation_delay;
-    bool _dead = false;
+    bool _destroyed = false;
     Room &_room;
 
 protected:
@@ -29,7 +29,7 @@ public:
 
     virtual void draw() = 0;
 
-    bool is_dead() { return _dead; }
+    bool is_destroyed() { return _destroyed; }
 
     void reset_timer() { _timer.restart(); };
 };
