@@ -24,6 +24,9 @@ private:
 
     sf::RenderWindow &get_window();
 
+    /// Retorna a posicao do mouse ajustada pra linha do inimigo
+    sf::Vector2f get_line_pos();
+
     /// Desenha os slots das tropas no canto esquerdo
     void draw_slots();
 

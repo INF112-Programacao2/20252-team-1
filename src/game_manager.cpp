@@ -1,4 +1,6 @@
 #include "game_manager.h"
+#include <SFML/Graphics/Font.hpp>
+#include <SFML/Graphics.hpp>
 
 int GameManager::get_points() {
     return _points;

@@ -2,6 +2,7 @@
 #define GAME_MANAGER_H
 
 #include <SFML/Graphics.hpp>
+#include <string>
 
 class GameManager {
 private:

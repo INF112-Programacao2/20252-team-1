@@ -7,6 +7,7 @@
 class Room {
 protected:
     sf::RenderWindow &_window;
+    bool _paused = false;
 
 public:
     Room(sf::RenderWindow &window)
@@ -26,6 +27,8 @@ public:
     sf::Vector2i get_mouse_position() { return sf::Mouse::getPosition(_window); };
 
     sf::RenderWindow &get_window() { return _window; }
+
+    bool is_paused() { return _paused; }
 };
 
 #endif

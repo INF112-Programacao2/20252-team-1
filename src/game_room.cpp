@@ -14,6 +14,7 @@ void GameRoom::start() {}
 void GameRoom::run(double dt, const std::vector<sf::Event> &event_queue) {
     //* rodando:
     for (const sf::Event &event : event_queue) {
+        // ESC pausa
         if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Escape)
             _paused = !_paused;
     }

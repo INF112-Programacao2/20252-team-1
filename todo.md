@@ -1,12 +1,14 @@
 # Bug ou Feature?
-- O efeito de hover nos slots aparece mesmo durante o menu de pause
-- A tropa selecionada pra comprar aparece no menu de pause
+- Nada ainda
 
 # Bugs:
 - Fullscreen não funciona em todos os PCs
 
 # Refatoração:
 - Usar um sistema melhor pra definir o tamanho da tela e onde posicionar as coisas
+
+# Perguntas sobre implementação:
+- FieldTroop deveria ser posicionada em grid (horizontalmente)?
 
 # Pra fazer:
 - HealthManager
@@ -22,4 +24,6 @@
 - Todos
 
 # Davi Nobre:
-- Alinhar a FieldTroop nas linhas dos inimigos
+- Alinhar a FieldTroop nas linhas dos inimigos (melhorar sistema de linha)
+- Poder cancelar uma compra com botão direito
+- Efeito de hover nas cartas da loja

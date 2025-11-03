@@ -11,10 +11,12 @@ private:
     float _width;
     TroopType _troop;
     int _price;
+    sf::Texture *_texture;
     Room &_room;
 
 public:
-    TroopCard(sf::Vector2f position, float _width, TroopType _troop, int price, Room &room);
+    TroopCard(sf::Vector2f position, float _width, TroopType _troop, int price, 
+              sf::Texture *texture, Room &room);
 
     /// Checa se uma posicao esta dentro dessa carta (util pra detectar o mouse dentro)
     bool position_meeting(sf::Vector2f position);

@@ -1,7 +1,9 @@
-#include <iostream>
 #include "troop_manager.h"
 #include "solar_energy_troop.h"
 #include "hedgehog_troop.h"
+#include "game_manager.h"
+#include <iostream>
+#include <cmath>
 
 const sf::Vector2f offset(50, 100); // posicao inicial dos slots (superior esquerdo)
 const float gap_x = 175;            // distancia horizontal dos slots
@@ -9,14 +11,40 @@ const float gap_y = 200;            // distancia vertical dos slots
 
 const float troop_radius = 75; // raio do slot
 
+// helper
+sf::Texture *get_troop_texture(TroopType troop) {
+    switch (troop) {
+    case TroopType::Hedgehog:
+        return &HedgehogTroop::get_texture();
+
+    case TroopType::SolarEnergy:
+        return &SolarEnergyTroop::get_texture();
+
+    default:
+        return nullptr;
+    }
+}
+
 TroopManager::TroopManager(Room &room) : _room(room) {
+    // inicializando texturas das tropas:
+    if (!HedgehogTroop::load_texture("assets/ourico.png")) {
+        std::cerr << "Nao achou o asset do ourico!\n";
+        std::exit(0);
+    }
+
+    if (!SolarEnergyTroop::load_texture("assets/energia solar.png")) {
+        std::cerr << "Nao achou o asset energia solar!\n";
+        std::exit(0);
+    }
+
     // inicializando array de tropas vazio
     for (size_t i = 0; i < _troops.size(); i++)
         _troops[i] = nullptr;
 
     // atualizando tamanho da area dos inimigos
     sf::Vector2f start(WALL_POSITION_X + WALL_WIDTH + 50, 100);
-    _enemy_area = sf::Rect(start, sf::Vector2f(GAME_SIZE_X - 50, DESKTOP_SIZE.y - 100) - start);
+    _enemy_area = sf::Rect(
+        start, sf::Vector2f(GAME_SIZE_X - 50, DESKTOP_SIZE.y - 100) - start);
 
     // criando array de cartas (itens da loja)
     const int item_width = 125;
@@ -30,23 +58,14 @@ TroopManager::TroopManager(Room &room) : _room(room) {
     int idx = 0;
     for (int i = 0; i <= TROOP_COUNT / cols; i++) {
         for (int j = 0; j < cols && idx < TROOP_COUNT; j++, idx++) {
+            sf::Vector2f position(
+                size_x - shop_width + (gap * (j + 1) + item_width * j),
+                75 + 200 * i);
+
             _shop_cards[idx] = new TroopCard(
-                sf::Vector2f(
-                    size_x - shop_width + (gap * (j + 1) + item_width * j),
-                    75 + 200 * i),
-                item_width, (TroopType)idx, TROOP_PRICES[idx], _room);
+                position, item_width, (TroopType)idx, TROOP_PRICES[idx],
+                get_troop_texture((TroopType)idx), _room);
         }
-    }
-
-    // inicializando texturas das tropas:
-    if (!HedgehogTroop::load_texture("assets/ourico.png")) {
-        std::cout << "Nao achou o asset do ourico!\n";
-        std::exit(0);
-    }
-
-    if (!SolarEnergyTroop::load_texture("assets/energia solar.png")) {
-        std::cout << "Nao achou o asset energia solar!\n";
-        std::exit(0);
     }
 }
 
@@ -89,9 +108,11 @@ void TroopManager::draw_slots() {
 
             // efeito hover
             int slot_idx = i * TROOP_COLS + j;
-            if (position_to_slot((sf::Vector2f)_room.get_mouse_position()) == slot_idx)
+            if (!_room.is_paused() &&
+                position_to_slot((sf::Vector2f)_room.get_mouse_position()) == slot_idx) {
+
                 slot_ui.setFillColor(sf::Color(255, 255, 255, 200));
-            else
+            } else
                 slot_ui.setFillColor(sf::Color(255, 255, 255, 100));
 
             get_window().draw(slot_ui);
@@ -116,6 +137,12 @@ void TroopManager::draw_shop() {
         card->draw();
 }
 
+sf::Vector2f TroopManager::get_line_pos() {
+    float div = DESKTOP_SIZE.y / 4;
+    int line = std::max(0, std::min(3, (int)floor(_room.get_mouse_position().y / div)));
+    return sf::Vector2f(_room.get_mouse_position().x, line * div + div / 2);
+}
+
 void TroopManager::draw() {
     draw_slots();
     draw_shop();
@@ -133,35 +160,29 @@ void TroopManager::draw() {
     }
 
     // desenha tropa no cursor
-    if (_cursor_troop == TroopType::None)
+    if (_cursor_troop == TroopType::None || _room.is_paused())
         return;
 
-    sf::Texture *texture;
+    bool is_fieldtroop = (_cursor_troop == TroopType::Hedgehog);
 
-    switch (_cursor_troop) {
-    case TroopType::Hedgehog:
-        texture = &HedgehogTroop::get_texture();
-        break;
-
-    case TroopType::SolarEnergy:
-        texture = &SolarEnergyTroop::get_texture();
-        break;
-
-    default:
-        texture = nullptr;
-        break;
-    }
+    sf::Vector2f mouse_pos = (sf::Vector2f)_room.get_mouse_position();
+    sf::Texture *texture = get_troop_texture(_cursor_troop);
 
     if (texture) {
         sf::RectangleShape sprite(sf::Vector2f(60, 60));
-        sprite.setPosition((sf::Vector2f)_room.get_mouse_position() - sf::Vector2f(30, 30));
+        sf::Vector2f position = is_fieldtroop ? get_line_pos() : mouse_pos;
+        sprite.setPosition(position - sf::Vector2f(30, 30));
         sprite.setTexture(texture);
-        sprite.setFillColor(sf::Color(255, 255, 255, 150));
+
+        if (is_fieldtroop && !_enemy_area.contains(get_line_pos()))
+            sprite.setFillColor(sf::Color(255, 0, 0, 150));
+        else
+            sprite.setFillColor(sf::Color(255, 255, 255, 150));
 
         get_window().draw(sprite);
     } else {
         sf::CircleShape circle(30);
-        circle.setPosition((sf::Vector2f)_room.get_mouse_position() - sf::Vector2f(30, 30));
+        circle.setPosition(mouse_pos - sf::Vector2f(30, 30));
         circle.setFillColor(sf::Color(255, 0, 0, 100));
 
         get_window().draw(circle);
@@ -173,12 +194,12 @@ void TroopManager::place_troop() {
 
     // TODO: adicionar as outras tropas que sao do tipo FieldTroop
     if (_cursor_troop == TroopType::Hedgehog) {
-        if (_enemy_area.contains(mouse_pos)) {
+        if (_enemy_area.contains(get_line_pos())) {
             FieldTroop *field_troop;
 
             switch (_cursor_troop) {
             case TroopType::Hedgehog:
-                field_troop = new HedgehogTroop(mouse_pos, 30.0, 2, _room);
+                field_troop = new HedgehogTroop(get_line_pos(), 30.0, 2, _room);
                 break;
 
             default:

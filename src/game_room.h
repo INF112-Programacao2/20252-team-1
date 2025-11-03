@@ -9,7 +9,6 @@ class GameRoom : public Room {
 private:
     TroopManager _troop_manager;
     sf::Font &_font;
-    bool _paused = false;
 
 public:
     GameRoom(sf::RenderWindow &window);

@@ -30,8 +30,6 @@ public:
     virtual void draw() = 0;
 
     bool is_destroyed() { return _destroyed; }
-
-    void reset_timer() { _timer.restart(); };
 };
 
 #endif
