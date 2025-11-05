@@ -1,5 +1,4 @@
 #include <SFML/Graphics.hpp>
-#include <sstream>
 #include "troop_card.h"
 #include "game_manager.h"
 
@@ -22,27 +21,39 @@ void TroopCard::draw() {
 
     sf::Color colors[TROOP_COUNT] = {
         sf::Color::Red, sf::Color::Green, sf::Color::Blue, sf::Color::Magenta,
-        sf::Color::Yellow, sf::Color::White, sf::Color::Cyan};
+        sf::Color::Cyan, sf::Color::White, sf::Color::Yellow};
 
     rect.setFillColor(_texture ? sf::Color(0, 0, 0, 100) : colors[_troop]);
     _room.get_window().draw(rect);
 
     // desenhando o sprite
     if (_texture) {
-        sf::RectangleShape sprite(sf::Vector2f(_width, _width));
-        sprite.setPosition(_position);
-        sprite.setTexture(_texture);
+        rect.setFillColor(sf::Color::White);
+        rect.setTexture(_texture);
 
-        _room.get_window().draw(sprite);
+        _room.get_window().draw(rect);
     }
 
-    // desenhando o preco
-    std::stringstream s;
-    s << _price;
+    // overlay de hover
+    rect.setTexture(0);
+    if (position_meeting((sf::Vector2f)_room.get_mouse_position())) {
+        rect.setFillColor(sf::Color(0, 0, 0, 50));
+        _room.get_window().draw(rect);
+    }
 
-    sf::Text price_text(s.str(), GameManager::get_instance().get_font(), 30);
+    // desenhando o preco e o fundo dele
+    sf::Text price_text(
+        std::to_string(_price), GameManager::get_instance().get_font(), 30);
     price_text.setPosition(_position + sf::Vector2f(30, _width - 20));
 
+    sf::FloatRect bounds = price_text.getGlobalBounds();
+
+    const float padding = 5;
+    rect.setFillColor(sf::Color::Black);
+    rect.setPosition(bounds.getPosition() - sf::Vector2f(padding, padding));
+    rect.setSize(sf::Vector2f(bounds.width + 2 * padding, bounds.height + 2 * padding));
+
+    _room.get_window().draw(rect);
     _room.get_window().draw(price_text);
 }
 

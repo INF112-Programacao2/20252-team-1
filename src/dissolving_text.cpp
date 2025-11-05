@@ -21,6 +21,7 @@ void DissolvingText::draw() {
     if (_hidden)
         return;
 
+    // muda a opacidade com o tempo
     sf::Color new_color = _text.getFillColor();
     new_color.a = 255 * (1.0 - _clock.get_seconds_elapsed() / _dissolving_time);
 

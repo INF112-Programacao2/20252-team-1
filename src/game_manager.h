@@ -34,6 +34,12 @@ public:
     sf::Font &get_font();
     bool load_font(std::string file_path);
 
+    /// Retorna o indice da linha mais proxima, comecando do 0
+    static int get_line(sf::Vector2f position);
+
+    /// Retorna a posicao com o y fixado na linha mais proxima
+    static sf::Vector2f get_line_pos(sf::Vector2f position);
+
     // garante que nao vai ter copias
     GameManager(const GameManager &) = delete;
     GameManager &operator=(const GameManager &) = delete;

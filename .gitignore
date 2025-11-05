@@ -2,3 +2,6 @@ main
 obj
 .vscode
 *.txt
+program
+MakeFileW
+obj_windows

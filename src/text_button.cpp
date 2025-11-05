@@ -37,7 +37,7 @@ void TextButton::run(const std::vector<sf::Event> &event_queue) {
             event.mouseButton.button == sf::Mouse::Left &&
             position_meeting(_room.get_mouse_position()) &&
             _on_click_callback) {
-            _on_click_callback();
+            _on_click_callback(); // chama o callback quando clicado
         }
     }
 }

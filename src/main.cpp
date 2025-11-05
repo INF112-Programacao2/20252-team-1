@@ -18,24 +18,26 @@ int main() {
         std::exit(0);
     }
 
-    //! false somente para debug
-    const bool FULLSCREEN = true;
+    const bool FULLSCREEN = true; //! Use false somente para debug
+    const bool WINDOWS = false;   //! DEBUG, coloque true se esta compilando para windows
 
-    //! CONCERTAR A RESOLUCAO DA TELA (NAO FUNCIONA EM TODO PC)
+    // TODO: CONCERTAR A RESOLUCAO DA TELA (NAO FUNCIONA EM TODO PC)
 
     // deixa em tela cheia
     sf::VideoMode desktop = sf::VideoMode::getDesktopMode();
     sf::RenderWindow window(
         sf::VideoMode(desktop.width, desktop.height),
         "Jogo",
-        (FULLSCREEN ? (sf::Style::Titlebar | sf::Style::Close) : 7));
+        (FULLSCREEN ? (WINDOWS ? sf::Style::Fullscreen
+                               : (sf::Style::Titlebar | sf::Style::Close))
+                    : 7));
 
     if (FULLSCREEN)
         window.setPosition(sf::Vector2i(0, 0));
     else
         window.setPosition(sf::Vector2i(50, 50));
 
-    window.setVerticalSyncEnabled(true);
+    window.setVerticalSyncEnabled(false);
 
     GameRoom game_room(window);
     RoomManager room_manager("game", &game_room);

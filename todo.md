@@ -3,6 +3,7 @@
 
 # Bugs:
 - Fullscreen não funciona em todos os PCs
+- Leitura da posição do mouse para de funcionar se não for fullscreen
 
 # Refatoração:
 - Usar um sistema melhor pra definir o tamanho da tela e onde posicionar as coisas
@@ -24,6 +25,3 @@
 - Todos
 
 # Davi Nobre:
-- Alinhar a FieldTroop nas linhas dos inimigos (melhorar sistema de linha)
-- Poder cancelar uma compra com botão direito
-- Efeito de hover nas cartas da loja

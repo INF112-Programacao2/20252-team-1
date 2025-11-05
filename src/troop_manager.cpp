@@ -2,14 +2,12 @@
 #include "solar_energy_troop.h"
 #include "hedgehog_troop.h"
 #include "game_manager.h"
+#include "globals.h"
 #include <iostream>
-#include <cmath>
 
-const sf::Vector2f offset(50, 100); // posicao inicial dos slots (superior esquerdo)
-const float gap_x = 175;            // distancia horizontal dos slots
-const float gap_y = 200;            // distancia vertical dos slots
-
-const float troop_radius = 75; // raio do slot
+// posicao inicial dos slots (superior esquerdo)
+const sf::Vector2f offset(50, HUD_HEIGHT + PADDING_Y);
+const float gap_x = 175; // distancia horizontal dos slots
 
 // helper
 sf::Texture *get_troop_texture(TroopType troop) {
@@ -42,9 +40,9 @@ TroopManager::TroopManager(Room &room) : _room(room) {
         _troops[i] = nullptr;
 
     // atualizando tamanho da area dos inimigos
-    sf::Vector2f start(WALL_POSITION_X + WALL_WIDTH + 50, 100);
+    sf::Vector2f start(WALL_POSITION_X + WALL_WIDTH + 50, HUD_HEIGHT);
     _enemy_area = sf::Rect(
-        start, sf::Vector2f(GAME_SIZE_X - 50, DESKTOP_SIZE.y - 100) - start);
+        start, sf::Vector2f(GAME_SIZE_X - 50, DESKTOP_SIZE.y) - start);
 
     // criando array de cartas (itens da loja)
     const int item_width = 125;
@@ -87,9 +85,9 @@ sf::RenderWindow &TroopManager::get_window() {
 int TroopManager::position_to_slot(sf::Vector2f position) {
     for (int i = 0; i < TROOP_ROWS; i++) {
         for (int j = 0; j < TROOP_COLS; j++) {
-            float dx = position.x - troop_radius - (offset.x + gap_x * j);
-            float dy = position.y - troop_radius - (offset.y + gap_y * i);
-            if (dx * dx + dy * dy < troop_radius * troop_radius)
+            float dx = position.x - TROOP_RADIUS - (offset.x + gap_x * j);
+            float dy = position.y - TROOP_RADIUS - (offset.y + GAP_Y * i);
+            if (dx * dx + dy * dy < TROOP_RADIUS * TROOP_RADIUS)
                 return i * TROOP_COLS + j;
         }
     }
@@ -98,13 +96,13 @@ int TroopManager::position_to_slot(sf::Vector2f position) {
 }
 
 void TroopManager::draw_slots() {
-    sf::CircleShape slot_ui = sf::CircleShape(troop_radius);
+    sf::CircleShape slot_ui = sf::CircleShape(TROOP_RADIUS);
     slot_ui.setFillColor(sf::Color(255, 255, 255, 100));
 
     for (int i = 0; i < TROOP_ROWS; i++) {
         for (int j = 0; j < TROOP_COLS; j++) {
             slot_ui.setPosition(
-                sf::Vector2f(offset.x + gap_x * j, offset.y + gap_y * i));
+                sf::Vector2f(offset.x + gap_x * j, offset.y + GAP_Y * i));
 
             // efeito hover
             int slot_idx = i * TROOP_COLS + j;
@@ -138,9 +136,7 @@ void TroopManager::draw_shop() {
 }
 
 sf::Vector2f TroopManager::get_line_pos() {
-    float div = DESKTOP_SIZE.y / 4;
-    int line = std::max(0, std::min(3, (int)floor(_room.get_mouse_position().y / div)));
-    return sf::Vector2f(_room.get_mouse_position().x, line * div + div / 2);
+    return GameManager::get_line_pos((sf::Vector2f)_room.get_mouse_position());
 }
 
 void TroopManager::draw() {
@@ -220,7 +216,7 @@ void TroopManager::place_troop() {
         int col = slot % TROOP_COLS;
         sf::Vector2f position(
             25 + offset.x + gap_x * col,
-            25 + offset.y + gap_y * row);
+            25 + offset.y + GAP_Y * row);
 
         // TODO: escolher a classe certa pra cada tipo de tropa
         Troop *troop;
@@ -278,6 +274,11 @@ void TroopManager::run(double dt, const std::vector<sf::Event> &event_queue) {
                 if (slot != -1 && _troops[slot] != nullptr) {
                     delete _troops[slot];
                     _troops[slot] = nullptr;
+                } else if (_cursor_troop != TroopType::None) {
+                    // cancela a compra e reembolsa
+                    // (se o mouse estiver fora de um slot ocupado)
+                    GameManager::get_instance().add_points(TROOP_PRICES[_cursor_troop]);
+                    _cursor_troop = TroopType::None;
                 }
             }
         }

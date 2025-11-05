@@ -8,3 +8,8 @@ Um jogo de tower defense inspirado em Plants vs Zombies com temática ambiental 
 - Enzo de Freitas Alencar
 - Gabriel Silvério Tavares
 - Pedro Henrique Carvalho Martins
+
+# Controles:
+ESC: pausa o jogo
+MOUSE ESQUERDO: para comprar e posicionar as tropas
+MOUSE DIREITO: remove uma tropa se o mouse estiver em cima dela ou cancela a compra

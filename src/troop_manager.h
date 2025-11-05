@@ -16,7 +16,7 @@ private:
     std::array<Troop *, (TROOP_ROWS * TROOP_COLS)> _troops;
     std::vector<FieldTroop *> _field_troops;
     TroopType _cursor_troop = TroopType::None; // tropa selecionada no mouse
-    sf::Rect<float> _enemy_area; // retangulo da area dos inimigos
+    sf::Rect<float> _enemy_area;               // retangulo da area dos inimigos
 
 private:
     /// Retorna -1 se a posicao nao esta em nenhum slot, ou o numero do slot se estiver
@@ -24,7 +24,7 @@ private:
 
     sf::RenderWindow &get_window();
 
-    /// Retorna a posicao do mouse ajustada pra linha do inimigo
+    /// Retorna a posicao do mouse com o y fixado na linha mais proxima
     sf::Vector2f get_line_pos();
 
     /// Desenha os slots das tropas no canto esquerdo

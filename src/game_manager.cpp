@@ -1,6 +1,6 @@
 #include "game_manager.h"
-#include <SFML/Graphics/Font.hpp>
-#include <SFML/Graphics.hpp>
+#include "globals.h"
+#include <cmath>
 
 int GameManager::get_points() {
     return _points;
@@ -33,4 +33,16 @@ bool GameManager::load_font(std::string file_path) {
 
 void GameManager::set_cooldown_multiplier(double cooldown_multiplier) {
     _cooldown_multiplier = cooldown_multiplier;
+}
+
+int GameManager::get_line(sf::Vector2f position) {
+    int y = position.y - HUD_HEIGHT - PADDING_Y - TROOP_RADIUS - GAP_Y / 2;
+    int line = (int)floor(y / GAP_Y);
+    return std::max(-1, std::min(TROOP_ROWS - 2, line)) + 1;
+}
+
+sf::Vector2f GameManager::get_line_pos(sf::Vector2f position) {
+    return sf::Vector2f(
+        position.x,
+        HUD_HEIGHT + PADDING_Y + TROOP_RADIUS + get_line(position) * GAP_Y);
 }

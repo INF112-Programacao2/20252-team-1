@@ -1,4 +1,5 @@
 #include <iostream>
+#include <cmath>
 #include "game_room.h"
 #include "globals.h"
 #include "text_button.h"
@@ -26,6 +27,11 @@ void GameRoom::run(double dt, const std::vector<sf::Event> &event_queue) {
     _window.clear(sf::Color(50, 150, 50));
 
     _troop_manager.draw();
+
+    // HUD
+    sf::RectangleShape hud_rect(sf::Vector2f(GAME_SIZE_X, HUD_HEIGHT));
+    hud_rect.setFillColor(sf::Color(135, 75, 0));
+    _window.draw(hud_rect);
 
     // UI de pontos:
     sf::Text points_text(
@@ -56,6 +62,11 @@ void GameRoom::run(double dt, const std::vector<sf::Event> &event_queue) {
         option_1.draw();
         option_2.draw();
     }
+
+    // !DEBUG (MOSTRA FRAMERATE)
+    sf::Text fps(std::to_string(round(1.0 / dt)).substr(0, 5), _font, 30);
+    fps.setPosition(sf::Vector2f(50, 50));
+    _window.draw(fps);
 
     _window.display();
 }
