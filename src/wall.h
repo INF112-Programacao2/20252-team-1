@@ -2,11 +2,11 @@
 #define WALL_H
 
 #include <SFML/Graphics.hpp>
-#include "HealthManager.h"
-#include "Clock.h"
-#include "Room.h"
-#include "EnemyProjectile.h"
-#include "Enemy.h"
+#include "healthmanager.h"
+#include "clock.h"
+#include "room.h"
+#include "enemyprojectile.h"
+#include "enemy.h"
 
 class Wall {
 private:
@@ -19,9 +19,9 @@ private:
 private:
     void destroy(); // callback do _health
 public:
-    Muro(int base_life, int spike_damage);
+    Wall(int base_life, int spike_damage);
 
-    ~Muro();
+    ~Wall();
 
     // Recebe dano de um projetil
     void hit(EnemyProjectile& projectile, int damage);
