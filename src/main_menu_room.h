@@ -10,7 +10,6 @@ class MainMenuRoom : public Room {
 private:
     sf::Font _font;
     TextButton _start_button;
-    TextButton _options_button;
     TextButton _credits_button;
     TextButton _exit_button;
 
