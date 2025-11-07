@@ -5,6 +5,7 @@
 #include "room_manager.h"
 #include "game_room.h"
 #include "game_manager.h"
+#include "main_menu_room.h"
 
 int main() {
     std::srand(std::time(0));
@@ -15,7 +16,7 @@ int main() {
                   << "assets/Minecraftia-Regular.ttf"
                   << "\"\n***" << std::endl;
 
-        std::exit(0);
+        std::exit(1);
     }
 
     const bool FULLSCREEN = true; //! Use false somente para debug
@@ -39,8 +40,14 @@ int main() {
 
     window.setVerticalSyncEnabled(false);
 
-    GameRoom game_room(window);
-    RoomManager room_manager("game", &game_room);
+    RoomManager room_manager;
+
+    GameRoom game_room(window, room_manager);
+    MainMenuRoom main_menu_room(window, room_manager);
+
+    room_manager.add_room("main_menu", &main_menu_room);
+    room_manager.add_room("game", &game_room);
+    room_manager.change_room("main_menu");
 
     sf::Clock delta_clock; // calcula o delta time (segundos entre o ultimo frame)
 

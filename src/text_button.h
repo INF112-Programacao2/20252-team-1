@@ -28,6 +28,8 @@ public:
     /// Centraliza no meio da tela o texto
     void center();
 
+    void set_on_click_callback(std::function<void()> on_click_callback);
+
     /// Roda todo frame pra checar se o botao foi pressionado
     void run(const std::vector<sf::Event> &event_queue);
 

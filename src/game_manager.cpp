@@ -42,7 +42,9 @@ int GameManager::get_line(sf::Vector2f position) {
 }
 
 sf::Vector2f GameManager::get_line_pos(sf::Vector2f position) {
-    return sf::Vector2f(
-        position.x,
-        HUD_HEIGHT + PADDING_Y + TROOP_RADIUS + get_line(position) * GAP_Y);
+    return sf::Vector2f(position.x, get_line_pos(get_line(position)));
+}
+
+float GameManager::get_line_pos(int line) {
+    return HUD_HEIGHT + PADDING_Y + TROOP_RADIUS + line * GAP_Y;
 }

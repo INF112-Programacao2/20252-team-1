@@ -27,12 +27,12 @@ TroopManager::TroopManager(Room &room) : _room(room) {
     // inicializando texturas das tropas:
     if (!HedgehogTroop::load_texture("assets/ourico.png")) {
         std::cerr << "Nao achou o asset do ourico!\n";
-        std::exit(0);
+        std::exit(1);
     }
 
     if (!SolarEnergyTroop::load_texture("assets/energia solar.png")) {
         std::cerr << "Nao achou o asset energia solar!\n";
-        std::exit(0);
+        std::exit(1);
     }
 
     // inicializando array de tropas vazio

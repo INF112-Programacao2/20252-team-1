@@ -3,15 +3,18 @@
 
 #include <SFML/Graphics.hpp>
 
+class RoomManager;
+
 // Classe abstrata para salas do jogo
 class Room {
 protected:
     sf::RenderWindow &_window;
+    RoomManager &_room_manager;
     bool _paused = false;
 
 public:
-    Room(sf::RenderWindow &window)
-        : _window(window) {}
+    Room(sf::RenderWindow &window, RoomManager &room_manager)
+        : _window(window), _room_manager(room_manager) {}
 
     virtual ~Room() = default;
 

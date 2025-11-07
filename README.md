@@ -10,6 +10,8 @@ Um jogo de tower defense inspirado em Plants vs Zombies com temática ambiental 
 - Pedro Henrique Carvalho Martins
 
 # Controles:
-ESC: pausa o jogo
-MOUSE ESQUERDO: para comprar e posicionar as tropas
-MOUSE DIREITO: remove uma tropa se o mouse estiver em cima dela ou cancela a compra
+**ESC:** pausa o jogo
+
+**MOUSE ESQUERDO:** para comprar e posicionar as tropas
+
+**MOUSE DIREITO:** remove uma tropa se o mouse estiver em cima dela ou cancela a compra

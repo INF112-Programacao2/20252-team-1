@@ -5,8 +5,9 @@
 #include "text_button.h"
 #include "game_manager.h"
 
-GameRoom::GameRoom(sf::RenderWindow &window)
-    : Room(window), _troop_manager(*this), _font(GameManager::get_instance().get_font()) {}
+GameRoom::GameRoom(sf::RenderWindow &window, RoomManager &room_manager)
+    : Room(window, room_manager), _troop_manager(*this),
+      _font(GameManager::get_instance().get_font()) {}
 
 GameRoom::~GameRoom() = default;
 

@@ -22,7 +22,7 @@ protected:
     Room &_room;
     sf::RectangleShape _shape;
 protected:
-    // chama o WaveManager pra remover essa instancia e adiciona os pontos
+    /// Chama o WaveManager pra remover essa instancia e adiciona os pontos
     virtual void destroy(); // Esperar o WaveManager ficar pronto
 
     bool can_walk(double next_position);
@@ -38,7 +38,7 @@ public:
 
     virtual void draw();
 
-    // verifica se a posicao colide com o inimigo
+    /// Verifica se a posicao colide com o inimigo
     bool collide(sf::Vector2f position);
 
     //bool is_destroyed() { return _health.is_dead(); }

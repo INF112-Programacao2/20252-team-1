@@ -31,6 +31,10 @@ void TextButton::center() {
     _position = (sf::Vector2f)DESKTOP_SIZE * .5f - offset;
 }
 
+void TextButton::set_on_click_callback(std::function<void()> on_click_callback) {
+    _on_click_callback = std::move(on_click_callback);
+}
+
 void TextButton::run(const std::vector<sf::Event> &event_queue) {
     for (const sf::Event &event : event_queue) {
         if (event.type == sf::Event::MouseButtonReleased &&

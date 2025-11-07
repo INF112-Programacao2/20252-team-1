@@ -39,6 +39,8 @@ public:
 
     /// Retorna a posicao com o y fixado na linha mais proxima
     static sf::Vector2f get_line_pos(sf::Vector2f position);
+    /// Retorna a posicao y da linha
+    static float get_line_pos(int line);
 
     // garante que nao vai ter copias
     GameManager(const GameManager &) = delete;

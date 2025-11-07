@@ -11,7 +11,7 @@ private:
     sf::Font &_font;
 
 public:
-    GameRoom(sf::RenderWindow &window);
+    GameRoom(sf::RenderWindow &window, RoomManager &room_manager);
 
     ~GameRoom();
 

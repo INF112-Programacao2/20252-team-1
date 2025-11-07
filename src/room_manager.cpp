@@ -1,6 +1,8 @@
 #include "room_manager.h"
 #include <iostream>
 
+RoomManager::RoomManager(): _curr_room(nullptr), _last_room(nullptr) {}
+
 RoomManager::RoomManager(std::string start_room_name, Room *start_room) {
     _curr_room = start_room;
     _last_room = nullptr;
@@ -37,7 +39,8 @@ void RoomManager::change_room(Room *temp_room) {
     _last_room = _curr_room;
     _curr_room = temp_room;
 
-    _last_room->end();
+    if (_last_room)
+        _last_room->end();
     _curr_room->start();
 }
 

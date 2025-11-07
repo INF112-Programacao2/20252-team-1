@@ -17,6 +17,7 @@ private:
     std::vector<sf::Event> _event_queue;
 
 public:
+    RoomManager();
     RoomManager(std::string start_room_name, Room *start_room);
 
     ~RoomManager();
