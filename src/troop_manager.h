@@ -9,9 +9,11 @@
 #include "field_troop.h"
 #include "globals.h"
 
+class GameRoom;
+
 class TroopManager {
 private:
-    Room &_room;
+    GameRoom &_room;
     std::array<TroopCard *, TROOP_COUNT> _shop_cards;
     std::array<Troop *, (TROOP_ROWS * TROOP_COLS)> _troops;
     std::vector<FieldTroop *> _field_troops;
@@ -37,7 +39,7 @@ private:
     void place_troop();
 
 public:
-    TroopManager(Room &room);
+    TroopManager(GameRoom &room);
 
     ~TroopManager();
 

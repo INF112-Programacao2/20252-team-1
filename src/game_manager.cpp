@@ -38,7 +38,7 @@ void GameManager::set_cooldown_multiplier(double cooldown_multiplier) {
 int GameManager::get_line(sf::Vector2f position) {
     int y = position.y - HUD_HEIGHT - PADDING_Y - TROOP_RADIUS - GAP_Y / 2;
     int line = (int)floor(y / GAP_Y);
-    return std::max(-1, std::min(TROOP_ROWS - 2, line)) + 1;
+    return std::max(-1, std::min(TROOP_ROWS - 2, line)) + 2;
 }
 
 sf::Vector2f GameManager::get_line_pos(sf::Vector2f position) {
@@ -46,5 +46,5 @@ sf::Vector2f GameManager::get_line_pos(sf::Vector2f position) {
 }
 
 float GameManager::get_line_pos(int line) {
-    return HUD_HEIGHT + PADDING_Y + TROOP_RADIUS + line * GAP_Y;
+    return HUD_HEIGHT + PADDING_Y + TROOP_RADIUS + (line - 1) * GAP_Y;
 }
