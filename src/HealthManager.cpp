@@ -56,7 +56,7 @@ void HealthManager::draw_health_bar(sf::RenderWindow& window, sf::Vector2f posit
     float life_ratio = static_cast<float>(_life) / static_cast<float>(_max_life);
 
     sf::RectangleShape foreground(sf::Vector2f(bar_width * life_ratio, bar_height));
-    foreground.setFillColor(sf::Color(0, 0, 255)); //cor verde pra vida cheia
+    foreground.setFillColor(sf::Color(0, 255, 0)); //cor verde pra vida cheia
     foreground.setPosition(position);
 
     // Desenha as barras
