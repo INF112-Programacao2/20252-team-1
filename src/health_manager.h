@@ -6,8 +6,8 @@
 
 class HealthManager {
 private:
-    int _max_life; // vida maxima
-    int _life; // vida atual
+    int _max_life;                            // vida maxima
+    int _life;                                // vida atual
     std::function<void()> _on_death_callback; // callback quando vida <= 0
 public:
     HealthManager(int max_life, std::function<void()> on_death_callback);
@@ -24,7 +24,7 @@ public:
 
     int get_life() const;
 
-	void increase_max_life(int amount); 
+    void increase_max_life(int amount);
 
     void increase_life(int amount);
 
@@ -33,7 +33,7 @@ public:
 
     // So mostra se a vida nao estiver cheia.
     // Origem e o canto superior esquerdo Gabriel: Decidi botar origem customizavel para teste, mudo se precisar
-    void draw_health_bar(sf::RenderWindow& window, sf::Vector2f position);
+    void draw_health_bar(sf::RenderWindow &window, sf::Vector2f position);
 };
 
 #endif

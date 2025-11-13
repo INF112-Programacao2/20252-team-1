@@ -6,11 +6,11 @@
 #include "game_manager.h"
 
 GameRoom::GameRoom(
-	sf::RenderWindow& window, RoomManager& room_manager, int base_life, int spike_damage)
-	: Room(window, room_manager),
-    _troop_manager(*this),
-	_font(GameManager::get_instance().get_font()),
-	_wall(base_life, spike_damage, *this) {
+    sf::RenderWindow &window, RoomManager &room_manager, int base_life, int spike_damage)
+    : Room(window, room_manager),
+      _troop_manager(*this),
+      _font(GameManager::get_instance().get_font()),
+      _wall(base_life, spike_damage, *this) {
 }
 
 GameRoom::~GameRoom() = default;
@@ -31,8 +31,7 @@ void GameRoom::run(double dt, const std::vector<sf::Event> &event_queue) {
     //* desenhando:
     _window.clear(sf::Color(50, 150, 50));
 
-    _wall.draw_wall();
-
+    _wall.draw();
     _troop_manager.draw();
 
     // HUD

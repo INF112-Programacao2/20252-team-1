@@ -5,7 +5,7 @@
 #include "health_manager.h"
 #include "clock.h"
 #include "room.h"
-//#include "enemyprojectile.h"
+// #include "enemyprojectile.h"
 #include "enemy.h"
 
 class Wall {
@@ -15,21 +15,21 @@ private:
     Clock _burning_clock;
     int _spike_damage;
     sf::Rect<float> _collider;
-    Room& _room;
+    Room &_room;
+
 private:
     void destroy(); // callback do _health
 public:
-    Wall(int base_life, int spike_damage, Room& room);
+    Wall(int base_life, int spike_damage, Room &room);
 
     ~Wall();
-    
-	void draw_wall(); // desenha o muro
 
+    void draw();
 
     // Recebe dano de um projetil
-    //void hit(EnemyProjectile& projectile, int damage); //comentado enquanto n tem enemy projectile
+    // void hit(EnemyProjectile& projectile, int damage); //comentado enquanto n tem enemy projectile
     // Recebe dano de um inimigo
-    //void hit(Enemy& enemy, int damage);
+    // void hit(Enemy& enemy, int damage);
 
     // Retorna se a posicao esta colidindo com o muro
     bool collide(sf::Vector2f position);
