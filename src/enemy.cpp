@@ -6,14 +6,16 @@
 
 Enemy::Enemy(int base_life, int damage, int line, double base_cooldown, double points, Room &room)
     : _damage(damage), _line(line), _base_cooldown(base_cooldown), _points(points), _room(room),
-      _shape(sf::Vector2f(50.0, 50.0)) { // _shape ta com um tamanho de teste
+      _shape(sf::Vector2f(100.0, 100.0)) { // _shape ta com um tamanho de teste
+
     //_health.set_life(base_life);
-    _position = GAME_SIZE_X;
+    _position_x = GAME_SIZE_X;
     _cooldown = 0;
     _shape.setFillColor(sf::Color::Red);
-    float y_pos = HUD_HEIGHT + PADDING_Y + (_line * GAP_Y);
-    _shape.setPosition(_position, y_pos);
-    }
+
+    // numeros magicos por enquanto
+    _shape.setPosition(get_position() - sf::Vector2f(50, 50));
+}
 
 Enemy::~Enemy() = default;
 
@@ -21,43 +23,45 @@ int Enemy::get_line() {
     return _line;
 }
 
+sf::Vector2f Enemy::get_position() {
+    return sf::Vector2f(_position_x + _shape.getGlobalBounds().width / 2,
+                        GameManager::get_line_pos(_line));
+}
+
 bool Enemy::can_walk(double next_position) {
-    if(next_position <= (WALL_POSITION_X + WALL_WIDTH)) {
-        return false;
-    }
-    return true; 
+    return next_position > WALL_POSITION_X + WALL_WIDTH;
 }
 
 void Enemy::attack() {}
 
 void Enemy::run(double dt) {
-    //if(_health.is_dead()) {
-    //    return; 
-    //}
+    // if(_health.is_dead()) {
+    //     return;
+    // }
 
-    if(_cooldown > 0) {
+    if (_cooldown > 0) {
         _cooldown -= dt;
     }
 
-    double speed = 50; // 50 pixels por segundo(teste)
-    double next_position_x = _position - (speed * dt); // Calcula a proxima posicao
+    double speed = 50;                                   // 50 pixels por segundo(teste)
+    double next_position_x = _position_x - (speed * dt); // Calcula a proxima posicao
 
-    if(can_walk(next_position_x)) {
+    if (can_walk(next_position_x)) {
         // Caso ele possa andar para a proxima posicao
-        _position = next_position_x; // Atualiza a posicao atual
-        _shape.setPosition(_position, _shape.getPosition().y); // Atualiza o x
-    } 
-    else {
+        _position_x = next_position_x;                           // Atualiza a posicao atual
+        _shape.setPosition(_position_x, _shape.getPosition().y); // Atualiza o x
+    } else {
         // Caso nao possa mais andar (chegou no muro)
-        if (_cooldown <= 0) {  // E tenha acabado o cooldown de ataque
-            attack();  // o inimigo ataca
+        if (_cooldown <= 0) {           // E tenha acabado o cooldown de ataque
+            attack();                   // o inimigo ataca
             _cooldown = _base_cooldown; // e o timer reseta
         }
     }
 }
 
 void Enemy::damage(int life) {
-    //_health.decrease_life(life);
+    std::cout << "OUCH " << life << std::endl;
+    //_health.decrease_life(life * GameManager::get_instance().get_damage_multiplier());
 }
 
 void Enemy::draw() {

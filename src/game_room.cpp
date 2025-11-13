@@ -10,6 +10,7 @@ GameRoom::GameRoom(
     : Room(window, room_manager),
       _troop_manager(*this),
       _font(GameManager::get_instance().get_font()),
+      _wave_manager(*this),
       _wall(base_life, spike_damage, *this) {
 }
 
@@ -25,14 +26,17 @@ void GameRoom::run(double dt, const std::vector<sf::Event> &event_queue) {
             _paused = !_paused;
     }
 
-    if (!_paused)
+    if (!_paused) {
         _troop_manager.run(dt, event_queue);
+        _wave_manager.run(dt);
+    }
 
     //* desenhando:
     _window.clear(sf::Color(50, 150, 50));
 
     _wall.draw();
     _troop_manager.draw();
+    _wave_manager.draw();
 
     // HUD
     sf::RectangleShape hud_rect(sf::Vector2f(GAME_SIZE_X, HUD_HEIGHT));
@@ -78,3 +82,11 @@ void GameRoom::run(double dt, const std::vector<sf::Event> &event_queue) {
 }
 
 void GameRoom::end() {}
+
+WaveManager &GameRoom::get_wave_manager() {
+    return _wave_manager;
+}
+
+Wall &GameRoom::get_wall() {
+    return _wall;
+}

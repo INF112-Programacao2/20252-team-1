@@ -2,6 +2,7 @@
 #define HEDGEHOG_TROOP_H
 
 #include "field_troop.h"
+#include "game_room.h"
 
 class HedgehogTroop : public FieldTroop {
 private:
@@ -12,7 +13,7 @@ private:
     void destroy();
 
 public:
-    HedgehogTroop(sf::Vector2f position, float activation_radius, double activation_delay, Room &room);
+    HedgehogTroop(sf::Vector2f position, float activation_radius, double activation_delay, GameRoom &room);
 
     void run(double dt);
 

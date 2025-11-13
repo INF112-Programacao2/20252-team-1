@@ -8,6 +8,7 @@ class GameManager {
 private:
     int _points = 1000;
     double _cooldown_multiplier = 1.0; // entre 0-1, quanto menor mais rapido o cooldown
+    double _damage_multiplier = 1.0;   // quanto maior mais dano da nos inimigos
     sf::Font _font;
 
 private:
@@ -30,6 +31,9 @@ public:
 
     double get_cooldown_multiplier();
     void set_cooldown_multiplier(double cooldown_multiplier);
+
+    double get_damage_multiplier();
+    void set_damage_multiplier(double damage_multiplier);
 
     sf::Font &get_font();
     bool load_font(std::string file_path);

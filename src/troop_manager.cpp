@@ -2,6 +2,7 @@
 #include "solar_energy_troop.h"
 #include "hedgehog_troop.h"
 #include "game_manager.h"
+#include "game_room.h"
 #include "globals.h"
 #include <iostream>
 
@@ -23,7 +24,7 @@ sf::Texture *get_troop_texture(TroopType troop) {
     }
 }
 
-TroopManager::TroopManager(Room &room) : _room(room) {
+TroopManager::TroopManager(GameRoom &room) : _room(room) {
     // inicializando texturas das tropas:
     if (!HedgehogTroop::load_texture("assets/ourico.png")) {
         std::cerr << "Nao achou o asset do ourico!\n";
@@ -195,7 +196,7 @@ void TroopManager::place_troop() {
 
             switch (_cursor_troop) {
             case TroopType::Hedgehog:
-                field_troop = new HedgehogTroop(get_line_pos(), 30.0, 2, _room);
+                field_troop = new HedgehogTroop(get_line_pos(), 75.0, 0.5, _room);
                 break;
 
             default:

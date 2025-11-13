@@ -19,6 +19,8 @@ enum TroopType {
 const int TROOP_COUNT = 7;
 const int TROOP_PRICES[TROOP_COUNT] = {300, 300, 300, 300, 300, 300, 200};
 
+const int ENEMY_COUNT = 1;
+
 const sf::Vector2u DESKTOP_SIZE = sf::Vector2u(
     sf::VideoMode::getDesktopMode().width, sf::VideoMode::getDesktopMode().height);
 
