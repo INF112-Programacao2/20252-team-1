@@ -5,9 +5,14 @@
 #include "text_button.h"
 #include "game_manager.h"
 
-GameRoom::GameRoom(sf::RenderWindow &window, RoomManager &room_manager)
-    : Room(window, room_manager), _troop_manager(*this), _wave_manager(*this),
-      _font(GameManager::get_instance().get_font()) {}
+GameRoom::GameRoom(
+    sf::RenderWindow &window, RoomManager &room_manager, int base_life, int spike_damage)
+    : Room(window, room_manager),
+      _troop_manager(*this),
+      _font(GameManager::get_instance().get_font()),
+      _wave_manager(*this),
+      _wall(base_life, spike_damage, *this) {
+}
 
 GameRoom::~GameRoom() = default;
 
@@ -29,6 +34,7 @@ void GameRoom::run(double dt, const std::vector<sf::Event> &event_queue) {
     //* desenhando:
     _window.clear(sf::Color(50, 150, 50));
 
+    _wall.draw();
     _troop_manager.draw();
     _wave_manager.draw();
 
@@ -79,4 +85,8 @@ void GameRoom::end() {}
 
 WaveManager &GameRoom::get_wave_manager() {
     return _wave_manager;
+}
+
+Wall &GameRoom::get_wall() {
+    return _wall;
 }

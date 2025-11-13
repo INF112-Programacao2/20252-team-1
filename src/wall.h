@@ -2,10 +2,10 @@
 #define WALL_H
 
 #include <SFML/Graphics.hpp>
-#include "healthmanager.h"
+#include "health_manager.h"
 #include "clock.h"
 #include "room.h"
-#include "enemyprojectile.h"
+// #include "enemyprojectile.h"
 #include "enemy.h"
 
 class Wall {
@@ -14,22 +14,25 @@ private:
     double _burning_time = 0.0;
     Clock _burning_clock;
     int _spike_damage;
-    Rect2 _collider;
-    Room& _room;
+    sf::Rect<float> _collider;
+    Room &_room;
+
 private:
     void destroy(); // callback do _health
 public:
-    Wall(int base_life, int spike_damage);
+    Wall(int base_life, int spike_damage, Room &room);
 
     ~Wall();
 
-    // Recebe dano de um projetil
-    void hit(EnemyProjectile& projectile, int damage);
-    // Recebe dano de um inimigo
-    void hit(Enemy& enemy, int damage);
+    void draw();
 
-    // Retorna se a posisao esta colidindo com o muro
-    bool collide(Vector2f position) { return _collider.contains(position); }
+    // Recebe dano de um projetil
+    // void hit(EnemyProjectile& projectile, int damage); //comentado enquanto n tem enemy projectile
+    // Recebe dano de um inimigo
+    // void hit(Enemy& enemy, int damage);
+
+    // Retorna se a posicao esta colidindo com o muro
+    bool collide(sf::Vector2f position);
 };
 
 #endif

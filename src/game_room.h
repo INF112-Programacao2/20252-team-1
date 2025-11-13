@@ -4,6 +4,7 @@
 #include <SFML/Graphics.hpp>
 #include "room.h"
 #include "troop_manager.h"
+#include "wall.h"
 #include "wave_manager.h"
 
 class GameRoom : public Room {
@@ -11,9 +12,10 @@ private:
     TroopManager _troop_manager;
     WaveManager _wave_manager;
     sf::Font &_font;
+    Wall _wall;
 
 public:
-    GameRoom(sf::RenderWindow &window, RoomManager &room_manager);
+    GameRoom(sf::RenderWindow &window, RoomManager &room_manager, int base_life, int spike_damage);
 
     ~GameRoom();
 
@@ -24,6 +26,7 @@ public:
     void end();
 
     WaveManager &get_wave_manager();
+    Wall &get_wall();
 };
 
 #endif

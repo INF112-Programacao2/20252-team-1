@@ -12,8 +12,6 @@
 - FieldTroop deveria ser posicionada em grid (horizontalmente)?
 
 # Pra fazer:
-- HealthManager
-- Muro
 - Inimigos
 - Projéteis
 - Tela de menu inicial
@@ -25,3 +23,9 @@
 - Todos
 
 # Davi Nobre:
+
+# Gabriel:
+- Implementar destroy do Muro (esperar projeteis)
+- Ajudar com tropas (e inimigos?)
+- Ajudar com upgrades
+- Ajudar com projetil

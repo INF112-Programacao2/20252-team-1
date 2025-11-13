@@ -42,8 +42,8 @@ TroopManager::TroopManager(GameRoom &room) : _room(room) {
 
     // atualizando tamanho da area dos inimigos
     sf::Vector2f start(WALL_POSITION_X + WALL_WIDTH + 50, HUD_HEIGHT);
-    _enemy_area = sf::Rect(
-        start, sf::Vector2f(GAME_SIZE_X - 50, DESKTOP_SIZE.y) - start);
+    _enemy_area = sf::Rect<float>( // G: N compilava nem fudendo sem esse <float>
+      start, sf::Vector2f(GAME_SIZE_X - 50, DESKTOP_SIZE.y) - start);
 
     // criando array de cartas (itens da loja)
     const int item_width = 125;
