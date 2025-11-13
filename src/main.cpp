@@ -41,9 +41,10 @@ int main() {
     window.setVerticalSyncEnabled(false);
 
     RoomManager room_manager;
-
-    GameRoom game_room(window, room_manager);
+    
+    GameRoom game_room(window, room_manager, 100.0f, 10.0f);
     MainMenuRoom main_menu_room(window, room_manager);
+
 
     room_manager.add_room("main_menu", &main_menu_room);
     room_manager.add_room("game", &game_room);
