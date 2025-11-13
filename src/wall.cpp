@@ -8,7 +8,7 @@ Wall::Wall(int base_life, int spike_damage, Room& room)
 	_collider = sf::Rect<float>(
 		sf::Vector2f(WALL_POSITION_X, HUD_HEIGHT),
 		sf::Vector2f(WALL_WIDTH, DESKTOP_SIZE.y - HUD_HEIGHT));
-}
+};
 
 Wall::~Wall() = default;
 
@@ -32,6 +32,6 @@ bool Wall::collide(sf::Vector2f position) {
 void Wall::draw_wall() {
 	sf::RectangleShape wall_shape(sf::Vector2f(WALL_WIDTH, DESKTOP_SIZE.y - HUD_HEIGHT));
 	wall_shape.setPosition(sf::Vector2f(WALL_POSITION_X, HUD_HEIGHT));
-	wall_shape.setFillColor(sf::Color(139, 69, 19)); // cor marrom para o muro
+	wall_shape.setFillColor(sf::Color(128, 128, 128)); // cor cinza para o muro
 	_room.get_window().draw(wall_shape);
 }

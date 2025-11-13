@@ -4,14 +4,16 @@
 #include <SFML/Graphics.hpp>
 #include "room.h"
 #include "troop_manager.h"
+#include "wall.h"
 
 class GameRoom : public Room {
 private:
     TroopManager _troop_manager;
     sf::Font &_font;
+    Wall _wall;
 
 public:
-    GameRoom(sf::RenderWindow &window, RoomManager &room_manager);
+    GameRoom(sf::RenderWindow &window, RoomManager &room_manager, int base_life, int spike_damage);
 
     ~GameRoom();
 

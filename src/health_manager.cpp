@@ -1,4 +1,4 @@
-#include "HealthManager.h"
+#include "health_manager.h"
 
 HealthManager::HealthManager(int max_life, std::function<void()> on_death_callback)
 	: _max_life(max_life), _life(max_life), _on_death_callback(std::move(on_death_callback)) {

@@ -2,7 +2,7 @@
 #define WALL_H
 
 #include <SFML/Graphics.hpp>
-#include "healthmanager.h"
+#include "health_manager.h"
 #include "clock.h"
 #include "room.h"
 //#include "enemyprojectile.h"
