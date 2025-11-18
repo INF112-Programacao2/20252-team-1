@@ -28,7 +28,7 @@ TroopProjectile::TroopProjectile(sf::Vector2f position, Troop &parent, Enemy *ta
 {
 }
 
-//funcao que move o projetil ao inimigo e checa colisao
+// funcao que move o projetil ao inimigo e checa colisao
 void TroopProjectile::run(float dt)
 {
 
@@ -36,6 +36,7 @@ void TroopProjectile::run(float dt)
     {
         _valid_target = false;
         destroy();
+        // anda reto até o fim da tela, ainda vou implementar de verdade
     }
     else
     {
@@ -44,6 +45,7 @@ void TroopProjectile::run(float dt)
 
     _position += (float)_speed * dt * _direction;
 
+    // acerta o alvo ou chega ao fim da tela
     if (_target->collide(_position))
     {
         //_target->take_damage(_damage);

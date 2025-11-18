@@ -17,11 +17,8 @@ protected:
     bool _destroyed = false;
     Room &_room;
     sf::CircleShape _shape;
-
-public:
-    // posso transformar em protected depois
     Projectile(sf::Vector2f position, sf::Vector2f direction, double speed, Room &room);
-
+public:
     virtual ~Projectile() = default;
 
     // movimenta, atualiza direcao, checa se colidiu, da dano e aplica efeito
