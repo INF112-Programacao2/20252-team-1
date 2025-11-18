@@ -1,11 +1,10 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
-#include <random>
-#include <chrono>
 #include "room_manager.h"
 #include "game_room.h"
 #include "game_manager.h"
 #include "main_menu_room.h"
+#include "upgrade_room.h"
 
 int main() {
     std::srand(std::time(0));
@@ -45,9 +44,12 @@ int main() {
     GameRoom game_room(window, room_manager, 100.0f, 10.0f);
     MainMenuRoom main_menu_room(window, room_manager);
 
+    UpgradeRoom upgrade_room(window, room_manager);
+
     room_manager.add_room("main_menu", &main_menu_room);
     room_manager.add_room("game", &game_room);
-    room_manager.change_room("main_menu");
+    room_manager.add_room("upgrade", &upgrade_room);
+    room_manager.change_room("game");
 
     sf::Clock delta_clock; // calcula o delta time (segundos entre o ultimo frame)
 
