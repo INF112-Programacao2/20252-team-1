@@ -4,6 +4,7 @@
 #include "enemy.h"
 #include "clock.h"
 #include "globals.h"
+#include "enemy_projectile.h"
 #include <memory>
 #include <array>
 #include <vector>
@@ -23,6 +24,7 @@ private:
     int _wave_idx = 0;
     int _subwave_idx = 0;
     std::unordered_set<std::shared_ptr<Enemy>> _enemys;
+    std::unordered_set<std::unique_ptr<EnemyProjectile>> _projectiles;
     std::array<std::array<SubWave, 3>, MAX_WAVES> _enemys_layout; // 3 subwaves por wave
     double _wave_ending_delay = 8;                                // delay entre waves
     bool _is_waiting_delay = false;
@@ -40,6 +42,8 @@ public:
     void run(double dt);
 
     void draw();
+
+    void spawn_projectile(std::unique_ptr<EnemyProjectile> projectile);
 
     /// Retorna o inimigo mais proximo da posicao especificada (pode retornar ponteiro vazio)
     std::shared_ptr<Enemy> get_closest_enemy(sf::Vector2f position);

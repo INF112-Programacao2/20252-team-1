@@ -1,23 +1,23 @@
-#ifndef TROOPPROJECTILE_H
-#define TROOPPROJECTILE_H
+#ifndef TROOP_PROJECTILE_H
+#define TROOP_PROJECTILE_H
 
+#include <SFML/Graphics.hpp>
+#include <memory>
 #include "projectile.h"
 #include "enemy.h"
 #include "room.h"
 #include "troop.h"
 #include "globals.h"
-#include <SFML/Graphics.hpp>
 
-class TroopProjectile : public Projectile
-{
+class TroopProjectile : public Projectile {
 private:
     Troop &_parent;
-    Enemy *_target;
-    bool _valid_target = false;
+    std::weak_ptr<Enemy> _target;
 
 public:
-    TroopProjectile(sf::Vector2f position, Troop &parent, Enemy *target, double speed, Room &room);
-    void run(float dt) override;
+    TroopProjectile(sf::Vector2f position, Troop &parent, std::weak_ptr<Enemy> target, double speed, Room &room);
+
+    void run(double dt);
 };
 
-#endif // TROOPPROJECTILE_H
+#endif

@@ -6,9 +6,12 @@
 
 class HealthManager {
 private:
-    int _max_life;                            // vida maxima
-    int _life;                                // vida atual
+    int _max_life;      // vida maxima
+    int _life;          // vida atual
+    bool _died = false; // se ja morreu (pra nao chamar o callback mais de uma vez)
+
     std::function<void()> _on_death_callback; // callback quando vida <= 0
+
 public:
     HealthManager(int max_life, std::function<void()> on_death_callback);
 

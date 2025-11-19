@@ -26,6 +26,8 @@ const sf::Vector2u DESKTOP_SIZE = sf::Vector2u(
 
 const int GAME_SIZE_X = sf::VideoMode::getDesktopMode().width - 400;
 
+const sf::Rect<float> GAME_RECT(sf::Vector2f(0, 0), sf::Vector2f(GAME_SIZE_X, DESKTOP_SIZE.y));
+
 const int TROOP_ROWS = 4;
 const int TROOP_COLS = 3;
 

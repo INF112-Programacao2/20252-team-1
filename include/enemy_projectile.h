@@ -7,15 +7,17 @@
 #include "room.h"
 #include "globals.h"
 
-class EnemyProjectile : public Projectile
-{
+class EnemyProjectile : public Projectile {
 private:
     Enemy &_parent;
     Wall &_target;
 
 public:
     EnemyProjectile(sf::Vector2f postition, Enemy &parent, Wall &target, double speed, Room &room);
-    void run(float dt) override;
+
+    void destroy() {}
+
+    void run(double dt);
 };
 
 #endif // ENEMYPROJECTILE_H

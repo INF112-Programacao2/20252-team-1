@@ -13,11 +13,12 @@
 
 # Pra fazer:
 - Inimigos
-- Projéteis
-- Tela de menu inicial
+- Tela de menu inicial (por tutorial e créditos)
 - Tela de upgrades
 - Upgrades
 - Mais tropas
+- GameSaver
+- Efeitos sonoros / música
 
 # Sprites:
 - Todos

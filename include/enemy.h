@@ -2,13 +2,13 @@
 #define ENEMY_H
 
 #include <SFML/Graphics.hpp>
-#include "room.h"
-// #include "wall.h"
-// #include "healthmanager.h"
+#include "game_room.h"
+#include "wall.h"
+#include "health_manager.h"
 
 class Enemy {
 protected:
-    // HealthManager _health;
+    HealthManager _health;
     int _damage;
     int _line;
     double _position_x;
@@ -18,8 +18,7 @@ protected:
     // Rect2 _collider;
     // vector<Effect> _effects; // vector de enum de efeitos
     // std::array<double, EFFECT_COUNT> _effect_times; // array de tempo restante de cada efeito
-    // Wall &_wall;
-    Room &_room;
+    GameRoom &_room;
     sf::RectangleShape _shape;
 
 protected:
@@ -31,8 +30,7 @@ protected:
     virtual void attack();
 
 public:
-    // Adicionar Wall depois
-    Enemy(int base_life, int damage, int line, double base_cooldown, double points, Room &room);
+    Enemy(int base_life, int damage, int line, double base_cooldown, double points, GameRoom &room);
 
     ~Enemy();
 
@@ -43,7 +41,7 @@ public:
     /// Verifica se a posicao colide com o inimigo
     bool collide(sf::Vector2f position);
 
-    // bool is_destroyed() { return _health.is_dead(); }
+    bool is_destroyed() { return _health.is_dead(); }
 
     int get_line();
 

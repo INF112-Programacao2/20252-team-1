@@ -3,10 +3,12 @@
 #include "game_manager.h"
 #include "globals.h"
 #include <iostream>
+#include <memory>
 
-Enemy::Enemy(int base_life, int damage, int line, double base_cooldown, double points, Room &room)
+//! tem que implementar o callback direito
+Enemy::Enemy(int base_life, int damage, int line, double base_cooldown, double points, GameRoom &room)
     : _damage(damage), _line(line), _base_cooldown(base_cooldown), _points(points), _room(room),
-      _shape(sf::Vector2f(100.0, 100.0)) { // _shape ta com um tamanho de teste
+      _shape(sf::Vector2f(100.0, 100.0)), _health(100, []() {}) { // _shape ta com um tamanho de teste
 
     //_health.set_life(base_life);
     _position_x = GAME_SIZE_X;
@@ -32,7 +34,10 @@ bool Enemy::can_walk(double next_position) {
     return next_position > WALL_POSITION_X + WALL_WIDTH;
 }
 
-void Enemy::attack() {}
+void Enemy::attack() {
+    _room.get_wave_manager().spawn_projectile(std::make_unique<EnemyProjectile>(
+        get_position(), *this, _room.get_wall(), 10.0, _room));
+}
 
 void Enemy::run(double dt) {
     // if(_health.is_dead()) {

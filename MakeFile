@@ -36,7 +36,7 @@ $(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp | $(OBJ_DIR)
 $(OBJ_DIR):
 	mkdir -p $(OBJ_DIR)
 
-# inclui arquivos .d (dependências de headers)
+# inclui os arquivos .d (dependências de headers)
 -include $(DEPS)
 
 # remove binário e objetos

@@ -3,24 +3,15 @@
 #include <SFML/Graphics.hpp>
 
 EnemyProjectile::EnemyProjectile(sf::Vector2f position, Enemy &parent, Wall &target, double speed, Room &room)
-    : Projectile(
-          position,
-          // anda para a esquerda
-          sf::Vector2f(-1.0f, 0.0f),
-          speed,
-          room),
-      _parent(parent),
-      _target(target)
-{
-}
+    : Projectile(position, sf::Vector2f(-1.0f, 0.0f), speed, room), _parent(parent), _target(target) {}
 
-// funcao que move o projetil ao muro e checa colisao
-void EnemyProjectile::run(float dt)
-{
+void EnemyProjectile::run(double dt) {
+    // funcao que move o projetil ao muro e checa colisao
+
     // checar se colidiu com o muro
-    if (_target.collide(_position))
-    {
+    if (_target.collide(_position)) {
         destroy();
+
         // aplicar dano e efeito no muro
         //_target.set_damage();
         //_target.set_effect(_effect_time);
@@ -29,5 +20,5 @@ void EnemyProjectile::run(float dt)
     }
 
     // andar
-    _position += (float)_speed * dt * _direction;
+    _position += (float)(_speed * dt) * _direction;
 }

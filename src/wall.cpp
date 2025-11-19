@@ -19,7 +19,7 @@ void Wall::destroy() {
 }
 
 bool Wall::collide(sf::Vector2f position) {
-    return _collider.contains(position);
+    return _collider.contains(position) || position.x < _collider.left;
 }
 
 void Wall::draw() {

@@ -21,8 +21,12 @@ void WaveManager::spawn_wave() {
 
 void WaveManager::run(double dt) {
 
-    for (std::shared_ptr<Enemy> enemy : _enemys) {
+    for (auto &enemy : _enemys) {
         enemy->run(dt);
+    }
+
+    for (auto &projectile : _projectiles) {
+        projectile->run(dt);
     }
 
     // delay ate a proxima wave
@@ -57,9 +61,17 @@ void WaveManager::run(double dt) {
 }
 
 void WaveManager::draw() {
-    for (std::shared_ptr<Enemy> enemy : _enemys) {
+    for (auto &enemy : _enemys) {
         enemy->draw();
     }
+
+    for (auto &projectile : _projectiles) {
+        projectile->draw();
+    }
+}
+
+void WaveManager::spawn_projectile(std::unique_ptr<EnemyProjectile> projectile) {
+    _projectiles.insert(std::move(projectile));
 }
 
 /// Retorna a distancia ao quadrado, util para comparar distancias
@@ -96,9 +108,7 @@ std::shared_ptr<Enemy> WaveManager::get_closest_enemy_on_line(int line) {
     return closest;
 }
 
-std::vector<std::shared_ptr<Enemy>> WaveManager::get_enemys_on_circle(
-    sf::Vector2f center, float radius) {
-
+std::vector<std::shared_ptr<Enemy>> WaveManager::get_enemys_on_circle(sf::Vector2f center, float radius) {
     std::vector<std::shared_ptr<Enemy>> vec;
 
     for (std::shared_ptr<Enemy> enemy : _enemys) {
