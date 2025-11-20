@@ -37,7 +37,6 @@ void Wall::hit(EnemyProjectile& projectile) {
     _health.decrease_life(projectile.get_damage());
 
     auto enemy = projectile.get_parent();
-    std::cout << "damage to: " << enemy.get() << std::endl;
     if (enemy) {
         enemy->damage(_spike_damage);
     }

@@ -142,7 +142,6 @@ sf::Vector2f TroopManager::get_line_pos() {
 
 void TroopManager::draw() {
     draw_slots();
-    draw_shop();
 
     // desenha tropas
     for (Troop *troop : _troops) {
@@ -155,6 +154,12 @@ void TroopManager::draw() {
         if (field_troop)
             field_troop->draw();
     }
+
+    // desenha projeteis
+    for (auto &projectile : _projectiles)
+        projectile->draw();
+
+    draw_shop();
 
     // desenha tropa no cursor
     if (_cursor_troop == TroopType::None || _room.is_paused())
@@ -252,6 +257,16 @@ void TroopManager::run(double dt, const std::vector<sf::Event> &event_queue) {
             troop->run(dt);
     }
 
+    // Run dos projeteis das troops
+    for (auto it = _projectiles.begin(); it != _projectiles.end(); ) {
+        it->get()->run(dt);
+
+        if (it->get()->is_destroyed()) {
+            it = _projectiles.erase(it);
+        } else
+            it++;
+    }
+
     for (int i = 0; i < _field_troops.size(); i++) {
         FieldTroop *field_troop = _field_troops[i];
 
@@ -284,4 +299,8 @@ void TroopManager::run(double dt, const std::vector<sf::Event> &event_queue) {
             }
         }
     }
+}
+
+void TroopManager::spawn_projectile(std::unique_ptr<TroopProjectile> projectile) {
+    _projectiles.insert(std::move(projectile));
 }

@@ -12,8 +12,12 @@ sf::Vector2f normalize(sf::Vector2f vec) {
     return vec / length;
 }
 
-TroopProjectile::TroopProjectile(sf::Vector2f position, std::weak_ptr<Enemy> target, double speed, Room &room)
-    : Projectile(position, sf::Vector2f(1, 0), speed, room), _target(target) {}
+TroopProjectile::TroopProjectile(sf::Vector2f position, std::weak_ptr<Enemy> target, int damage,
+                                 double speed, Room &room)
+    : Projectile(position, sf::Vector2f(1, 0), damage, speed, room), _target(target) {
+
+    _shape.setFillColor(sf::Color::Yellow);
+}
 
 void TroopProjectile::run(double dt) {
     // funcao que move o projetil ao inimigo e checa colisao
@@ -26,8 +30,8 @@ void TroopProjectile::run(double dt) {
 
     _position += (float)(_speed * dt) * _direction;
 
-    // acerta o alvo ou chega ao fim da tela
-    if (enemy->collide(_position)) {
+    // acerta o alvo
+    if (enemy && enemy->collide(_position)) {
         enemy->damage(_damage);
         destroy();
 

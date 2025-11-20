@@ -1,5 +1,7 @@
 #include "troop.h"
 #include "game_manager.h"
+#include "game_room.h"
+#include "troop_projectile.h"
 
 Troop::Troop(sf::Vector2f position, Room &room)
     : _position(position), _room(room) {}
@@ -17,6 +19,15 @@ void Troop::run(double dt) {
         fire();
         _timer.restart();
     }
+}
+
+void Troop::fire() {
+    // atira no inimigo mais perto
+    GameRoom &game_room = dynamic_cast<GameRoom&>(_room);
+    std::shared_ptr<Enemy> target = game_room.get_wave_manager().get_closest_enemy(_position);
+
+    game_room.get_troop_manager().spawn_projectile(std::make_unique<TroopProjectile>(
+        _position + sf::Vector2f(50, 50), target, 100, 300.0, _room));
 }
 
 void Troop::draw() {

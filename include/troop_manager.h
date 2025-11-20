@@ -3,11 +3,14 @@
 
 #include <SFML/Graphics.hpp>
 #include <array>
+#include <unordered_set>
+#include <memory>
 #include "room.h"
 #include "troop_card.h"
 #include "troop.h"
 #include "field_troop.h"
 #include "globals.h"
+#include "troop_projectile.h"
 
 class GameRoom;
 
@@ -17,6 +20,7 @@ private:
     std::array<TroopCard *, TROOP_COUNT> _shop_cards;
     std::array<Troop *, (TROOP_ROWS * TROOP_COLS)> _troops;
     std::vector<FieldTroop *> _field_troops;
+    std::unordered_set<std::unique_ptr<TroopProjectile>> _projectiles;
     TroopType _cursor_troop = TroopType::None; // tropa selecionada no mouse
     sf::Rect<float> _enemy_area;               // retangulo da area dos inimigos
 
@@ -46,6 +50,8 @@ public:
     void run(double dt, const std::vector<sf::Event> &event_queue);
 
     void draw();
+
+    void spawn_projectile(std::unique_ptr<TroopProjectile> projectile);
 };
 
 #endif

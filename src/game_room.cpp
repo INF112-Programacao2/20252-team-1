@@ -83,6 +83,10 @@ void GameRoom::run(double dt, const std::vector<sf::Event> &event_queue) {
 
 void GameRoom::end() {}
 
+TroopManager &GameRoom::get_troop_manager() {
+    return _troop_manager;
+}
+
 WaveManager &GameRoom::get_wave_manager() {
     return _wave_manager;
 }

@@ -4,6 +4,8 @@
 # Bugs:
 - Fullscreen não funciona em todos os PCs e nem na versão compilada para windows
 - Inimigos estão sendo desenhados por cima do menu da loja
+- O TIRO ATRAVESSA OS INIMIGOS SE O TARGET ORIGINAL MORRER (PORQUE O TIRO CONTINUA MESMO DEPOIS DISSO)
+- O TIRO PARECE PERDER A REFERENCIA DO TARGET SE OUTRA TROOP TENTAR MIRAR NESSE MESMO TARGET DEPOIS
 
 # Refatoração:
 - Usar um sistema melhor pra definir o tamanho da tela e onde posicionar as coisas

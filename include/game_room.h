@@ -25,6 +25,7 @@ public:
 
     void end();
 
+    TroopManager &get_troop_manager();
     WaveManager &get_wave_manager();
     Wall &get_wall();
 };

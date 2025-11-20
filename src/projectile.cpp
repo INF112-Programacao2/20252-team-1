@@ -1,10 +1,10 @@
 #include "projectile.h"
 #include "globals.h"
 
-Projectile::Projectile(sf::Vector2f position, sf::Vector2f direction, double speed, Room &room)
-    : _position(position), _direction(direction), _speed(speed), _room(room) {
+Projectile::Projectile(sf::Vector2f position, sf::Vector2f direction, int damage, double speed, Room &room)
+    : _position(position), _direction(direction), _damage(damage), _speed(speed), _room(room) {
 
-    _shape.setRadius(5.0f);
+    _shape.setRadius(10.0);
     _shape.setFillColor(sf::Color::Red);
     _shape.setOrigin(_shape.getRadius(), _shape.getRadius());
     _shape.setPosition(_position);

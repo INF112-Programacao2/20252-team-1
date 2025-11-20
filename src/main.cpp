@@ -41,7 +41,7 @@ int main() {
 
     RoomManager room_manager;
 
-    GameRoom game_room(window, room_manager, 1000, 20);
+    GameRoom game_room(window, room_manager, 1000, 0);
     MainMenuRoom main_menu_room(window, room_manager);
 
     UpgradeRoom upgrade_room(window, room_manager);

@@ -14,7 +14,7 @@ private:
     std::weak_ptr<Enemy> _target;
 
 public:
-    TroopProjectile(sf::Vector2f position, std::weak_ptr<Enemy> target, double speed, Room &room);
+    TroopProjectile(sf::Vector2f position, std::weak_ptr<Enemy> target, int damage, double speed, Room &room);
 
     void run(double dt);
 };

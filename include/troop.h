@@ -6,6 +6,9 @@
 #include "clock.h"
 
 // TODO: transformar numa classe abstrata
+
+//TODO: passar a linha em que a troop esta
+
 class Troop {
 protected:
     sf::Vector2f _position;
@@ -23,7 +26,7 @@ public:
     virtual void run(double dt);
 
     /// Ativa a habilidade
-    virtual void fire() {}
+    virtual void fire();
 
     //! nao e virtual pura por debug
     virtual void draw();

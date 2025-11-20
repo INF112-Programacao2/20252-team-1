@@ -16,7 +16,7 @@ protected:
     Room &_room;
     sf::CircleShape _shape; //! shape de debug
 
-    Projectile(sf::Vector2f position, sf::Vector2f direction, double speed, Room &room);
+    Projectile(sf::Vector2f position, sf::Vector2f direction, int damage, double speed, Room &room);
 
 public:
     virtual ~Projectile() = default;
