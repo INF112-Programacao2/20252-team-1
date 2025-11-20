@@ -13,18 +13,24 @@ WaveManager::WaveManager(Room &room) : _room(room) {
 WaveManager::~WaveManager() = default;
 
 void WaveManager::spawn_wave() {
-    _enemys.insert(std::make_shared<Enemy>(10, 10, 1, 4.0, 25, _room));
-    _enemys.insert(std::make_shared<Enemy>(10, 10, 2, 3.0, 25, _room));
-    _enemys.insert(std::make_shared<Enemy>(10, 10, 3, 3.0, 25, _room));
-    _enemys.insert(std::make_shared<Enemy>(10, 10, 4, 3.5, 25, _room));
+    _enemys.insert(std::make_shared<Enemy>(50, 10, 1, 4.0, 25, _room));
+    _enemys.insert(std::make_shared<Enemy>(50, 10, 2, 3.0, 25, _room));
+    _enemys.insert(std::make_shared<Enemy>(50, 10, 3, 3.0, 25, _room));
+    _enemys.insert(std::make_shared<Enemy>(50, 10, 4, 3.5, 25, _room));
 }
 
 void WaveManager::run(double dt) {
+    // Run dos inimigos
+    for (auto it = _enemys.begin(); it != _enemys.end(); ) {
+        it->get()->run(dt);
 
-    for (auto &enemy : _enemys) {
-        enemy->run(dt);
+        if (it->get()->is_destroyed()) {
+            it = _enemys.erase(it);
+        } else
+            it++;
     }
 
+    // Run dos projeteis de inimigos
     for (auto it = _projectiles.begin(); it != _projectiles.end(); ) {
         it->get()->run(dt);
 

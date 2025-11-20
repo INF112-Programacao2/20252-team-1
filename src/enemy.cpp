@@ -3,12 +3,10 @@
 #include "game_manager.h"
 #include "globals.h"
 #include <iostream>
-#include <memory>
 
-//! tem que implementar o callback direito
 Enemy::Enemy(int base_life, int damage, int line, double base_cooldown, double points, Room &room)
     : _damage(damage), _line(line), _base_cooldown(base_cooldown), _points(points), _room(room),
-      _shape(sf::Vector2f(100.0, 100.0)), _health(100, []() {}) { // _shape ta com um tamanho de teste
+      _shape(sf::Vector2f(100.0, 100.0)), _health(100, [this]() { this->destroy(); }) { // _shape ta com um tamanho de teste
 
     _health.set_life(base_life);
     _position_x = GAME_SIZE_X;
@@ -37,7 +35,7 @@ bool Enemy::can_walk(double next_position) {
 void Enemy::attack() {
     GameRoom& game_room = dynamic_cast<GameRoom&>(_room);
     game_room.get_wave_manager().spawn_projectile(std::make_unique<EnemyProjectile>(
-        get_position(), *this, game_room.get_wall(), 100.0, _room));
+        get_position(), shared_from_this(), game_room.get_wall(), 100.0, _room));
 }
 
 void Enemy::run(double dt) {
@@ -72,8 +70,7 @@ void Enemy::run(double dt) {
 }
 
 void Enemy::damage(int life) {
-    std::cout << "OUCH " << life << std::endl;
-    //_health.decrease_life(life * GameManager::get_instance().get_damage_multiplier());
+    _health.decrease_life(life * GameManager::get_instance().get_damage_multiplier());
 }
 
 void Enemy::draw() {
@@ -84,4 +81,4 @@ bool Enemy::collide(sf::Vector2f position) {
     return _shape.getGlobalBounds().contains(position);
 }
 
-void Enemy::destroy() {} // Esperando WaveManager
+void Enemy::destroy() {}

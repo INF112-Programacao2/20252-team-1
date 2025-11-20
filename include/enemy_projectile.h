@@ -7,16 +7,19 @@
 #include "room.h"
 #include "globals.h"
 #include <functional>
+#include <memory>
 
 class EnemyProjectile : public Projectile {
 private:
-    Enemy &_parent;
+    std::weak_ptr<Enemy> _parent;
     Wall &_target;
 
 public:
-    EnemyProjectile(sf::Vector2f postition, Enemy &parent, Wall &target, double speed, Room &room);
+    EnemyProjectile(sf::Vector2f postition, std::weak_ptr<Enemy> parent, Wall &target, double speed, Room &room);
 
     void run(double dt);
+
+    std::shared_ptr<Enemy> get_parent();
 };
 
 #endif

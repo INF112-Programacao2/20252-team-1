@@ -1,4 +1,3 @@
-#include <iostream> //! DEBUG
 #include "troop.h"
 #include "game_manager.h"
 
@@ -18,10 +17,6 @@ void Troop::run(double dt) {
         fire();
         _timer.restart();
     }
-}
-
-void Troop::fire() {
-    std::cout << "fire" << std::endl;
 }
 
 void Troop::draw() {

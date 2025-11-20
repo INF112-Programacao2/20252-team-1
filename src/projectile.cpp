@@ -23,3 +23,7 @@ void Projectile::draw() {
 bool Projectile::is_destroyed() {
     return _destroyed;
 }
+
+int Projectile::get_damage() {
+    return _damage;
+}

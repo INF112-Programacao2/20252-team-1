@@ -7,6 +7,7 @@
 
 Wall::Wall(int base_life, int spike_damage, Room &room)
     : _health(base_life, std::bind(&Wall::destroy, this)), _spike_damage(spike_damage), _room(room) {
+
     _collider = sf::Rect<float>(
         sf::Vector2f(WALL_POSITION_X, HUD_HEIGHT),
         sf::Vector2f(WALL_WIDTH, DESKTOP_SIZE.y - HUD_HEIGHT));
@@ -30,4 +31,14 @@ void Wall::draw() {
     wall_shape.setFillColor(sf::Color(128, 128, 128)); // cor cinza para o muro
 
     _room.get_window().draw(wall_shape);
+}
+
+void Wall::hit(EnemyProjectile& projectile) {
+    _health.decrease_life(projectile.get_damage());
+
+    auto enemy = projectile.get_parent();
+    std::cout << "damage to: " << enemy.get() << std::endl;
+    if (enemy) {
+        enemy->damage(_spike_damage);
+    }
 }

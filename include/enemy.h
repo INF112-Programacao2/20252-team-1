@@ -2,10 +2,11 @@
 #define ENEMY_H
 
 #include <SFML/Graphics.hpp>
+#include <memory>
 #include "room.h"
 #include "health_manager.h"
 
-class Enemy {
+class Enemy : public std::enable_shared_from_this<Enemy> {
 protected:
     HealthManager _health;
     int _damage;
@@ -21,8 +22,7 @@ protected:
     sf::RectangleShape _shape;
 
 protected:
-    /// Chama o WaveManager pra remover essa instancia e adiciona os pontos
-    virtual void destroy(); // Esperar o WaveManager ficar pronto
+    virtual void destroy();
 
     bool can_walk(double next_position);
 
@@ -48,6 +48,7 @@ public:
 
     // void set_effect(Effect effect, double time); // Ignorar por enquanto
 
+    /// Ja multiplica o dano pelo multiplicador, nao precisa multiplicar antes
     void damage(int life);
 };
 

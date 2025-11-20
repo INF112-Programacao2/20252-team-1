@@ -12,14 +12,15 @@ sf::Vector2f normalize(sf::Vector2f vec) {
     return vec / length;
 }
 
-TroopProjectile::TroopProjectile(sf::Vector2f position, Troop &parent, std::weak_ptr<Enemy> target, double speed, Room &room)
-    : Projectile(position, sf::Vector2f(1, 0), speed, room), _target(target), _parent(parent) {}
+TroopProjectile::TroopProjectile(sf::Vector2f position, std::weak_ptr<Enemy> target, double speed, Room &room)
+    : Projectile(position, sf::Vector2f(1, 0), speed, room), _target(target) {}
 
 void TroopProjectile::run(double dt) {
     // funcao que move o projetil ao inimigo e checa colisao
 
     std::shared_ptr<Enemy> enemy = _target.lock();
 
+    // mantem a direcao anterior caso o target seja destruido
     if (enemy)
         _direction = normalize(enemy->get_position() - _position);
 

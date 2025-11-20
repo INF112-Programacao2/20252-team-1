@@ -19,11 +19,13 @@ public:
 
     virtual ~Troop();
 
+    /// Administra o cooldown da habilidade, lembra de chamar quando der override
     virtual void run(double dt);
 
-    // Ativa a habilidade
-    virtual void fire();
+    /// Ativa a habilidade
+    virtual void fire() {}
 
+    //! nao e virtual pura por debug
     virtual void draw();
 };
 

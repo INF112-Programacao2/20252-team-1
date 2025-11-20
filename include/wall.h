@@ -28,7 +28,7 @@ public:
     void draw();
 
     // Recebe dano de um projetil
-    void hit(EnemyProjectile& projectile, int damage) {};
+    void hit(EnemyProjectile& projectile);
 
     // Recebe dano de um inimigo
     void hit(Enemy& enemy, int damage) {};

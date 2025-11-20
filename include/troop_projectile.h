@@ -11,11 +11,10 @@
 
 class TroopProjectile : public Projectile {
 private:
-    Troop &_parent;
     std::weak_ptr<Enemy> _target;
 
 public:
-    TroopProjectile(sf::Vector2f position, Troop &parent, std::weak_ptr<Enemy> target, double speed, Room &room);
+    TroopProjectile(sf::Vector2f position, std::weak_ptr<Enemy> target, double speed, Room &room);
 
     void run(double dt);
 };

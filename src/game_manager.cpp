@@ -23,6 +23,10 @@ double GameManager::get_cooldown_multiplier() {
     return _cooldown_multiplier;
 }
 
+double GameManager::get_damage_multiplier() {
+    return _damage_multiplier;
+}
+
 sf::Font &GameManager::get_font() {
     return _font;
 }
@@ -33,6 +37,10 @@ bool GameManager::load_font(std::string file_path) {
 
 void GameManager::set_cooldown_multiplier(double cooldown_multiplier) {
     _cooldown_multiplier = cooldown_multiplier;
+}
+
+void GameManager::set_damage_multiplier(double damage_multiplier) {
+    _damage_multiplier = damage_multiplier;
 }
 
 int GameManager::get_line(sf::Vector2f position) {

@@ -31,6 +31,8 @@ public:
     virtual void draw();
 
     bool is_destroyed();
+
+    int get_damage();
 };
 
 #endif
