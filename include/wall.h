@@ -5,8 +5,9 @@
 #include "health_manager.h"
 #include "clock.h"
 #include "room.h"
-// #include "enemyprojectile.h"
-#include "enemy.h"
+
+class EnemyProjectile;
+class Enemy;
 
 class Wall {
 private:
@@ -27,9 +28,10 @@ public:
     void draw();
 
     // Recebe dano de um projetil
-    // void hit(EnemyProjectile& projectile, int damage); //comentado enquanto n tem enemy projectile
+    void hit(EnemyProjectile& projectile, int damage) {};
+
     // Recebe dano de um inimigo
-    // void hit(Enemy& enemy, int damage);
+    void hit(Enemy& enemy, int damage) {};
 
     // Retorna se a posicao esta colidindo com o muro
     bool collide(sf::Vector2f position);

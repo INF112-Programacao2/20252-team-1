@@ -1,4 +1,3 @@
-#include "projectile.h"
 #include "enemy_projectile.h"
 #include <SFML/Graphics.hpp>
 

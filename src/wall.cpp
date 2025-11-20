@@ -1,6 +1,8 @@
 #include "wall.h"
 #include "room_manager.h"
 #include "globals.h"
+#include "enemy_projectile.h"
+#include "enemy.h"
 #include <iostream> //! DEBUG
 
 Wall::Wall(int base_life, int spike_damage, Room &room)

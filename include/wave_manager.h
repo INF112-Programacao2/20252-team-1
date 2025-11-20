@@ -1,10 +1,10 @@
 #ifndef WAVE_MANAGER_H
 #define WAVE_MANAGER_H
 
-#include "enemy.h"
 #include "clock.h"
 #include "globals.h"
 #include "enemy_projectile.h"
+#include "enemy.h"
 #include <memory>
 #include <array>
 #include <vector>

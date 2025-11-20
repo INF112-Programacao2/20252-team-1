@@ -13,10 +13,10 @@ WaveManager::WaveManager(Room &room) : _room(room) {
 WaveManager::~WaveManager() = default;
 
 void WaveManager::spawn_wave() {
-    _enemys.insert(std::make_shared<Enemy>(10, 10, 1, 1, 25, _room));
-    _enemys.insert(std::make_shared<Enemy>(10, 10, 2, 1, 25, _room));
-    _enemys.insert(std::make_shared<Enemy>(10, 10, 3, 1, 25, _room));
-    _enemys.insert(std::make_shared<Enemy>(10, 10, 4, 1, 25, _room));
+    _enemys.insert(std::make_shared<Enemy>(10, 10, 1, 4.0, 25, _room));
+    _enemys.insert(std::make_shared<Enemy>(10, 10, 2, 3.0, 25, _room));
+    _enemys.insert(std::make_shared<Enemy>(10, 10, 3, 3.0, 25, _room));
+    _enemys.insert(std::make_shared<Enemy>(10, 10, 4, 3.5, 25, _room));
 }
 
 void WaveManager::run(double dt) {
@@ -25,12 +25,17 @@ void WaveManager::run(double dt) {
         enemy->run(dt);
     }
 
-    for (auto &projectile : _projectiles) {
-        projectile->run(dt);
+    for (auto it = _projectiles.begin(); it != _projectiles.end(); ) {
+        it->get()->run(dt);
+
+        if (it->get()->is_destroyed()) {
+            it = _projectiles.erase(it);
+        } else
+            it++;
     }
 
     // delay ate a proxima wave
-    double delay;
+    double delay = 0;
 
     // verifica o fim da subwave e atualiza pra proxima
     if (!_is_waiting_delay && _enemys.size() == 0) {

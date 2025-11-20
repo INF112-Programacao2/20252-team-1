@@ -2,8 +2,7 @@
 #define ENEMY_H
 
 #include <SFML/Graphics.hpp>
-#include "game_room.h"
-#include "wall.h"
+#include "room.h"
 #include "health_manager.h"
 
 class Enemy {
@@ -18,7 +17,7 @@ protected:
     // Rect2 _collider;
     // vector<Effect> _effects; // vector de enum de efeitos
     // std::array<double, EFFECT_COUNT> _effect_times; // array de tempo restante de cada efeito
-    GameRoom &_room;
+    Room &_room;
     sf::RectangleShape _shape;
 
 protected:
@@ -30,7 +29,7 @@ protected:
     virtual void attack();
 
 public:
-    Enemy(int base_life, int damage, int line, double base_cooldown, double points, GameRoom &room);
+    Enemy(int base_life, int damage, int line, double base_cooldown, double points, Room &room);
 
     ~Enemy();
 

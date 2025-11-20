@@ -1,16 +1,16 @@
 #include "enemy.h"
-#include "room.h"
+#include "game_room.h"
 #include "game_manager.h"
 #include "globals.h"
 #include <iostream>
 #include <memory>
 
 //! tem que implementar o callback direito
-Enemy::Enemy(int base_life, int damage, int line, double base_cooldown, double points, GameRoom &room)
+Enemy::Enemy(int base_life, int damage, int line, double base_cooldown, double points, Room &room)
     : _damage(damage), _line(line), _base_cooldown(base_cooldown), _points(points), _room(room),
       _shape(sf::Vector2f(100.0, 100.0)), _health(100, []() {}) { // _shape ta com um tamanho de teste
 
-    //_health.set_life(base_life);
+    _health.set_life(base_life);
     _position_x = GAME_SIZE_X;
     _cooldown = 0;
     _shape.setFillColor(sf::Color::Red);
@@ -35,17 +35,24 @@ bool Enemy::can_walk(double next_position) {
 }
 
 void Enemy::attack() {
-    _room.get_wave_manager().spawn_projectile(std::make_unique<EnemyProjectile>(
-        get_position(), *this, _room.get_wall(), 10.0, _room));
+    GameRoom& game_room = dynamic_cast<GameRoom&>(_room);
+    game_room.get_wave_manager().spawn_projectile(std::make_unique<EnemyProjectile>(
+        get_position(), *this, game_room.get_wall(), 100.0, _room));
 }
 
 void Enemy::run(double dt) {
-    // if(_health.is_dead()) {
-    //     return;
-    // }
+    if(_health.is_dead()) {
+        return;
+    }
 
     if (_cooldown > 0) {
         _cooldown -= dt;
+    }
+
+    //! DEBUG
+    if (_cooldown <= 0) {           // E tenha acabado o cooldown de ataque
+        attack();                   // o inimigo ataca
+        _cooldown = _base_cooldown; // e o timer reseta
     }
 
     double speed = 50;                                   // 50 pixels por segundo(teste)

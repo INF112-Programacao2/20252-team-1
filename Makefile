@@ -1,0 +1,49 @@
+CXX := g++
+DEBUG ?= 0
+
+ifeq ($(DEBUG), 1)
+	CXXFLAGS += -g
+else
+	CXXFLAGS += -O2
+endif
+
+CXXFLAGS += -Wall -Wextra -std=c++17 -Iinclude
+LDFLAGS := -lsfml-graphics -lsfml-window -lsfml-system
+
+SRC_DIR := src
+OBJ_DIR := obj
+INC_DIR := include
+
+TARGET := main
+
+SRCS := $(wildcard $(SRC_DIR)/*.cpp)
+OBJS := $(patsubst $(SRC_DIR)/%.cpp,$(OBJ_DIR)/%.o,$(SRCS))
+
+# arquivo de dependência
+DEPS := $(OBJS:.o=.d)
+
+all: $(TARGET)
+
+# gera o executável
+$(TARGET): $(OBJS)
+	$(CXX) $(CXXFLAGS) -o $@ $^ $(LDFLAGS)
+
+# compila .cpp para .o e gera .d
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp | $(OBJ_DIR)
+	$(CXX) $(CXXFLAGS) -MMD -c $< -o $@
+
+# cria o diretório /obj
+$(OBJ_DIR):
+	mkdir -p $(OBJ_DIR)
+
+# inclui os arquivos .d (dependências de headers)
+-include $(DEPS)
+
+# remove binário e objetos
+clean:
+	rm -rf $(OBJ_DIR) $(TARGET)
+
+run: all
+	./$(TARGET)
+
+.PHONY: all clean run
