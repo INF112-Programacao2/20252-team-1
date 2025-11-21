@@ -3,7 +3,7 @@
 
 #include "text_button.h"
 #include <SFML/Graphics/Text.hpp>
-//#include <string>
+#include <string>
 
 class UpgradeUI{
 private:

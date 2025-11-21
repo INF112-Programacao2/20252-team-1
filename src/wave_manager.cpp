@@ -13,31 +13,33 @@ WaveManager::WaveManager(Room &room) : _room(room) {
 WaveManager::~WaveManager() = default;
 
 void WaveManager::spawn_wave() {
-    _enemys.insert(std::make_shared<Enemy>(50, 10, 1, 4.0, 25, _room));
-    _enemys.insert(std::make_shared<Enemy>(50, 10, 2, 3.0, 25, _room));
-    _enemys.insert(std::make_shared<Enemy>(50, 10, 3, 3.0, 25, _room));
-    _enemys.insert(std::make_shared<Enemy>(50, 10, 4, 3.5, 25, _room));
+    _enemys.push_back(std::make_shared<Enemy>(50, 10, 1, 5.0, 25, _room));
+    _enemys.push_back(std::make_shared<Enemy>(50, 10, 2, 5.0, 25, _room));
+    _enemys.push_back(std::make_shared<Enemy>(50, 10, 3, 5.0, 25, _room));
+    _enemys.push_back(std::make_shared<Enemy>(50, 10, 4, 5.0, 25, _room));
 }
 
 void WaveManager::run(double dt) {
     // Run dos inimigos
-    for (auto it = _enemys.begin(); it != _enemys.end(); ) {
-        it->get()->run(dt);
+    for (int i = 0; i < _enemys.size(); ) {
+        _enemys[i]->run(dt);
 
-        if (it->get()->is_destroyed()) {
-            it = _enemys.erase(it);
+        if (_enemys[i]->is_destroyed()) {
+            std::swap(_enemys[i], _enemys.back());
+            _enemys.pop_back();
         } else
-            it++;
+            i++;
     }
 
     // Run dos projeteis de inimigos
-    for (auto it = _projectiles.begin(); it != _projectiles.end(); ) {
-        it->get()->run(dt);
+    for (int i = 0; i < _projectiles.size(); ) {
+        _projectiles[i]->run(dt);
 
-        if (it->get()->is_destroyed()) {
-            it = _projectiles.erase(it);
+        if (_projectiles[i]->is_destroyed()) {
+            std::swap(_projectiles[i], _projectiles.back());
+            _projectiles.pop_back();
         } else
-            it++;
+            i++;
     }
 
     // delay ate a proxima wave
@@ -56,8 +58,10 @@ void WaveManager::run(double dt) {
         }
 
         // TODO: mostrar que ganhou o jogo
-        if (_wave_idx >= MAX_WAVES)
+        if (_wave_idx >= MAX_WAVES) {
+            _wave_idx = MAX_WAVES; // nao deixa dar overflow no array por enquanto
             return;
+        }
     }
 
     if (_is_waiting_delay) {
@@ -82,20 +86,25 @@ void WaveManager::draw() {
 }
 
 void WaveManager::spawn_projectile(std::unique_ptr<EnemyProjectile> projectile) {
-    _projectiles.insert(std::move(projectile));
+    _projectiles.push_back(std::move(projectile));
 }
 
 /// Retorna a distancia ao quadrado, util para comparar distancias
-float get_distance_sqr(sf::Vector2f a, sf::Vector2f b) {
-    return (a.x - b.x) * (a.x - b.x) + (a.y - b.y) * (a.y - b.y);
+double get_distance_sqr(sf::Vector2f a, sf::Vector2f b) {
+    double dx = a.x - b.x;
+    double dy = a.y - b.y;
+    return dx * dx + dy * dy;
 }
 
 std::shared_ptr<Enemy> WaveManager::get_closest_enemy(sf::Vector2f position) {
-    std::shared_ptr<Enemy> closest;
-    float min_distance = 1000000;
+    if (_enemys.empty())
+        return nullptr;
 
-    for (std::shared_ptr<Enemy> enemy : _enemys) {
-        float distance = get_distance_sqr(position, enemy->get_position());
+    std::shared_ptr<Enemy> closest = *_enemys.begin();
+    double min_distance = get_distance_sqr(position, (*_enemys.begin())->get_position());
+
+    for (const std::shared_ptr<Enemy> &enemy : _enemys) {
+        double distance = get_distance_sqr(position, enemy->get_position());
         if (distance < min_distance) {
             closest = enemy;
             min_distance = distance;
@@ -107,9 +116,9 @@ std::shared_ptr<Enemy> WaveManager::get_closest_enemy(sf::Vector2f position) {
 
 std::shared_ptr<Enemy> WaveManager::get_closest_enemy_on_line(int line) {
     std::shared_ptr<Enemy> closest;
-    float closest_x_pos = 1000000;
+    float closest_x_pos = 10000000;
 
-    for (std::shared_ptr<Enemy> enemy : _enemys) {
+    for (const std::shared_ptr<Enemy> &enemy : _enemys) {
         if (enemy->get_line() == line && enemy->get_position().x < closest_x_pos) {
             closest = enemy;
             closest_x_pos = enemy->get_position().x;
@@ -122,7 +131,7 @@ std::shared_ptr<Enemy> WaveManager::get_closest_enemy_on_line(int line) {
 std::vector<std::shared_ptr<Enemy>> WaveManager::get_enemys_on_circle(sf::Vector2f center, float radius) {
     std::vector<std::shared_ptr<Enemy>> vec;
 
-    for (std::shared_ptr<Enemy> enemy : _enemys) {
+    for (const std::shared_ptr<Enemy> &enemy : _enemys) {
         if (get_distance_sqr(center, enemy->get_position()) <= radius * radius)
             vec.push_back(enemy);
     }
@@ -130,11 +139,11 @@ std::vector<std::shared_ptr<Enemy>> WaveManager::get_enemys_on_circle(sf::Vector
     return vec;
 }
 
-void WaveManager::remove_enemy(Enemy *enemy) {
-    for (std::shared_ptr<Enemy> sp : _enemys) {
-        if (sp.get() == enemy) {
-            _enemys.erase(sp);
-            break;
-        }
+std::shared_ptr<Enemy> WaveManager::get_enemy_colliding(sf::Vector2f position) {
+    for (const std::shared_ptr<Enemy>& enemy : _enemys) {
+        if (enemy->collide(position))
+            return enemy;
     }
+
+    return nullptr;
 }

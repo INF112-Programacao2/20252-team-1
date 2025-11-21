@@ -224,16 +224,18 @@ void TroopManager::place_troop() {
             25 + offset.x + gap_x * col,
             25 + offset.y + GAP_Y * row);
 
+        int line = GameManager::get_line(mouse_pos);
+
         // TODO: escolher a classe certa pra cada tipo de tropa
         Troop *troop;
         switch (_cursor_troop) {
         case TroopType::SolarEnergy:
-            troop = new SolarEnergyTroop(position, 5.0, 100, _room);
+            troop = new SolarEnergyTroop(position, line, 5.0, 100, _room);
             break;
 
         //! DEBUG (Troop deveria ser uma interface)
         default:
-            troop = new Troop(position, 5.0, _room);
+            troop = new Troop(position, line, 5.0, _room);
             break;
         }
 
@@ -258,25 +260,28 @@ void TroopManager::run(double dt, const std::vector<sf::Event> &event_queue) {
     }
 
     // Run dos projeteis das troops
-    for (auto it = _projectiles.begin(); it != _projectiles.end(); ) {
-        it->get()->run(dt);
+    for (int i = 0; i < _projectiles.size(); ) {
+        _projectiles[i]->run(dt);
 
-        if (it->get()->is_destroyed()) {
-            it = _projectiles.erase(it);
+        if (_projectiles[i]->is_destroyed()) {
+            std::swap(_projectiles[i], _projectiles.back());
+            _projectiles.pop_back();
         } else
-            it++;
+            i++;
     }
 
-    for (int i = 0; i < _field_troops.size(); i++) {
+    // Run do field troop
+    for (int i = 0; i < _field_troops.size(); ) {
         FieldTroop *field_troop = _field_troops[i];
 
-        if (!field_troop)
-            _field_troops.erase(_field_troops.begin() + i--); // tira do vetor e volta o i
-        else if (field_troop->is_destroyed()) {
+        if (!field_troop || field_troop->is_destroyed()) {
             delete field_troop;
-            _field_troops.erase(_field_troops.begin() + i--); // tira do vetor e volta o i
-        } else
+            std::swap(_field_troops[i], _field_troops.back());
+            _field_troops.pop_back();
+        } else {
             field_troop->run(dt);
+            i++;
+        }
     }
 
     // colocando uma tropa no mapa
@@ -302,5 +307,5 @@ void TroopManager::run(double dt, const std::vector<sf::Event> &event_queue) {
 }
 
 void TroopManager::spawn_projectile(std::unique_ptr<TroopProjectile> projectile) {
-    _projectiles.insert(std::move(projectile));
+    _projectiles.push_back(std::move(projectile));
 }

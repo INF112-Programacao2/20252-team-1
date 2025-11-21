@@ -35,8 +35,8 @@ void GameRoom::run(double dt, const std::vector<sf::Event> &event_queue) {
     _window.clear(sf::Color(50, 150, 50));
 
     _wall.draw();
-    _troop_manager.draw();
     _wave_manager.draw();
+    _troop_manager.draw();
 
     // HUD
     sf::RectangleShape hud_rect(sf::Vector2f(GAME_SIZE_X, HUD_HEIGHT));

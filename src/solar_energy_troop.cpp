@@ -5,8 +5,8 @@
 
 sf::Texture SolarEnergyTroop::_texture;
 
-SolarEnergyTroop::SolarEnergyTroop(sf::Vector2f position, double cooldown, int increase_points, Room &room)
-    : Troop(position, cooldown, room), _points_text(position, 1, room) {
+SolarEnergyTroop::SolarEnergyTroop(sf::Vector2f position, int line, double cooldown, int increase_points, Room &room)
+    : Troop(position, line, cooldown, room), _points_text(position, 1, room) {
     sf::Text text("", GameManager::get_instance().get_font(), 30);
     _points_text.set_text(text);
     _increase_points = increase_points;

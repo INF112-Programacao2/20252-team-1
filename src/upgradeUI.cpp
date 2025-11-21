@@ -44,9 +44,7 @@ UpgradeUI::UpgradeUI(std::string nome, int preco, int level,
   _descricao.setString(quebra_linha);
 }
 
-UpgradeUI::~UpgradeUI() {
-  // Destrutor, se necessário
-}
+UpgradeUI::~UpgradeUI() = default;
 
 bool UpgradeUI::buy(const std::vector<sf::Event> &event_queue) {
   for (const sf::Event &event : event_queue) {

@@ -12,13 +12,13 @@
 class Troop {
 protected:
     sf::Vector2f _position;
-    double _cooldown = 2.0;
+    int _line;
+    double _cooldown;
     Clock _timer;
     Room &_room;
 
 public:
-    Troop(sf::Vector2f position, Room &room);
-    Troop(sf::Vector2f position, double cooldown, Room &room);
+    Troop(sf::Vector2f position, int line, double cooldown, Room &room);
 
     virtual ~Troop();
 
@@ -26,6 +26,7 @@ public:
     virtual void run(double dt);
 
     /// Ativa a habilidade
+    //! nao e virtual pura por debug
     virtual void fire();
 
     //! nao e virtual pura por debug

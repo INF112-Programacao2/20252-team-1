@@ -12,10 +12,14 @@ private:
     // Outros atributos relacionados ao UpgradeRoom
 public:
     UpgradeRoom(sf::RenderWindow &window, RoomManager &room_manager);
+
     ~UpgradeRoom();
-    void start() override;
+
+    void start();
+
     void run(double dt, const std::vector<sf::Event> &event_queue) override;
-    void end() override;
+
+    void end();
 };
 
 #endif

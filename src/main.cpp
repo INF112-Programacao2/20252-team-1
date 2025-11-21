@@ -43,7 +43,6 @@ int main() {
 
     GameRoom game_room(window, room_manager, 1000, 0);
     MainMenuRoom main_menu_room(window, room_manager);
-
     UpgradeRoom upgrade_room(window, room_manager);
 
     room_manager.add_room("main_menu", &main_menu_room);

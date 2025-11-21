@@ -11,10 +11,7 @@ RoomManager::RoomManager(std::string start_room_name, Room *start_room) {
     _curr_room->start();
 }
 
-RoomManager::~RoomManager() {
-    if (_curr_room)
-        _curr_room->end();
-}
+RoomManager::~RoomManager() = default;
 
 void RoomManager::add_room(std::string room_name, Room *room) {
     _room_map[room_name] = room;

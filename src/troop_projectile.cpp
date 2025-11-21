@@ -1,5 +1,6 @@
 #include "troop_projectile.h"
 #include "projectile.h"
+#include "game_room.h"
 #include <cmath>
 #include <SFML/Graphics.hpp>
 
@@ -24,15 +25,16 @@ void TroopProjectile::run(double dt) {
 
     std::shared_ptr<Enemy> enemy = _target.lock();
 
-    // mantem a direcao anterior caso o target seja destruido
+    // mantem a direcao caso o target seja perdido
     if (enemy)
         _direction = normalize(enemy->get_position() - _position);
 
     _position += (float)(_speed * dt) * _direction;
 
-    // acerta o alvo
-    if (enemy && enemy->collide(_position)) {
-        enemy->damage(_damage);
+    // ve se acertou algum inimigo (pode nao ser o target)
+    GameRoom &game_room = dynamic_cast<GameRoom&>(_room);
+    if (auto hit = game_room.get_wave_manager().get_enemy_colliding(_position)) {
+        hit->damage(_damage);
         destroy();
 
         return;

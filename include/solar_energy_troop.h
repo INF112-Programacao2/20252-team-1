@@ -12,7 +12,7 @@ private:
     static sf::Texture _texture;
 
 public:
-    SolarEnergyTroop(sf::Vector2f position, double cooldown, int increase_points, Room &room);
+    SolarEnergyTroop(sf::Vector2f position, int line, double cooldown, int increase_points, Room &room);
 
     /// Gera pontos
     void fire() override;
