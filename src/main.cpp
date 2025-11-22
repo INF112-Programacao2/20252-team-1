@@ -74,6 +74,16 @@ int main() {
                 window.close();
             }
 
+            // Vai pra room de upgrades quando se aperta 'U'
+            if (event.type == sf::Event::KeyReleased && event.key.code == sf::Keyboard::U) {
+                room_manager.change_room("upgrade");
+            }
+
+            // Vai pra room do jogo quando se aperta 'G'
+            if (event.type == sf::Event::KeyReleased && event.key.code == sf::Keyboard::G) {
+                room_manager.change_room("game");
+            }
+
             room_manager.add_event(event);
         }
 
