@@ -14,7 +14,7 @@ class Troop {
 protected:
     TroopType _type = TroopType::Troop1;
     sf::Vector2f _position;
-    int _line;
+    int _line; // comeca do 1
     double _cooldown;
     Clock _timer;
     Room &_room;

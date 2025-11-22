@@ -1,6 +1,7 @@
 #include "upgrade_room.h"
 #include "game_manager.h"
 #include "globals.h"
+#include "room_manager.h"
 #include <iostream>
 
 UpgradeRoom::UpgradeRoom(sf::RenderWindow &window, RoomManager &room_manager)
@@ -49,10 +50,15 @@ UpgradeRoom::UpgradeRoom(sf::RenderWindow &window, RoomManager &room_manager)
 UpgradeRoom::~UpgradeRoom() = default;
 
 void UpgradeRoom::start() {
-  	// Inicialização do UpgradeRoom
+    // Inicializacao do UpgradeRoom
 }
 
 void UpgradeRoom::run(double dt, const std::vector<sf::Event> &event_queue) {
+    for (const sf::Event &event : event_queue) {
+        if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Tab)
+            _room_manager.rollback_room();
+    }
+    
     _window.clear(sf::Color::Black);
 
     sf::Text points_text(
@@ -65,8 +71,8 @@ void UpgradeRoom::run(double dt, const std::vector<sf::Event> &event_queue) {
 
     _dano_bruto.draw();
     _dano_bruto.run(dt, event_queue);
-	_ataque_rapido.draw();
-	_ataque_rapido.run(dt, event_queue);
+    _ataque_rapido.draw();
+    _ataque_rapido.run(dt, event_queue);
 
     _window.display();
 }

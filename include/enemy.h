@@ -10,7 +10,7 @@ class Enemy : public std::enable_shared_from_this<Enemy> {
 protected:
     HealthManager _health;
     int _damage;
-    int _line;
+    int _line; // comeca do 1
     double _position_x;
     double _base_cooldown;
     double _cooldown;

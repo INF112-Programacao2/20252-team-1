@@ -4,6 +4,7 @@
 #include "globals.h"
 #include "text_button.h"
 #include "game_manager.h"
+#include "room_manager.h"
 
 GameRoom::GameRoom(
     sf::RenderWindow &window, RoomManager &room_manager, int wall_base_life, int wall_spike_damage)
@@ -22,8 +23,13 @@ void GameRoom::run(double dt, const std::vector<sf::Event> &event_queue) {
     //* rodando:
     for (const sf::Event &event : event_queue) {
         // ESC pausa
-        if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Escape)
-            _paused = !_paused;
+        if (event.type == sf::Event::KeyPressed) {
+            if (event.key.code == sf::Keyboard::Escape)
+                _paused = !_paused;
+
+            if (event.key.code == sf::Keyboard::Tab)
+                _room_manager.change_room("upgrade");
+        }
     }
 
     if (!_paused) {

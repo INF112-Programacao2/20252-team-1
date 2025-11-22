@@ -5,17 +5,19 @@
 
 const float width = 250.f;
 const float height = 250.f;
+const float padding_x = 20.f;
 const int desc_tamanho = 14;
+
 UpgradeUI::UpgradeUI(std::string nome, int preco, int level, int max_level, std::string descricao,
-	sf::Vector2f position, Room &room, std::function<void()> on_buy_callback)
+    sf::Vector2f position, Room &room, std::function<void()> on_buy_callback)
     : _preco(preco), _level(level), _max_level(max_level), _position(position), _room(room),
-	  _on_buy_callback(std::move(on_buy_callback)), _feedback_text(sf::Vector2f(0, 0), 1.5, room) {
+      _on_buy_callback(std::move(on_buy_callback)), _feedback_text(sf::Vector2f(0, 0), 1.5, room) {
     _nome.setString(nome);
     _colider = sf::Rect<float>(position.x, position.y, width, height);
     _font = GameManager::get_instance().get_font();
 
     // criacao da quebra de linha na descricao
-    const float largura_max = width - 20.f;
+    const float largura_max = width - 2 * padding_x;
     _descricao.setFont(_font);
     _descricao.setCharacterSize(desc_tamanho);
 
@@ -25,15 +27,15 @@ UpgradeUI::UpgradeUI(std::string nome, int preco, int level, int max_level, std:
     std::string linha_atual;
 
     while (ss >> palavra) {
-    	std::string test_line = linha_atual.empty() ? palavra : linha_atual + " " + palavra;
+        std::string test_line = linha_atual.empty() ? palavra : linha_atual + " " + palavra;
 
         sf::Text temp_text(test_line, _font, desc_tamanho);
         float bounds_width = temp_text.getLocalBounds().width;
 
         if (bounds_width > largura_max) {
-        	if (!linha_atual.empty()) {
-				quebra_linha += linha_atual + "\n";
-				linha_atual = palavra;
+            if (!linha_atual.empty()) {
+                quebra_linha += linha_atual + "\n";
+                linha_atual = palavra;
             }
         } else {
             linha_atual = test_line;
@@ -43,17 +45,17 @@ UpgradeUI::UpgradeUI(std::string nome, int preco, int level, int max_level, std:
     quebra_linha += linha_atual;
     _descricao.setString(quebra_linha);
 
-	// Circulos dos niveis
+    // Circulos dos niveis
     _level_circle.setRadius(6.f);
     _level_circle.setOutlineThickness(1.f);
     _level_circle.setOutlineColor(sf::Color::White);
-    
+
     // Texto do nivel
     _level_label.setFont(_font);
     _level_label.setString("Nivel:");
     _level_label.setCharacterSize(18);
 
-	// Texto do preco
+    // Texto do preco
     _preco_text.setFont(_font);
     _preco_text.setCharacterSize(18);
 }
@@ -61,30 +63,30 @@ UpgradeUI::UpgradeUI(std::string nome, int preco, int level, int max_level, std:
 UpgradeUI::~UpgradeUI() = default;
 
 bool UpgradeUI::buy(const std::vector<sf::Event> &event_queue) {
-	for(const sf::Event &event : event_queue) {
+    for(const sf::Event &event : event_queue) {
         if(event.type == sf::Event::MouseButtonReleased &&
             event.mouseButton.button == sf::Mouse::Left) {
-            
-			// Verifica se a posicao do mouse colide com a posicao do colider
-            if(_colider.contains((sf::Vector2f)_room.get_mouse_position())) {           
+
+            // Verifica se a posicao do mouse colide com a posicao do colider
+            if(_colider.contains((sf::Vector2f)_room.get_mouse_position())) {
                 GameManager& gm = GameManager::get_instance();
-				sf::Text msg_text;
+                sf::Text msg_text;
                 msg_text.setFont(_font);
                 msg_text.setCharacterSize(20);
 
-				if(_level < _max_level) {
-					if(gm.get_points() >= _preco) { // Verifica se tem pontos o bastante
-						gm.remove_points(_preco);// Remove os pontos gastos
-						_level++;
-						// Aumenta o preço para a proxima compra
-						_preco += 50;
-						// Executa o upgrade
-						if(_on_buy_callback) {
-							_on_buy_callback();
-						}
+                if(_level < _max_level) {
+                    if(gm.get_points() >= _preco) { // Verifica se tem pontos o bastante
+                        gm.remove_points(_preco);// Remove os pontos gastos
+                        _level++;
+                        // Aumenta o preço para a proxima compra
+                        _preco += 50;
+                        // Executa o upgrade
+                        if(_on_buy_callback) {
+                            _on_buy_callback();
+                        }
 
-						// Texto que aparece quando o jogador compra um upgrade
-						msg_text.setString("Subiu de nivel!");
+                        // Texto que aparece quando o jogador compra um upgrade
+                        msg_text.setString("Subiu de nivel!");
                         msg_text.setFillColor(sf::Color::Green);            
                         sf::FloatRect bounds = msg_text.getLocalBounds();
                         msg_text.setOrigin(bounds.width / 2, bounds.height / 2);
@@ -92,10 +94,9 @@ bool UpgradeUI::buy(const std::vector<sf::Event> &event_queue) {
                         _feedback_text.set_position(_position + sf::Vector2f(width / 2, height / 2));                        
                         _feedback_text.restart();
 
-						return true;
-					} 
-					else {
-						// Texto que aparece caso o jogador nao tenha pontos suficientes para comprar
+                        return true;
+                    } else {
+                        // Texto que aparece caso o jogador nao tenha pontos suficientes para comprar
                         msg_text.setString("Pontos insuficientes!");
                         msg_text.setFillColor(sf::Color::Red);
                         sf::FloatRect bounds = msg_text.getLocalBounds();
@@ -103,21 +104,22 @@ bool UpgradeUI::buy(const std::vector<sf::Event> &event_queue) {
                         _feedback_text.set_text(msg_text);
                         _feedback_text.set_position(_position + sf::Vector2f(width / 2, height / 2));
                         _feedback_text.restart();
-					}
-				}
+                    }
+                }
             }
         }
     }
+
     return false;
 }
 
 void UpgradeUI::run(double dt, const std::vector<sf::Event> &event_queue) {
-  	buy(event_queue);
-	_feedback_text.run(dt);
+    buy(event_queue);
+    _feedback_text.run(dt);
 }
 
 void UpgradeUI::draw() {
-	// Verifica se o mouse esta passando por cima
+    // Verifica se o mouse esta passando por cima
     bool is_hovering = _colider.contains((sf::Vector2f)_room.get_mouse_position());
 
     // Define a nova escala caso o mouse esteja por cima do botao
@@ -128,8 +130,7 @@ void UpgradeUI::draw() {
     if(is_hovering) {
         rectangle.setFillColor(sf::Color(50, 50, 50));
         rectangle.setOutlineColor(sf::Color::Yellow);
-    } 
-	else {
+    } else {
         rectangle.setFillColor(sf::Color::Black);
         rectangle.setOutlineColor(sf::Color::White);
     }
@@ -141,17 +142,17 @@ void UpgradeUI::draw() {
     rectangle.setScale(scale, scale);
     rectangle.setOutlineThickness(5.f);
 
-	// Tratando de desenhar o _nome
+    // Tratando de desenhar o _nome
     _nome.setFont(_font);
     _nome.setCharacterSize(24);
-    _nome.setPosition(_position + sf::Vector2f(15.f, 30.f));
-    _descricao.setPosition(_position + sf::Vector2f(15.f, 60.f));
+    _nome.setPosition(_position + sf::Vector2f(padding_x, 30.f));
+    _descricao.setPosition(_position + sf::Vector2f(padding_x, 60.f));
 
     // Posiciona o texto "Nivel:"
     float rodape_y_1 = height - 55.f;
-    _level_label.setPosition(_position + sf::Vector2f(15.f, rodape_y_1));
+    _level_label.setPosition(_position + sf::Vector2f(padding_x, rodape_y_1));
 
-    // Tratando de desenhar o _preco 
+    // Tratando de desenhar o _preco
     if(_level >= _max_level) {
         _preco_text.setString("MAXIMO");
         _preco_text.setFillColor(sf::Color::Red);
@@ -162,7 +163,7 @@ void UpgradeUI::draw() {
     }
 
     float rodape_y_2 = height - 25.f;
-    _preco_text.setPosition(_position + sf::Vector2f(15.f, rodape_y_2));
+    _preco_text.setPosition(_position + sf::Vector2f(padding_x, rodape_y_2));
 
     // Desenha os textos na janela
     _room.get_window().draw(rectangle);
@@ -174,9 +175,9 @@ void UpgradeUI::draw() {
     // Posicao dos circulos de nivel
     float raio = 6.f;
     float espacamento = 5.f; // Espaco entre os circulos
-    
-    float start_x = _position.x + 80.f; 
-    float start_y = _position.y + rodape_y_1 - 8.f; 
+
+    float start_x = _level_label.getGlobalBounds().left + _level_label.getGlobalBounds().width + 10;
+    float start_y = _position.y + rodape_y_1 - 8.f;
 
     for(int i = 0; i < _max_level; i++) {
         // Calcula a posicao do circulo em especifico
@@ -184,14 +185,9 @@ void UpgradeUI::draw() {
         _level_circle.setPosition(x, start_y);
 
         // Decide a cor
-        if(i < _level) {
-            _level_circle.setFillColor(sf::Color::Green);
-        } 
-		else {
-            _level_circle.setFillColor(sf::Color::Transparent);
-        }
+        _level_circle.setFillColor((i < _level) ? sf::Color::White : sf::Color::Transparent);
 
         _room.get_window().draw(_level_circle);
-		_feedback_text.draw();
+        _feedback_text.draw();
     }
 }

@@ -3,6 +3,8 @@
 
 # Bugs:
 - Fullscreen não funciona em todos os PCs e nem na versão compilada para windows
+- dissolving text do UpgradeUI não some quando sai da sala (se não tiver acabado o timer)
+- Menu de pause não aparece na UpgradeRoom (obviamente porque não foi implementado lá)
 
 # Refatoração:
 - Usar um sistema melhor pra definir o tamanho da tela e onde posicionar as coisas
@@ -22,6 +24,10 @@
 
 # Sprites:
 - Todos
+
+# Pedro:
+- Corrigir o BUG dissolving text do UpgradeUI não sumir quando sai da sala
+- Fazer o incremento de preço ser um parâmetro da classe UpgradeUI
 
 # Davi Nobre:
 - GameSaver (wave, pontos no inicio da wave, tropas no inicio da wave, upgrades, vida do muro no inicio da wave, fieldtroops no inicio da wave)

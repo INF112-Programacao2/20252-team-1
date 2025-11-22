@@ -197,16 +197,18 @@ Troop* TroopManager::instantiate_troop(int slot, TroopType troop_type) {
 
     int row = slot / TROOP_COLS;
     int col = slot % TROOP_COLS;
+
+    int line = row + 1;
     sf::Vector2f position(25 + offset.x + gap_x * col, 25 + offset.y + GAP_Y * row);
 
     // TODO: colocar o resto dos tipos de tropas
     switch (troop_type) {
     case TroopType::SolarEnergy:
-        return new SolarEnergyTroop(position, row, 5.0, 100, _room);
+        return new SolarEnergyTroop(position, line, 5.0, 100, _room);
 
     //! DEBUG (Troop deveria ser uma interface)
     default:
-        return new Troop(position, row, 5.0, _room);
+        return new Troop(position, line, 5.0, _room);
     }
 }
 

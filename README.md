@@ -15,3 +15,5 @@ Um jogo de tower defense inspirado em Plants vs Zombies com temática ambiental 
 **MOUSE ESQUERDO:** para comprar e posicionar as tropas
 
 **MOUSE DIREITO:** remove uma tropa se o mouse estiver em cima dela ou cancela a compra
+
+**TAB:** abre a sala de upgrades e sai dela também
