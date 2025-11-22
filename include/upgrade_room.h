@@ -8,7 +8,8 @@
 class UpgradeRoom : public Room {
 private:
     sf::Font _font;
-    UpgradeUI _upgrade_ui_1;
+    UpgradeUI _dano_bruto;
+    UpgradeUI _ataque_rapido;
     // Outros atributos relacionados ao UpgradeRoom
 public:
     UpgradeRoom(sf::RenderWindow &window, RoomManager &room_manager);
