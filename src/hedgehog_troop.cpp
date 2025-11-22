@@ -6,7 +6,10 @@ sf::Texture HedgehogTroop::_texture;
 
 HedgehogTroop::HedgehogTroop(sf::Vector2f position, float activation_radius,
                              double activation_delay, GameRoom &room)
-    : FieldTroop(position, activation_radius, activation_delay, room) {}
+    : FieldTroop(position, activation_radius, activation_delay, room) {
+
+    _type = TroopType::Hedgehog;
+}
 
 void HedgehogTroop::run(double dt) {
     // bloqueia o resto se estiver morto

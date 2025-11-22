@@ -191,54 +191,53 @@ void TroopManager::draw() {
     }
 }
 
+Troop* TroopManager::instantiate_troop(int slot, TroopType troop_type) {
+    if (slot == -1 || _troops[slot] != nullptr || troop_type == TroopType::None)
+        return nullptr;
+
+    int row = slot / TROOP_COLS;
+    int col = slot % TROOP_COLS;
+    sf::Vector2f position(25 + offset.x + gap_x * col, 25 + offset.y + GAP_Y * row);
+
+    // TODO: colocar o resto dos tipos de tropas
+    switch (troop_type) {
+    case TroopType::SolarEnergy:
+        return new SolarEnergyTroop(position, row, 5.0, 100, _room);
+
+    //! DEBUG (Troop deveria ser uma interface)
+    default:
+        return new Troop(position, row, 5.0, _room);
+    }
+}
+
+FieldTroop* TroopManager::instantiate_field_troop(sf::Vector2f position, TroopType troop_type) {
+    if (!_enemy_area.contains(position))
+        return nullptr;
+
+    // TODO: adicionar as outras tropas que sao do tipo FieldTroop
+    switch (troop_type) {
+    case TroopType::Hedgehog:
+        return new HedgehogTroop(position, 75.0, 0.5, _room);
+
+    default:
+        std::cout << troop_type << std::endl; //!DEBUG
+        std::cerr << "FieldTroop nao adicionada!" << std::endl;
+        return nullptr;
+    }
+}
+
 void TroopManager::place_troop() {
     sf::Vector2f mouse_pos = (sf::Vector2f)_room.get_mouse_position();
 
-    // TODO: adicionar as outras tropas que sao do tipo FieldTroop
-    if (_cursor_troop == TroopType::Hedgehog) {
-        if (_enemy_area.contains(get_line_pos())) {
-            FieldTroop *field_troop;
-
-            switch (_cursor_troop) {
-            case TroopType::Hedgehog:
-                field_troop = new HedgehogTroop(get_line_pos(), 75.0, 0.5, _room);
-                break;
-
-            default:
-                std::cerr << "Tropa nao adicionada!" << std::endl;
-                break;
-            }
-
-            _field_troops.push_back(field_troop);
-            _cursor_troop = TroopType::None;
-        }
+    if (FieldTroop* field_troop = instantiate_field_troop(get_line_pos(), _cursor_troop)) {
+        _field_troops.push_back(field_troop);
+        _cursor_troop = TroopType::None;
 
         return;
     }
 
     int slot = position_to_slot(mouse_pos);
-    if (slot != -1 && _troops[slot] == nullptr && _cursor_troop != TroopType::None) {
-        int row = slot / TROOP_COLS;
-        int col = slot % TROOP_COLS;
-        sf::Vector2f position(
-            25 + offset.x + gap_x * col,
-            25 + offset.y + GAP_Y * row);
-
-        int line = GameManager::get_line(mouse_pos);
-
-        // TODO: escolher a classe certa pra cada tipo de tropa
-        Troop *troop;
-        switch (_cursor_troop) {
-        case TroopType::SolarEnergy:
-            troop = new SolarEnergyTroop(position, line, 5.0, 100, _room);
-            break;
-
-        //! DEBUG (Troop deveria ser uma interface)
-        default:
-            troop = new Troop(position, line, 5.0, _room);
-            break;
-        }
-
+    if (Troop* troop = instantiate_troop(slot, _cursor_troop)) {
         _troops[slot] = troop;
         _cursor_troop = TroopType::None;
 
@@ -308,4 +307,34 @@ void TroopManager::run(double dt, const std::vector<sf::Event> &event_queue) {
 
 void TroopManager::spawn_projectile(std::unique_ptr<TroopProjectile> projectile) {
     _projectiles.push_back(std::move(projectile));
+}
+
+std::array<TroopType, TROOP_ROWS * TROOP_COLS> TroopManager::get_troops() {
+    std::array<TroopType, TROOP_ROWS * TROOP_COLS> result;
+    for (int i = 0; i < _troops.size(); i++)
+        result[i] = (_troops[i] == nullptr) ? TroopType::None : _troops[i]->get_type();
+
+    return result;
+}
+
+void TroopManager::set_troops(std::array<TroopType, TROOP_ROWS * TROOP_COLS> troops) {
+    for (int slot = 0; slot < troops.size(); slot++) {
+        delete _troops[slot];
+        _troops[slot] = instantiate_troop(slot, troops[slot]);
+    }
+}
+
+const std::vector<FieldTroop *> &TroopManager::get_field_troops() {
+    return _field_troops;
+}
+
+void TroopManager::set_field_troops(const std::vector<std::pair<TroopType, sf::Vector2f>> &field_troops) {
+    for (FieldTroop* field_troop : _field_troops)
+        delete field_troop;
+
+    _field_troops.clear();
+    _field_troops.reserve(field_troops.size());
+    for (auto [troop_type, position] : field_troops) {
+        _field_troops.push_back(instantiate_field_troop(position, troop_type));
+    }
 }

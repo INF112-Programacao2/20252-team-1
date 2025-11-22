@@ -7,12 +7,16 @@
 
 enum TroopType {
     None = -1,
+
+    // Troops:
     Troop1 = 0,
     Troop2,
     Troop3,
     Troop4,
     Troop5,
     SolarEnergy,
+
+    // FieldTroops:
     Hedgehog,
 };
 

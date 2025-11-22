@@ -6,7 +6,7 @@
 
 class GameManager {
 private:
-    int _points = 1000;
+    int _points = 0;
     double _cooldown_multiplier = 1.0; // entre 0-1, quanto menor mais rapido o cooldown
     double _damage_multiplier = 1.0;   // quanto maior mais dano da nos inimigos
     sf::Font _font;

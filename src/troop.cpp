@@ -36,3 +36,7 @@ void Troop::draw() {
 
     _room.get_window().draw(circle);
 }
+
+TroopType Troop::get_type() {
+    return _type;
+}

@@ -4,6 +4,7 @@
 #include <SFML/Graphics.hpp>
 #include "room.h"
 #include "clock.h"
+#include "globals.h"
 
 // TODO: transformar numa classe abstrata
 
@@ -11,6 +12,7 @@
 
 class Troop {
 protected:
+    TroopType _type = TroopType::Troop1;
     sf::Vector2f _position;
     int _line;
     double _cooldown;
@@ -31,6 +33,8 @@ public:
 
     //! nao e virtual pura por debug
     virtual void draw();
+
+    TroopType get_type();
 };
 
 #endif

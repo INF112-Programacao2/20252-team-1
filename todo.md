@@ -18,11 +18,15 @@
 - Mais tropas
 - GameSaver
 - Efeitos sonoros / música
+- Logica de ganhar o jogo (salvar a wave anterior à vitória)
 
 # Sprites:
 - Todos
 
 # Davi Nobre:
+- GameSaver (wave, pontos no inicio da wave, tropas no inicio da wave, upgrades, vida do muro no inicio da wave, fieldtroops no inicio da wave)
+- Salvar no momento certo
+- Poder resetar um save no menu de inicio
 
 # Gabriel:
 - Implementar destroy do Muro (esperar projeteis)

@@ -55,6 +55,9 @@ public:
 
     /// Retorna o primeiro inimigo que colide com a posicao
     std::shared_ptr<Enemy> get_enemy_colliding(sf::Vector2f position);
+
+    int get_wave_idx();
+    void set_wave_idx(int wave_idx);
 };
 
 #endif

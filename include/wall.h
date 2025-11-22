@@ -35,6 +35,8 @@ public:
 
     // Retorna se a posicao esta colidindo com o muro
     bool collide(sf::Vector2f position);
+
+    int get_life();
 };
 
 #endif

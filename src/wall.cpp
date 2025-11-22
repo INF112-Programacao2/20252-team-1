@@ -41,3 +41,7 @@ void Wall::hit(EnemyProjectile& projectile) {
         enemy->damage(_spike_damage);
     }
 }
+
+int Wall::get_life() {
+    return _health.get_life();
+}

@@ -147,3 +147,11 @@ std::shared_ptr<Enemy> WaveManager::get_enemy_colliding(sf::Vector2f position) {
 
     return nullptr;
 }
+
+int WaveManager::get_wave_idx() {
+    return _wave_idx;
+}
+
+void WaveManager::set_wave_idx(int wave_idx) {
+    _wave_idx = wave_idx;
+}

@@ -4,10 +4,12 @@
 #include <SFML/Graphics.hpp>
 #include "room.h"
 #include "clock.h"
+#include "globals.h"
 
 // Classe abstrata para tropas que ficam na area dos inimigos
 class FieldTroop {
 protected:
+    TroopType _type = TroopType::None;
     sf::Vector2f _position;
     Clock _timer;
     float _activation_radius;
@@ -30,6 +32,10 @@ public:
     virtual void draw() = 0;
 
     bool is_destroyed() { return _destroyed; }
+
+    TroopType get_type() { return _type; }
+
+    sf::Vector2f get_position() { return _position; }
 };
 
 #endif

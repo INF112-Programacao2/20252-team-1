@@ -5,6 +5,7 @@
 #include "game_manager.h"
 #include "main_menu_room.h"
 #include "upgrade_room.h"
+#include "game_saver.h"
 
 int main() {
     std::srand(std::time(0));
@@ -39,9 +40,14 @@ int main() {
 
     window.setVerticalSyncEnabled(false);
 
+    // Carregando informacoes do jogo
+    GameSaver game_saver("save.txt");
+    game_saver.load();
+
+    // Criando as salas
     RoomManager room_manager;
 
-    GameRoom game_room(window, room_manager, 1000, 0);
+    GameRoom game_room(window, room_manager, game_saver.get_wall_life(), 0);
     MainMenuRoom main_menu_room(window, room_manager);
     UpgradeRoom upgrade_room(window, room_manager);
 
@@ -49,6 +55,12 @@ int main() {
     room_manager.add_room("game", &game_room);
     room_manager.add_room("upgrade", &upgrade_room);
     room_manager.change_room("game");
+
+    // Restaurando estado anterior
+    GameManager::get_instance().add_points(game_saver.get_points());
+    game_room.get_wave_manager().set_wave_idx(game_saver.get_wave_idx());
+    game_room.get_troop_manager().set_troops(game_saver.get_troops());
+    game_room.get_troop_manager().set_field_troops(game_saver.get_field_troops());
 
     sf::Clock delta_clock; // calcula o delta time (segundos entre o ultimo frame)
 
@@ -67,6 +79,15 @@ int main() {
 
         room_manager.run(delta_clock.restart().asSeconds());
     }
+
+    //! DEBUG (so deve salvar no inicio de uma wave)
+    game_saver.set_wave_idx(game_room.get_wave_manager().get_wave_idx());
+    game_saver.set_points(GameManager::get_instance().get_points());
+    game_saver.set_wall_life(game_room.get_wall().get_life());
+    game_saver.set_troops(game_room.get_troop_manager().get_troops());
+    game_saver.set_field_troops(game_room.get_troop_manager().get_field_troops());
+
+    game_saver.save();
 
     return 0;
 }
