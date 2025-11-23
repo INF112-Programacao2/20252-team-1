@@ -10,12 +10,12 @@ GameSaver::GameSaver(const std::string &save_file_path, GameRoom& game_room, Upg
     _wave_idx = 0;
     _points = 1000;
     _wall_life = 1000;
-    _wall_max_life = 1000;
     for (auto &troop_type : _troops) {
         troop_type = TroopType::None;
     }
-
-    //TODO: valores default para upgrades
+    for (auto &value : _upgrades) {
+        value = 0;
+    }
 
     update_game_state();
 }
@@ -23,17 +23,17 @@ GameSaver::GameSaver(const std::string &save_file_path, GameRoom& game_room, Upg
 void GameSaver::load_game_state() {
     _wave_idx = _game_room.get_wave_manager().get_wave_idx();
     _points = GameManager::get_instance().get_points();
-    _wall_max_life = _game_room.get_wall().get_max_life();
     _wall_life = _game_room.get_wall().get_life();
+    _upgrades = _upgrade_room.get_upgrade_levels();
     _troops = _game_room.get_troop_manager().get_troops();
     set_field_troops(_game_room.get_troop_manager().get_field_troops());
 }
 
 void GameSaver::update_game_state() {
-    GameManager::get_instance().set_points(_points);
-    _game_room.get_wall().set_max_life(_wall_max_life); // vem antes do set_life
-    _game_room.get_wall().set_life(_wall_life);
     _game_room.get_wave_manager().set_wave_idx(_wave_idx);
+    GameManager::get_instance().set_points(_points);
+    _upgrade_room.set_upgrade_levels(_upgrades); // vem antes do set_life do wall
+    _game_room.get_wall().set_life(_wall_life);
     _game_room.get_troop_manager().set_troops(_troops);
     _game_room.get_troop_manager().set_field_troops(_field_troops);
 }
@@ -48,20 +48,29 @@ void GameSaver::save() {
 
     load_game_state(); // Carrega as informacoes do jogo
 
-    // salva as informacoes no arquivo
-    _save_file << _wave_idx << ' ' << _points << ' ' << _wall_life << ' ' << _wall_max_life << std::endl;
+    // salva as informacoes no arquivo:
 
+    // salva inteiros da primeira linha
+    _save_file << _wave_idx << ' ' << _points << ' ' << _wall_life << std::endl;
+
+    // salva o tipo das tropas na segunda linha
     for (int i = 0; i < _troops.size() - 1; i++)
         _save_file << _troops[i] << ' ';
     _save_file << _troops.back() << std::endl;
 
+    // salva a quantidade de upgrades comprados para cada tipo na terceira linha
+    for (int i = 0; i < UPGRADE_COUNT - 1; i++)
+        _save_file << _upgrades[i] << ' ';
+    _save_file << _upgrades.back() << std::endl;
+
+    // salva quantas tropas de campo tem na quarta linha
     _save_file << _field_troops.size() << std::endl;
 
+    // salva o tipo + posicao das tropas de campo na quinta linha
     for (auto &[type, pos] : _field_troops) {
         _save_file << type << ' ' << pos.x << ' ' << pos.y << std::endl;
     }
 
-    //TODO: salvar upgrades
     _save_file.close();
 }
 
@@ -73,19 +82,28 @@ void GameSaver::load() {
         return;
     }
 
-    // atualiza variaveis
-    _save_file >> _wave_idx >> _points >> _wall_life >> _wall_max_life;
+    // atualiza variaveis:
 
+    // le inteiros da primeira linha
+    _save_file >> _wave_idx >> _points >> _wall_life;
+
+    // le o tipo das tropas na segunda linha
     for (int i = 0; i < _troops.size(); i++) {
         int type;
         _save_file >> type;
         _troops[i] = (TroopType)type;
     }
 
+    // le a quantidade de upgrades comprados para cada tipo na terceira linha
+    for (int i = 0; i < UPGRADE_COUNT; i++)
+        _save_file >> _upgrades[i];
+
+    // le quantas tropas de campo tem na quarta linha
     int size;
     _save_file >> size;
-
     _field_troops.resize(size);
+
+    // le o tipo + posicao das tropas de campo na quinta linha
     for (int i = 0; i < size; i++) {
         int type;
         _save_file >> type;
@@ -95,7 +113,6 @@ void GameSaver::load() {
         _field_troops[i] = std::make_pair((TroopType)type, position);
     }
 
-    //TODO: carregar upgrades
     _save_file.close();
 
     update_game_state(); // Atualizando o estado do jogo

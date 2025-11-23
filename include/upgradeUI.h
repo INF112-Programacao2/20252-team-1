@@ -31,6 +31,8 @@ public:
     void run(double dt, const std::vector<sf::Event> &event_queue);
     void draw();
     void reset_feedback();
+    int get_level() const;
+    void set_level(int level);
 };
 
 #endif

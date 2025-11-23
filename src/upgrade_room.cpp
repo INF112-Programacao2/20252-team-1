@@ -144,3 +144,17 @@ void UpgradeRoom::end() {
     for (auto &upgrade : _upgrades)
         upgrade.reset_feedback();
 }
+
+std::array<int, UPGRADE_COUNT> UpgradeRoom::get_upgrade_levels() const {
+    std::array<int, UPGRADE_COUNT> result;
+    for (int i = 0; i < UPGRADE_COUNT; i++)
+        result[i] = _upgrades[i].get_level();
+
+    return result;
+}
+
+void UpgradeRoom::set_upgrade_levels(std::array<int, UPGRADE_COUNT> levels) {
+    for (int i = 0; i < UPGRADE_COUNT; i++) {
+        _upgrades[i].set_level(levels[i]);
+    }
+}

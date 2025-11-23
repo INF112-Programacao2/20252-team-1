@@ -13,8 +13,9 @@
 /*
 EXEMPLO DE UM ARQUIVO DE SAVE:
 
-5 1000 300 1000 // "wave_idx", "points", "wall_life" e "wall_max_life"
--1 0 -1 -1 0 -1 -1 -1 2 2 // array de TroopTypes nas posições certas
+5 1000 300 // "wave_idx", "points" e "wall_life"
+-1 0 -1 -1 0 -1 -1 -1 2 2 // array de TroopTypes nas posições
+0 0 0 0 0 // array de nivel dos upgrades comprados na ordem do array
 3 // tamanho do vetor "field_troops"
 9 600 500.23  // TroopType e posicao x e y
 9 1000 500.23 // TroopType e posicao x e y
@@ -23,7 +24,8 @@ EXEMPLO DE UM ARQUIVO DE SAVE:
 
 class GameSaver {
 private:
-    int _wave_idx, _points, _wall_life, _wall_max_life;
+    int _wave_idx, _points, _wall_life;
+    std::array<int, UPGRADE_COUNT> _upgrades;
     std::array<TroopType, TROOP_ROWS * TROOP_COLS> _troops;
     std::vector<std::pair<TroopType, sf::Vector2f>> _field_troops;
     std::string _save_file_path;

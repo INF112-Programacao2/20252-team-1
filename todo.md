@@ -12,12 +12,11 @@
 - FieldTroop deveria ser posicionada em grid (horizontalmente)?
 
 # Pra fazer:
+- Mais upgrades
 - Inimigos
 - Tela de menu inicial (por tutorial e créditos)
 - Tela de upgrades
-- Upgrades
 - Mais tropas
-- GameSaver
 - Efeitos sonoros / música
 - Logica de ganhar o jogo (salvar a wave anterior à vitória)
 
@@ -27,8 +26,7 @@
 # Pedro:
 
 # Davi Nobre:
-- GameSaver (wave, pontos no inicio da wave, tropas no inicio da wave, upgrades, vida do muro no inicio da wave, fieldtroops no inicio da wave)
-- Salvar no momento certo
+- Salvar o jogo somente no inicio de uma wave
 
 # Gabriel:
 - Implementar destroy do Muro (esperar projeteis)

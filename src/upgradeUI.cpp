@@ -4,7 +4,7 @@
 #include <utility>
 
 const float width = 250.f;
-const float height = 250.f;
+const float height = 300.f;
 const float padding_x = 20.f;
 const int desc_tamanho = 14;
 
@@ -199,4 +199,15 @@ void UpgradeUI::draw() {
 
 void UpgradeUI::reset_feedback() {
     _feedback_text.hide();
+}
+
+int UpgradeUI::get_level() const {
+    return _level;
+}
+
+void UpgradeUI::set_level(int level) {
+    _level = level;
+    _preco += _incremento * level;
+    for (int i = 0; i < level; i++)
+        _on_buy_callback(); // compra os upgrades
 }
