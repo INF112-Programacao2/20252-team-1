@@ -27,6 +27,8 @@ public:
 
     int get_life() const;
 
+    int get_max_life() const;
+
     void increase_max_life(int amount);
 
     void increase_life(int amount);

@@ -13,6 +13,8 @@ GameRoom::GameRoom(
       _wave_manager(*this),
       _font(GameManager::get_instance().get_font()),
       _wall(wall_base_life, wall_spike_damage, *this) {
+
+    GameManager::get_instance().set_game_room(this);
 }
 
 GameRoom::~GameRoom() = default;
@@ -48,6 +50,7 @@ void GameRoom::run(double dt, const std::vector<sf::Event> &event_queue) {
     sf::RectangleShape hud_rect(sf::Vector2f(GAME_SIZE_X, HUD_HEIGHT));
     hud_rect.setFillColor(sf::Color(135, 75, 0));
     _window.draw(hud_rect);
+    _wall.draw_wall_health_bar();
 
     // UI de pontos:
     sf::Text points_text(

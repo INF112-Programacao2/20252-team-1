@@ -1,22 +1,26 @@
 #include "upgrade_room.h"
 #include "game_manager.h"
+#include "game_room.h"
 #include "globals.h"
 #include "room_manager.h"
+#include "wall.h"
 #include <iostream>
+#include <cmath>
 
 UpgradeRoom::UpgradeRoom(sf::RenderWindow &window, RoomManager &room_manager)
     : Room(window, room_manager),
       _dano_bruto(
           "Dano Bruto",    // Nome
-          100,              // Preço
-          1,                // Nivel atual
+          300,              // Preço
+          150,               // Incremento do preço
+          0,                // Nivel atual
 		  5,				// Nivel maximo
-          "Aumenta o multiplicador de dano das tropas em 0.25", // Descricao
+          "Aumenta o multiplicador de dano base das tropas em 25%", // Descricao
           sf::Vector2f(80, 150), // Posicao
           *this,            // Room
           
           []() { // Funcao do upgrade
-            GameManager& gm = GameManager::get_instance();
+            GameManager &gm = GameManager::get_instance();
             double atual = gm.get_damage_multiplier();
               
             gm.set_damage_multiplier(atual + 0.25);
@@ -27,14 +31,15 @@ UpgradeRoom::UpgradeRoom(sf::RenderWindow &window, RoomManager &room_manager)
 	  _ataque_rapido(
           "Ataque Rapido", // Nome
           200,              // Preço
-          1,                // Nivel atual
+          100,              // Incremento do preço
+          0,                // Nivel atual
           5,                // Nivel máximo
-          "Reduz o tempo de recarga das tropas em 0.1", // Descricao
+          "Reduz o tempo base de recarga das tropas em 10%", // Descricao
           sf::Vector2f(380, 150), // Posição 
           *this,            // Room
           
           []() { // Funcao do upgrade
-            GameManager& gm = GameManager::get_instance();
+            GameManager &gm = GameManager::get_instance();
               
             double novo_cooldown = gm.get_cooldown_multiplier() - 0.1;
             if(gm.get_cooldown_multiplier() - 0.1 < 0.1)
@@ -43,6 +48,57 @@ UpgradeRoom::UpgradeRoom(sf::RenderWindow &window, RoomManager &room_manager)
             gm.set_cooldown_multiplier(novo_cooldown);
               
             std::cout << "Cooldown: x" << gm.get_cooldown_multiplier() << std::endl;
+          }
+      ),
+      _mais_vida(
+          "Mais vida",
+          400,                
+          600,                 
+          0,                  
+          8,                  
+          "Aumenta a vida maxima e a vida atual do muro em 250", 
+          sf::Vector2f(680, 150), 
+          *this,
+          
+          []() {
+            GameManager &gm = GameManager::get_instance();
+            
+            Wall &wall = gm.get_game_room().get_wall();
+            wall.increase_max_life(250);
+            wall.increase_life(250);
+
+          }
+      ),
+      _espinhos(
+          "Espinhos", 
+          500,                
+          400,                 
+          0,                 
+          3,                
+          "Agora o muro tem espinhos! Sempre que um inimigo causar dano no muro, este inimigo vai receber dano dos espinhos. +10 de dano por nivel",
+          sf::Vector2f(980, 150),
+          *this,
+          
+          []() {
+            GameManager &gm = GameManager::get_instance();
+            Wall &wall = gm.get_game_room().get_wall();
+            wall.increase_spike_damage(10);
+          }
+      ),
+      _investidor(
+          "Investidor",      
+          1000,               
+          5000,               
+          0,                 
+          5,                 
+          "Aumenta o ganho total de pontos de todas as fontes em 10%", 
+          sf::Vector2f(1280, 150),
+          *this,
+            
+          []() {
+            GameManager &gm = GameManager::get_instance();
+            double atual = gm.get_point_multiplier();
+            gm.set_point_multiplier(atual + 0.10);
           }
       )
 {}
@@ -59,7 +115,7 @@ void UpgradeRoom::run(double dt, const std::vector<sf::Event> &event_queue) {
             _room_manager.rollback_room();
     }
     
-    _window.clear(sf::Color::Black);
+    _window.clear(sf::Color(50, 150, 50));
 
     sf::Text points_text(
         "Pontos: " + std::to_string(GameManager::get_instance().get_points()), (GameManager::get_instance().get_font()), 40);
@@ -67,16 +123,29 @@ void UpgradeRoom::run(double dt, const std::vector<sf::Event> &event_queue) {
     points_text.setPosition(
         sf::Vector2f(DESKTOP_SIZE.x - points_text.getGlobalBounds().width - 50, 50));
 
-    _window.draw(points_text);
+    // HUD
+    sf::RectangleShape hud_rect(sf::Vector2f(GAME_SIZE_X + 500, HUD_HEIGHT));
+    hud_rect.setFillColor(sf::Color(135, 75, 0));
+    _window.draw(hud_rect);
 
+    // Upgrades
     _dano_bruto.draw();
     _dano_bruto.run(dt, event_queue);
     _ataque_rapido.draw();
     _ataque_rapido.run(dt, event_queue);
+    _mais_vida.draw();
+    _mais_vida.run(dt, event_queue);
+    _espinhos.draw();
+    _espinhos.run(dt,event_queue);
+    _investidor.draw();
+    _investidor.run(dt,event_queue);
+
+    _window.draw(points_text);
 
     _window.display();
 }
 
 void UpgradeRoom::end() {
-    // Limpeza do UpgradeRoom
+    _dano_bruto.reset_feedback();
+    _ataque_rapido.reset_feedback();
 }

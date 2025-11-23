@@ -11,6 +11,7 @@ private:
     sf::Font _font;
     sf::Text _nome;
     int _preco;
+    int _incremento;
     int _level;
     int _max_level;
     sf::Text _descricao;
@@ -23,12 +24,13 @@ private:
     sf::CircleShape _level_circle;
     DissolvingText _feedback_text;
 public:
-    UpgradeUI(std::string nome, int preco, int level, int max_levels, std::string descricao,
+    UpgradeUI(std::string nome, int preco, int incremento, int level, int max_levels, std::string descricao,
         sf::Vector2f position, Room &room, std::function<void()> on_buy_callback);
     ~UpgradeUI();
     bool buy(const std::vector<sf::Event> &event_queue);
     void run(double dt, const std::vector<sf::Event> &event_queue);
     void draw();
+    void reset_feedback();
 };
 
 #endif

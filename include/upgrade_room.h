@@ -10,7 +10,10 @@ private:
     sf::Font _font;
     UpgradeUI _dano_bruto;
     UpgradeUI _ataque_rapido;
-    // Outros atributos relacionados ao UpgradeRoom
+    UpgradeUI _mais_vida;
+    UpgradeUI _espinhos;
+    UpgradeUI _investidor;
+
 public:
     UpgradeRoom(sf::RenderWindow &window, RoomManager &room_manager);
 
