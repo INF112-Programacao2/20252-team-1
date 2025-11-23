@@ -19,11 +19,15 @@ enum TroopType {
     // FieldTroops:
     Hedgehog,
 };
-
+// Mudar sempre que adicionar uma troop nova:
 const int TROOP_COUNT = 7;
 const int TROOP_PRICES[TROOP_COUNT] = {300, 300, 300, 300, 300, 300, 200};
 
-const int ENEMY_COUNT = 1;
+enum EnemyType {
+    Enemy1 = 0,
+    Lumberjack,
+};
+const int ENEMY_COUNT = 2; // Mudar sempre que aparecer um inimigo novo
 
 const int UPGRADE_COUNT = 5;
 

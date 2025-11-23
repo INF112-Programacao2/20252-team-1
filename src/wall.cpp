@@ -7,11 +7,14 @@
 #include <iostream> //! DEBUG
 
 Wall::Wall(int base_life, int spike_damage, Room &room)
-    : _health(base_life, std::bind(&Wall::destroy, this)), _spike_damage(spike_damage), _room(room) {
+    : _health(base_life, std::bind(&Wall::destroy, this)), _spike_damage(spike_damage), _room(room),
+      _flash_timer(.15), _shape({WALL_WIDTH, DESKTOP_SIZE.y - HUD_HEIGHT}) {
 
     _collider = sf::Rect<float>(
         sf::Vector2f(WALL_POSITION_X, HUD_HEIGHT),
         sf::Vector2f(WALL_WIDTH, DESKTOP_SIZE.y - HUD_HEIGHT));
+
+    _shape.setFillColor(sf::Color(128, 128, 128)); // cor cinza para o muro
 };
 
 Wall::~Wall() = default;
@@ -26,21 +29,36 @@ bool Wall::collide(sf::Vector2f position) {
     return _collider.contains(position) || position.x < _collider.left;
 }
 
-void Wall::draw() {
-    sf::RectangleShape wall_shape(sf::Vector2f(WALL_WIDTH, DESKTOP_SIZE.y - HUD_HEIGHT));
-    wall_shape.setPosition(sf::Vector2f(WALL_POSITION_X, HUD_HEIGHT));
-    wall_shape.setFillColor(sf::Color(128, 128, 128)); // cor cinza para o muro
+void Wall::run(double dt) {
+    _burning_timer.update(dt);
+    _flash_timer.update(dt);
+}
 
-    _room.get_window().draw(wall_shape);
+void Wall::draw() {
+    _shape.setPosition(sf::Vector2f(WALL_POSITION_X, HUD_HEIGHT));
+    if (_flash_timer.timeout())
+        _shape.setFillColor(sf::Color(128, 128, 128)); // cor cinza para o muro
+
+    _room.get_window().draw(_shape);
 }
 
 void Wall::hit(EnemyProjectile& projectile) {
     _health.decrease_life(projectile.get_damage());
+    _flash_timer.restart();
+    _shape.setFillColor(sf::Color::White);
 
     auto enemy = projectile.get_parent();
     if (enemy) {
         enemy->damage(_spike_damage);
     }
+}
+
+void Wall::hit(Enemy& enemy, int damage) {
+    _health.decrease_life(damage);
+    _flash_timer.restart();
+    _shape.setFillColor(sf::Color::White);
+
+    enemy.damage(_spike_damage);
 }
 
 int Wall::get_life() {

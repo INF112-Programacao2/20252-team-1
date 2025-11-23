@@ -4,6 +4,7 @@
 # Bugs:
 - Fullscreen não funciona em todos os PCs e nem na versão compilada para windows
 - Menu de pause não aparece na UpgradeRoom (obviamente porque não foi implementado lá)
+- Sair do jogo sem jogar reseta o save (porque não deveria estar salvando no final do jogo)
 
 # Refatoração:
 - Usar um sistema melhor pra definir o tamanho da tela e onde posicionar as coisas
@@ -24,6 +25,8 @@
 - Todos
 
 # Pedro:
+- Upgrade de aumentar o dano geral nos inimigos (damage_multiplier) "ta feito com a descrição errada" (esse é mais roubado então aumenta o preço e diminui o incremento do multiplicador)
+- Upgrade de aumentar o dano da tropas (troop_damage_multiplier) "não ta feito, mas tem descrição"
 
 # Davi Nobre:
 - Salvar o jogo somente no inicio de uma wave

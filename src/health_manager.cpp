@@ -7,7 +7,7 @@ HealthManager::~HealthManager() = default;
 
 void HealthManager::set_life(int new_life) {
     _life = std::max(0, std::min(_max_life, new_life));
-    if (!_died && _life <= 0 && _on_death_callback) {
+    if (!_died && _life == 0 && _on_death_callback) {
         _died = true;
         _on_death_callback();
     }
@@ -56,12 +56,15 @@ void HealthManager::draw_health_bar(sf::RenderWindow &window, sf::Vector2f posit
 
     sf::RectangleShape background(sf::Vector2f(bar_width, bar_height));
     background.setFillColor(sf::Color(100, 100, 100)); // cor cinza pra vida vazia
+    background.setOutlineThickness(2);
+    background.setOrigin(sf::Vector2f(bar_width / 2, bar_height / 2));
     background.setPosition(position);
 
     float life_ratio = static_cast<float>(_life) / static_cast<float>(_max_life);
 
     sf::RectangleShape foreground(sf::Vector2f(bar_width * life_ratio, bar_height));
     foreground.setFillColor(sf::Color(0, 255, 0)); // cor verde pra vida cheia
+    foreground.setOrigin(sf::Vector2f(bar_width / 2, bar_height / 2));
     foreground.setPosition(position);
 
     // Desenha as barras

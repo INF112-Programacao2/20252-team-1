@@ -4,33 +4,39 @@
 #include "globals.h"
 #include <iostream>
 
-const float width = 100.0;
+const float height = 100.0;
 
-Enemy::Enemy(int base_life, int damage, int line, double base_cooldown, double points, Room &room)
-    : _damage(damage), _line(line), _base_cooldown(base_cooldown), _points(points), _room(room),
-      _shape(sf::Vector2f(width, 100.0)), _health(100, [this]() { this->destroy(); }) { // _shape ta com um tamanho de teste
+Enemy::Enemy(int base_life, int damage, int line, double speed, double base_cooldown, int points, Room &room)
+    : _damage(damage), _line(line), _speed(speed), _base_cooldown(base_cooldown), _points(points), _room(room),
+      _shape(sf::Vector2f(height, height)), _health(base_life, [this]() { this->destroy(); }), // _shape ta com um tamanho de teste
+      _flash_timer(.25) {
 
     _health.set_life(base_life);
     _position_x = GAME_SIZE_X;
     _cooldown = 0;
-    _shape.setFillColor(sf::Color::Red);
 
-    // numeros magicos por enquanto
-    _shape.setPosition(get_position() - sf::Vector2f(width / 2, 50));
+    _shape.setFillColor(sf::Color::White);
+    _shape.setOrigin(sf::Vector2f(.5, .5) * height);
+    _shape.setPosition(get_position());
 }
 
 Enemy::~Enemy() = default;
+
+bool Enemy::is_destroyed() {
+    return _health.is_dead();
+}
 
 int Enemy::get_line() {
     return _line;
 }
 
 sf::Vector2f Enemy::get_position() {
-    return sf::Vector2f(_position_x + width / 2, GameManager::get_line_pos(_line));
+    return sf::Vector2f(_position_x + height / 2, GameManager::get_line_pos(_line));
 }
 
 bool Enemy::can_walk(double next_position) {
-    return next_position > WALL_POSITION_X + WALL_WIDTH;
+    //! DEBUG
+    return next_position > WALL_POSITION_X + WALL_WIDTH + 300;
 }
 
 void Enemy::attack() {
@@ -40,22 +46,14 @@ void Enemy::attack() {
 }
 
 void Enemy::run(double dt) {
-    if(_health.is_dead()) {
+    if (is_destroyed())
         return;
-    }
 
-    if (_cooldown > 0) {
+    _flash_timer.update(dt);
+    if (_cooldown > 0)
         _cooldown -= dt;
-    }
 
-    //! DEBUG
-    if (_cooldown <= 0) {           // E tenha acabado o cooldown de ataque
-        attack();                   // o inimigo ataca
-        _cooldown = _base_cooldown; // e o timer reseta
-    }
-
-    double speed = 50;                                   // 50 pixels por segundo(teste)
-    double next_position_x = _position_x - (speed * dt); // Calcula a proxima posicao
+    double next_position_x = _position_x - (_speed * dt); // Calcula a proxima posicao
 
     if (can_walk(next_position_x)) {
         // Caso ele possa andar para a proxima posicao
@@ -70,17 +68,32 @@ void Enemy::run(double dt) {
 }
 
 void Enemy::damage(int life) {
+    if (life <= 0)
+        return;
+
+    _flash_timer.restart();
+    _shape.setFillColor(sf::Color::Red);
     _health.decrease_life(life * GameManager::get_instance().get_damage_multiplier());
 }
 
 void Enemy::draw() {
-    _shape.setPosition(get_position() - sf::Vector2f(.5, .5) * width);
+    if (_flash_timer.timeout())
+        _shape.setFillColor(sf::Color::White);
+
+    _shape.setPosition(get_position());
     _room.get_window().draw(_shape);
+
+    _health.draw_health_bar(_room.get_window(), get_position() + sf::Vector2f(0, 70));
 }
 
 bool Enemy::collide(sf::Vector2f position) {
-    _shape.setPosition(get_position() - sf::Vector2f(.5, .5) * width);
-    return _shape.getGlobalBounds().contains(position);
+    _shape.setPosition(get_position());
+    _collider = _shape.getGlobalBounds();
+
+    return _collider.contains(position);
 }
 
-void Enemy::destroy() {}
+void Enemy::destroy() {
+    // soma os pontos quando for destruido
+    GameManager::get_instance().add_points(_points);
+}

@@ -1,6 +1,7 @@
 #include "troop_projectile.h"
 #include "projectile.h"
 #include "game_room.h"
+#include "game_manager.h"
 #include <cmath>
 #include <SFML/Graphics.hpp>
 
@@ -34,7 +35,7 @@ void TroopProjectile::run(double dt) {
     // ve se acertou algum inimigo (pode nao ser o target)
     GameRoom &game_room = dynamic_cast<GameRoom&>(_room);
     if (auto hit = game_room.get_wave_manager().get_enemy_colliding(_position)) {
-        hit->damage(_damage);
+        hit->damage(_damage * GameManager::get_instance().get_troop_damage_multiplier());
         destroy();
 
         return;

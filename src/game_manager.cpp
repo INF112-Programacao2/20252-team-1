@@ -32,6 +32,10 @@ double GameManager::get_damage_multiplier() {
     return _damage_multiplier;
 }
 
+double GameManager::get_troop_damage_multiplier() {
+    return _troop_damage_multiplier;
+}
+
 double GameManager::get_point_multiplier() {
     return _point_multiplier;
 }
@@ -50,6 +54,10 @@ void GameManager::set_cooldown_multiplier(double cooldown_multiplier) {
 
 void GameManager::set_damage_multiplier(double damage_multiplier) {
     _damage_multiplier = damage_multiplier;
+}
+
+void GameManager::set_troop_damage_multiplier(double troop_damage_multiplier) {
+    _troop_damage_multiplier = troop_damage_multiplier;
 }
 
 void GameManager::set_point_multiplier(double point_multiplier) {

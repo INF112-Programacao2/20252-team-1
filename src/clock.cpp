@@ -1,5 +1,8 @@
 #include "clock.h"
 
+Clock::Clock(): _time(0), _timeout_duration(0) {}
+Clock::Clock(double time_duration): _time(0), _timeout_duration(time_duration) {}
+
 void Clock::update(double dt) {
     if (!_paused)
         _time += dt;
@@ -16,10 +19,18 @@ double Clock::restart() {
     return ret;
 }
 
+bool Clock::timeout() {
+    return _time > _timeout_duration;
+}
+
 void Clock::pause() {
     _paused = true;
 }
 
 void Clock::resume() {
     _paused = false;
+}
+
+double Clock::get_timeout_duration() {
+    return _timeout_duration;
 }

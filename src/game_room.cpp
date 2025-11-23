@@ -36,6 +36,7 @@ void GameRoom::run(double dt, const std::vector<sf::Event> &event_queue) {
     if (!_paused) {
         _troop_manager.run(dt, event_queue);
         _wave_manager.run(dt);
+        _wall.run(dt);
     }
 
     //* desenhando:
