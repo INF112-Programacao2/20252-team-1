@@ -6,13 +6,12 @@
 #include "game_manager.h"
 #include "room_manager.h"
 
-GameRoom::GameRoom(
-    sf::RenderWindow &window, RoomManager &room_manager, int wall_base_life, int wall_spike_damage)
+GameRoom::GameRoom(sf::RenderWindow &window, RoomManager &room_manager)
     : Room(window, room_manager),
       _troop_manager(*this),
       _wave_manager(*this),
       _font(GameManager::get_instance().get_font()),
-      _wall(wall_base_life, wall_spike_damage, *this) {
+      _wall(1000, 0, *this) {
 
     GameManager::get_instance().set_game_room(this);
 }

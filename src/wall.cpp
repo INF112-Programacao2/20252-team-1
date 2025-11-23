@@ -55,6 +55,10 @@ int Wall::get_max_life() {
     return _health.get_max_life();
 }
 
+void Wall::set_max_life(int max_life) {
+    _health.set_max_life(max_life);
+}
+
 void Wall::draw_wall_health_bar() {
     float width = 450.0f;
     float height = 30.0f;

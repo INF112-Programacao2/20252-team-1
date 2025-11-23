@@ -2,17 +2,14 @@
 #define UPGRADE_ROOM_H
 
 #include <SFML/Graphics.hpp>
+#include <array>
 #include "room.h"
 #include "upgradeUI.h"
 
 class UpgradeRoom : public Room {
 private:
     sf::Font _font;
-    UpgradeUI _dano_bruto;
-    UpgradeUI _ataque_rapido;
-    UpgradeUI _mais_vida;
-    UpgradeUI _espinhos;
-    UpgradeUI _investidor;
+    std::array<UpgradeUI, 5> _upgrades; //! mudar a quantidade quando adicionar mais
 
 public:
     UpgradeRoom(sf::RenderWindow &window, RoomManager &room_manager);

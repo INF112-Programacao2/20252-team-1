@@ -3,7 +3,6 @@
 
 # Bugs:
 - Fullscreen não funciona em todos os PCs e nem na versão compilada para windows
-- dissolving text do UpgradeUI não some quando sai da sala (se não tiver acabado o timer)
 - Menu de pause não aparece na UpgradeRoom (obviamente porque não foi implementado lá)
 
 # Refatoração:
@@ -30,8 +29,6 @@
 # Davi Nobre:
 - GameSaver (wave, pontos no inicio da wave, tropas no inicio da wave, upgrades, vida do muro no inicio da wave, fieldtroops no inicio da wave)
 - Salvar no momento certo
-- Poder resetar um save no menu de inicio
-- Fazer o GameSaver salvar a vida maxima do muro e a vida atual do muro separadamente
 
 # Gabriel:
 - Implementar destroy do Muro (esperar projeteis)

@@ -5,21 +5,24 @@
 #include <string>
 #include "room.h"
 #include "text_button.h"
+#include "game_saver.h"
 
 class MainMenuRoom : public Room {
 private:
     sf::Font _font;
-    TextButton _start_button;
+    TextButton _continue_button;
+    TextButton _new_game_button;
     TextButton _tutorial_button;
     TextButton _credits_button;
     TextButton _exit_button;
+    GameSaver &_game_saver;
 
 public:
-    MainMenuRoom(sf::RenderWindow &window, RoomManager &room_manager);
+    MainMenuRoom(sf::RenderWindow &window, RoomManager &room_manager, GameSaver &game_saver);
 
     ~MainMenuRoom() = default;
 
-    void change_room(std::string room_name);
+    void change_room(std::string room_name, bool load_save);
 
     void start() {};
 

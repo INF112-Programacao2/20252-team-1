@@ -15,6 +15,10 @@ bool GameManager::remove_points(int points) {
     return false;
 }
 
+void GameManager::set_points(int points) {
+    _points = points;
+}
+
 void GameManager::add_points(int points) {
     int final_points = static_cast<int>(points * _point_multiplier);
     _points += final_points;

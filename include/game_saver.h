@@ -3,24 +3,48 @@
 
 #include "globals.h"
 #include "field_troop.h"
+#include "game_room.h"
+#include "upgrade_room.h"
 #include <array>
 #include <vector>
 #include <fstream>
 #include <string>
 
+/*
+EXEMPLO DE UM ARQUIVO DE SAVE:
+
+5 1000 300 1000 // "wave_idx", "points", "wall_life" e "wall_max_life"
+-1 0 -1 -1 0 -1 -1 -1 2 2 // array de TroopTypes nas posições certas
+3 // tamanho do vetor "field_troops"
+9 600 500.23  // TroopType e posicao x e y
+9 1000 500.23 // TroopType e posicao x e y
+9 1000 800.51 // TroopType e posicao x e y
+*/
+
 class GameSaver {
 private:
-    int _wave_idx, _points, _wall_life;
+    int _wave_idx, _points, _wall_life, _wall_max_life;
     std::array<TroopType, TROOP_ROWS * TROOP_COLS> _troops;
     std::vector<std::pair<TroopType, sf::Vector2f>> _field_troops;
     std::string _save_file_path;
     std::fstream _save_file;
+    GameRoom& _game_room;
+    UpgradeRoom& _upgrade_room;
+
+private:
+    /// Atualiza o jogo com o estado atual da classe
+    void update_game_state();
+
+    /// Atualiza a classe com o estado atual do jogo
+    void load_game_state();
 
 public:
-    GameSaver(const std::string &save_file_path);
+    GameSaver(const std::string &save_file_path, GameRoom& game_room, UpgradeRoom& upgrade_room);
 
+    /// Salva o estado atual DO JOGO para o arquivo e salva na classe
     void save();
 
+    /// Modifica o estado da classe E DO JOGO com o que foi salvo no arquivo
     void load();
 
     int get_wave_idx() const;

@@ -31,6 +31,8 @@ public:
 
     /// Reseta o timer pra fazer o efeito novamente (nao reseta a posicao)
     void restart();
+
+    void hide();
 };
 
 #endif

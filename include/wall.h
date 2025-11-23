@@ -37,10 +37,10 @@ public:
     bool collide(sf::Vector2f position);
 
     int get_life();
-
     void set_life(int amount);
 
-    int get_max_life(); 
+    int get_max_life();
+    void set_max_life(int max_life);
 
     // Desenha a health bar do muro
     void draw_wall_health_bar();

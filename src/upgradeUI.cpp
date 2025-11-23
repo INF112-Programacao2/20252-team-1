@@ -81,11 +81,9 @@ bool UpgradeUI::buy(const std::vector<sf::Event> &event_queue) {
                 msg_text.setCharacterSize(15);
 
                 if(_level < _max_level) {
-                    if(gm.get_points() >= _preco) { // Verifica se tem pontos o bastante
-                        gm.remove_points(_preco);// Remove os pontos gastos
+                    if(gm.remove_points(_preco)) { // Verifica se tem pontos o bastante
                         _level++;
-                        // Aumenta o preço para a proxima compra
-                        _preco += _incremento;
+                        _preco += _incremento; // Aumenta o preço para a proxima compra
                         // Executa o upgrade
                         if(_on_buy_callback) {
                             _on_buy_callback();
@@ -93,11 +91,11 @@ bool UpgradeUI::buy(const std::vector<sf::Event> &event_queue) {
 
                         // Texto que aparece quando o jogador compra um upgrade
                         msg_text.setString("Subiu de nivel!");
-                        msg_text.setFillColor(sf::Color::Green);            
+                        msg_text.setFillColor(sf::Color::Green);
                         sf::FloatRect bounds = msg_text.getLocalBounds();
                         msg_text.setOrigin(bounds.width / 2, bounds.height / 2);
-                        _feedback_text.set_text(msg_text);                      
-                        _feedback_text.set_position(_position + sf::Vector2f(width / 2, height / 2));                        
+                        _feedback_text.set_text(msg_text);
+                        _feedback_text.set_position(_position + sf::Vector2f(width / 2, height / 2));
                         _feedback_text.restart();
 
                         return true;
@@ -194,11 +192,11 @@ void UpgradeUI::draw() {
         _level_circle.setFillColor((i < _level) ? sf::Color::White : sf::Color::Transparent);
 
         _room.get_window().draw(_level_circle);
-        _feedback_text.draw();
     }
+
+    _feedback_text.draw();
 }
 
 void UpgradeUI::reset_feedback() {
-    sf::Text texto_vazio;
-    _feedback_text.set_text(texto_vazio); 
+    _feedback_text.hide();
 }

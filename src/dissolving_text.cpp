@@ -46,3 +46,7 @@ void DissolvingText::restart() {
     _hidden = false;
     _clock.restart();
 }
+
+void DissolvingText::hide() {
+    _hidden = true;
+}
