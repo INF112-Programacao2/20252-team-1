@@ -26,13 +26,12 @@
 - Todos
 
 # Pedro:
-- Corrigir o BUG dissolving text do UpgradeUI não sumir quando sai da sala
-- Fazer o incremento de preço ser um parâmetro da classe UpgradeUI
 
 # Davi Nobre:
 - GameSaver (wave, pontos no inicio da wave, tropas no inicio da wave, upgrades, vida do muro no inicio da wave, fieldtroops no inicio da wave)
 - Salvar no momento certo
 - Poder resetar um save no menu de inicio
+- Fazer o GameSaver salvar a vida maxima do muro e a vida atual do muro separadamente
 
 # Gabriel:
 - Implementar destroy do Muro (esperar projeteis)

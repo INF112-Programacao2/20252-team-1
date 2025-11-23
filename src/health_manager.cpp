@@ -43,6 +43,10 @@ int HealthManager::get_life() const {
     return _life;
 }
 
+int HealthManager::get_max_life() const {
+    return _max_life;
+}
+
 void HealthManager::draw_health_bar(sf::RenderWindow &window, sf::Vector2f position) {
     if (_life >= _max_life)
         return;

@@ -4,12 +4,16 @@
 #include <SFML/Graphics.hpp>
 #include <string>
 
+class GameRoom;
+
 class GameManager {
 private:
     int _points = 0;
     double _cooldown_multiplier = 1.0; // entre 0-1, quanto menor mais rapido o cooldown
     double _damage_multiplier = 1.0;   // quanto maior mais dano da nos inimigos
+    double _point_multiplier = 1.0;    //quanto maior o valor, maior a pontuacao final
     sf::Font _font;
+    GameRoom *_game_room = nullptr;
 
 private:
     GameManager() {}
@@ -35,6 +39,9 @@ public:
     double get_damage_multiplier();
     void set_damage_multiplier(double damage_multiplier);
 
+    double get_point_multiplier();
+    void set_point_multiplier(double point_multiplier);
+
     sf::Font &get_font();
     bool load_font(std::string file_path);
 
@@ -49,6 +56,9 @@ public:
     // garante que nao vai ter copias
     GameManager(const GameManager &) = delete;
     GameManager &operator=(const GameManager &) = delete;
+
+    void set_game_room(GameRoom* room);
+    GameRoom &get_game_room();
 };
 
 #endif
