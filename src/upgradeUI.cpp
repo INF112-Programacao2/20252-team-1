@@ -4,14 +4,20 @@
 #include <utility>
 
 const float width = 250.f;
-const float height = 250.f;
+const float height = 300.f;
 const float padding_x = 20.f;
 const int desc_tamanho = 14;
 
-UpgradeUI::UpgradeUI(std::string nome, int preco, int level, int max_level, std::string descricao,
+UpgradeUI::UpgradeUI(std::string nome, int preco, int incremento, int level, int max_level, std::string descricao,
     sf::Vector2f position, Room &room, std::function<void()> on_buy_callback)
-    : _preco(preco), _level(level), _max_level(max_level), _position(position), _room(room),
-      _on_buy_callback(std::move(on_buy_callback)), _feedback_text(sf::Vector2f(0, 0), 1.5, room) {
+    : _preco(preco),
+      _incremento(incremento),
+      _level(level),
+      _max_level(max_level),
+      _position(position),
+      _room(room),
+      _on_buy_callback(std::move(on_buy_callback)),
+      _feedback_text(sf::Vector2f(0, 0), 1.5, room) {
     _nome.setString(nome);
     _colider = sf::Rect<float>(position.x, position.y, width, height);
     _font = GameManager::get_instance().get_font();
@@ -72,14 +78,12 @@ bool UpgradeUI::buy(const std::vector<sf::Event> &event_queue) {
                 GameManager& gm = GameManager::get_instance();
                 sf::Text msg_text;
                 msg_text.setFont(_font);
-                msg_text.setCharacterSize(20);
+                msg_text.setCharacterSize(15);
 
                 if(_level < _max_level) {
-                    if(gm.get_points() >= _preco) { // Verifica se tem pontos o bastante
-                        gm.remove_points(_preco);// Remove os pontos gastos
+                    if(gm.remove_points(_preco)) { // Verifica se tem pontos o bastante
                         _level++;
-                        // Aumenta o preço para a proxima compra
-                        _preco += 50;
+                        _preco += _incremento; // Aumenta o preço para a proxima compra
                         // Executa o upgrade
                         if(_on_buy_callback) {
                             _on_buy_callback();
@@ -87,11 +91,11 @@ bool UpgradeUI::buy(const std::vector<sf::Event> &event_queue) {
 
                         // Texto que aparece quando o jogador compra um upgrade
                         msg_text.setString("Subiu de nivel!");
-                        msg_text.setFillColor(sf::Color::Green);            
+                        msg_text.setFillColor(sf::Color::Green);
                         sf::FloatRect bounds = msg_text.getLocalBounds();
                         msg_text.setOrigin(bounds.width / 2, bounds.height / 2);
-                        _feedback_text.set_text(msg_text);                      
-                        _feedback_text.set_position(_position + sf::Vector2f(width / 2, height / 2));                        
+                        _feedback_text.set_text(msg_text);
+                        _feedback_text.set_position(_position + sf::Vector2f(width / 2, height / 2));
                         _feedback_text.restart();
 
                         return true;
@@ -128,10 +132,10 @@ void UpgradeUI::draw() {
     sf::RectangleShape rectangle({width, height});
 
     if(is_hovering) {
-        rectangle.setFillColor(sf::Color(50, 50, 50));
+        rectangle.setFillColor(sf::Color(125, 65, 40));
         rectangle.setOutlineColor(sf::Color::Yellow);
     } else {
-        rectangle.setFillColor(sf::Color::Black);
+        rectangle.setFillColor(sf::Color(85, 25, 0));
         rectangle.setOutlineColor(sf::Color::White);
     }
 
@@ -188,6 +192,22 @@ void UpgradeUI::draw() {
         _level_circle.setFillColor((i < _level) ? sf::Color::White : sf::Color::Transparent);
 
         _room.get_window().draw(_level_circle);
-        _feedback_text.draw();
     }
+
+    _feedback_text.draw();
+}
+
+void UpgradeUI::reset_feedback() {
+    _feedback_text.hide();
+}
+
+int UpgradeUI::get_level() const {
+    return _level;
+}
+
+void UpgradeUI::set_level(int level) {
+    _level = level;
+    _preco += _incremento * level;
+    for (int i = 0; i < level; i++)
+        _on_buy_callback(); // compra os upgrades
 }

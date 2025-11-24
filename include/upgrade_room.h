@@ -2,15 +2,16 @@
 #define UPGRADE_ROOM_H
 
 #include <SFML/Graphics.hpp>
+#include <array>
 #include "room.h"
 #include "upgradeUI.h"
+#include "globals.h"
 
 class UpgradeRoom : public Room {
 private:
     sf::Font _font;
-    UpgradeUI _dano_bruto;
-    UpgradeUI _ataque_rapido;
-    // Outros atributos relacionados ao UpgradeRoom
+    std::array<UpgradeUI, UPGRADE_COUNT> _upgrades; //! mudar a quantidade no "globals.h"
+
 public:
     UpgradeRoom(sf::RenderWindow &window, RoomManager &room_manager);
 
@@ -21,6 +22,9 @@ public:
     void run(double dt, const std::vector<sf::Event> &event_queue) override;
 
     void end();
+
+    std::array<int, UPGRADE_COUNT> get_upgrade_levels() const;
+    void set_upgrade_levels(std::array<int, UPGRADE_COUNT> levels);
 };
 
 #endif

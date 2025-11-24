@@ -1,0 +1,26 @@
+#ifndef LUMBERJACK_ENEMY_H
+#define LUMBERJACK_ENEMY_H
+
+#include "enemy.h"
+#include <string>
+
+class LumberjackEnemy : public Enemy {
+private:
+    static sf::Texture _texture;
+
+private:
+    bool can_walk(double next_position) override;
+
+    void attack() override;
+
+public:
+    LumberjackEnemy(int base_life, int damage, int line, double speed, double base_cooldown, int points, Room &room);
+
+    void run(double dt) override;
+
+    void draw() override;
+
+    static bool load_texture(const std::string& file_path);
+};
+
+#endif

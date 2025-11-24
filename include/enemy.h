@@ -5,33 +5,37 @@
 #include <memory>
 #include "room.h"
 #include "health_manager.h"
+#include "clock.h"
 
 class Enemy : public std::enable_shared_from_this<Enemy> {
 protected:
     HealthManager _health;
     int _damage;
     int _line; // comeca do 1
+    double _speed;
     double _position_x;
     double _base_cooldown;
     double _cooldown;
-    double _points; // pensar na moeda do jogo logo
-    // Rect2 _collider;
+    int _points;
+    sf::Rect<float> _collider;
     // vector<Effect> _effects; // vector de enum de efeitos
     // std::array<double, EFFECT_COUNT> _effect_times; // array de tempo restante de cada efeito
     Room &_room;
     sf::RectangleShape _shape;
+    Clock _flash_timer;
 
 protected:
+    /// E chamado quando a vida chega a 0
     virtual void destroy();
 
-    bool can_walk(double next_position);
+    virtual bool can_walk(double next_position);
 
     virtual void attack();
 
 public:
-    Enemy(int base_life, int damage, int line, double base_cooldown, double points, Room &room);
+    Enemy(int base_life, int damage, int line, double speed, double base_cooldown, int points, Room &room);
 
-    ~Enemy();
+    virtual ~Enemy();
 
     virtual void run(double dt);
 
@@ -40,7 +44,7 @@ public:
     /// Verifica se a posicao colide com o inimigo
     bool collide(sf::Vector2f position);
 
-    bool is_destroyed() { return _health.is_dead(); }
+    bool is_destroyed();
 
     int get_line();
 

@@ -7,7 +7,11 @@ else
 	CXXFLAGS += -O2
 endif
 
-CXXFLAGS += -Wall -Wextra -std=c++17 -Iinclude
+ifeq ($(WARNINGS), 1)
+	CXXFLAGS += -Wall -Wextra
+endif
+
+CXXFLAGS += -std=c++17 -Iinclude
 LDFLAGS := -lsfml-graphics -lsfml-window -lsfml-system
 
 SRC_DIR := src

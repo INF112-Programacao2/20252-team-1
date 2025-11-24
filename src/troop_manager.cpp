@@ -203,12 +203,19 @@ Troop* TroopManager::instantiate_troop(int slot, TroopType troop_type) {
 
     // TODO: colocar o resto dos tipos de tropas
     switch (troop_type) {
+    //! DEBUG (Troop deveria ser uma interface)
+    case TroopType::Troop1:
+    case TroopType::Troop2:
+    case TroopType::Troop3:
+    case TroopType::Troop4:
+    case TroopType::Troop5:
+        return new Troop(position, line, 5.0, _room);
+
     case TroopType::SolarEnergy:
         return new SolarEnergyTroop(position, line, 5.0, 100, _room);
 
-    //! DEBUG (Troop deveria ser uma interface)
     default:
-        return new Troop(position, line, 5.0, _room);
+        return nullptr;
     }
 }
 
@@ -222,8 +229,7 @@ FieldTroop* TroopManager::instantiate_field_troop(sf::Vector2f position, TroopTy
         return new HedgehogTroop(position, 75.0, 0.5, _room);
 
     default:
-        std::cout << troop_type << std::endl; //!DEBUG
-        std::cerr << "FieldTroop nao adicionada!" << std::endl;
+        //std::cerr << '(' << troop_type << ") FieldTroop nao implementada!" << std::endl;
         return nullptr;
     }
 }

@@ -13,10 +13,12 @@ class Wall {
 private:
     HealthManager _health;
     double _burning_time = 0.0;
-    Clock _burning_clock;
+    Clock _burning_timer;
     int _spike_damage;
     sf::Rect<float> _collider;
     Room &_room;
+    Clock _flash_timer;
+    sf::RectangleShape _shape;
 
 private:
     void destroy(); // callback do _health
@@ -25,18 +27,33 @@ public:
 
     ~Wall();
 
+    void run(double dt);
+
     void draw();
 
     // Recebe dano de um projetil (tambem pode receber effect)
     void hit(EnemyProjectile& projectile);
 
     // Recebe dano de um inimigo
-    void hit(Enemy& enemy, int damage) {};
+    void hit(Enemy& enemy, int damage);
 
     // Retorna se a posicao esta colidindo com o muro
     bool collide(sf::Vector2f position);
 
     int get_life();
+    void set_life(int amount);
+
+    int get_max_life();
+    void set_max_life(int max_life);
+
+    // Desenha a health bar do muro
+    void draw_wall_health_bar();
+
+    void increase_max_life(int amount);
+
+    void increase_life(int amount);
+
+    void increase_spike_damage(int amount);
 };
 
 #endif

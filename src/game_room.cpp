@@ -6,13 +6,14 @@
 #include "game_manager.h"
 #include "room_manager.h"
 
-GameRoom::GameRoom(
-    sf::RenderWindow &window, RoomManager &room_manager, int wall_base_life, int wall_spike_damage)
+GameRoom::GameRoom(sf::RenderWindow &window, RoomManager &room_manager)
     : Room(window, room_manager),
       _troop_manager(*this),
       _wave_manager(*this),
       _font(GameManager::get_instance().get_font()),
-      _wall(wall_base_life, wall_spike_damage, *this) {
+      _wall(1000, 0, *this) {
+
+    GameManager::get_instance().set_game_room(this);
 }
 
 GameRoom::~GameRoom() = default;
@@ -35,6 +36,7 @@ void GameRoom::run(double dt, const std::vector<sf::Event> &event_queue) {
     if (!_paused) {
         _troop_manager.run(dt, event_queue);
         _wave_manager.run(dt);
+        _wall.run(dt);
     }
 
     //* desenhando:
@@ -48,6 +50,7 @@ void GameRoom::run(double dt, const std::vector<sf::Event> &event_queue) {
     sf::RectangleShape hud_rect(sf::Vector2f(GAME_SIZE_X, HUD_HEIGHT));
     hud_rect.setFillColor(sf::Color(135, 75, 0));
     _window.draw(hud_rect);
+    _wall.draw_wall_health_bar();
 
     // UI de pontos:
     sf::Text points_text(

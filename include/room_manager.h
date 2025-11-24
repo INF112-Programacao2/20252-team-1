@@ -38,6 +38,9 @@ public:
 
     /// Adiciona eventos da window pra passar uma lista para a sala atual
     void add_event(sf::Event event);
+
+    /// Acionado no fim do jogo para fechar a sala atual
+    void close();
 };
 
 #endif

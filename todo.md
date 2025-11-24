@@ -3,8 +3,8 @@
 
 # Bugs:
 - Fullscreen não funciona em todos os PCs e nem na versão compilada para windows
-- dissolving text do UpgradeUI não some quando sai da sala (se não tiver acabado o timer)
 - Menu de pause não aparece na UpgradeRoom (obviamente porque não foi implementado lá)
+- Sair do jogo sem jogar reseta o save (porque não deveria estar salvando no final do jogo)
 
 # Refatoração:
 - Usar um sistema melhor pra definir o tamanho da tela e onde posicionar as coisas
@@ -13,12 +13,11 @@
 - FieldTroop deveria ser posicionada em grid (horizontalmente)?
 
 # Pra fazer:
+- Mais upgrades
 - Inimigos
 - Tela de menu inicial (por tutorial e créditos)
 - Tela de upgrades
-- Upgrades
 - Mais tropas
-- GameSaver
 - Efeitos sonoros / música
 - Logica de ganhar o jogo (salvar a wave anterior à vitória)
 
@@ -26,13 +25,11 @@
 - Todos
 
 # Pedro:
-- Corrigir o BUG dissolving text do UpgradeUI não sumir quando sai da sala
-- Fazer o incremento de preço ser um parâmetro da classe UpgradeUI
+- Upgrade de aumentar o dano geral nos inimigos (damage_multiplier) "ta feito com a descrição errada" (esse é mais roubado então aumenta o preço e diminui o incremento do multiplicador)
+- Upgrade de aumentar o dano da tropas (troop_damage_multiplier) "não ta feito, mas tem descrição"
 
 # Davi Nobre:
-- GameSaver (wave, pontos no inicio da wave, tropas no inicio da wave, upgrades, vida do muro no inicio da wave, fieldtroops no inicio da wave)
-- Salvar no momento certo
-- Poder resetar um save no menu de inicio
+- Salvar o jogo somente no inicio de uma wave
 
 # Gabriel:
 - Implementar destroy do Muro (esperar projeteis)

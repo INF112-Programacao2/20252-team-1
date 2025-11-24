@@ -1,10 +1,19 @@
 #include "wave_manager.h"
+#include "lumberjack_enemy.h"
+#include <iostream>
 
 WaveManager::WaveManager(Room &room) : _room(room) {
+    // carregando texturas:
+    if (!LumberjackEnemy::load_texture("assets/madeireiro.png")) {
+        std::cerr << "Nao achou o asset do madeireiro!\n";
+        std::exit(1);
+    }
+
     // wave 1:
-    SubWave subwave_01 = {{1.0}, 4, 0, 3};
-    SubWave subwave_02 = {{1.0}, 4, 0, 3};
-    SubWave subwave_03 = {{1.0}, 4, 0, 3};
+    // probabilidades, numero de inimigos, delay entre inimigos, delay pra terminar subwave
+    SubWave subwave_01 = {{0, 1.0}, 4, 0, 3};
+    SubWave subwave_02 = {{0, 1.0}, 4, 0, 3};
+    SubWave subwave_03 = {{0, 1.0}, 4, 0, 3};
     _enemys_layout[0] = {subwave_01, subwave_02, subwave_03};
 
     spawn_wave();
@@ -12,11 +21,29 @@ WaveManager::WaveManager(Room &room) : _room(room) {
 
 WaveManager::~WaveManager() = default;
 
+void WaveManager::spawn_enemy(EnemyType enemy_type, int line) {
+    switch (enemy_type) {
+    case EnemyType::Enemy1:
+        // vida, dano, linha, velocidade, cooldown, pontos, sala
+        _enemys.push_back(std::make_shared<Enemy>(50, 10, line, 50.0, 5.0, 10, _room));
+        break;
+
+    case EnemyType::Lumberjack:
+        // vida, dano, linha, velocidade, cooldown, pontos, sala
+        _enemys.push_back(std::make_shared<LumberjackEnemy>(100, 25, line, 50.0, 3.0, 20, _room));
+        break;
+
+    default:
+        std::cerr << "Inimigo com ID: " << enemy_type << " nao implementado!" << std::endl;
+        break;
+    }
+}
+
 void WaveManager::spawn_wave() {
-    _enemys.push_back(std::make_shared<Enemy>(50, 10, 1, 5.0, 25, _room));
-    _enemys.push_back(std::make_shared<Enemy>(50, 10, 2, 5.0, 25, _room));
-    _enemys.push_back(std::make_shared<Enemy>(50, 10, 3, 5.0, 25, _room));
-    _enemys.push_back(std::make_shared<Enemy>(50, 10, 4, 5.0, 25, _room));
+    spawn_enemy(EnemyType::Enemy1, 1);
+    spawn_enemy(EnemyType::Enemy1, 2);
+    spawn_enemy(EnemyType::Lumberjack, 3);
+    spawn_enemy(EnemyType::Lumberjack, 4);
 }
 
 void WaveManager::run(double dt) {

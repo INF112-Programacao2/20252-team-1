@@ -31,6 +31,8 @@ private:
     Room &_room;
 
 private:
+    void spawn_enemy(EnemyType enemy_type, int line);
+
     void spawn_wave();
 
 public:

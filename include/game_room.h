@@ -15,7 +15,7 @@ private:
     Wall _wall;
 
 public:
-    GameRoom(sf::RenderWindow &window, RoomManager &room_manager, int wall_base_life, int wall_spike_damage);
+    GameRoom(sf::RenderWindow &window, RoomManager &room_manager);
 
     ~GameRoom();
 
