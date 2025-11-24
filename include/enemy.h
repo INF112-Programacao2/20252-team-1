@@ -14,6 +14,7 @@ protected:
     double _position_x;
     double _base_cooldown;
     double _cooldown;
+    double _speed; //necessario para diferenciar inimigos e o macaco
     double _points; // pensar na moeda do jogo logo
     // Rect2 _collider;
     // vector<Effect> _effects; // vector de enum de efeitos
@@ -29,7 +30,7 @@ protected:
     virtual void attack();
 
 public:
-    Enemy(int base_life, int damage, int line, double base_cooldown, double points, Room &room);
+    Enemy(int base_life, int damage, int line, double base_cooldown, double points, double _speed, Room &room);
 
     ~Enemy();
 

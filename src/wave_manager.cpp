@@ -13,10 +13,10 @@ WaveManager::WaveManager(Room &room) : _room(room) {
 WaveManager::~WaveManager() = default;
 
 void WaveManager::spawn_wave() {
-    _enemys.push_back(std::make_shared<Enemy>(50, 10, 1, 5.0, 25, _room));
-    _enemys.push_back(std::make_shared<Enemy>(50, 10, 2, 5.0, 25, _room));
-    _enemys.push_back(std::make_shared<Enemy>(50, 10, 3, 5.0, 25, _room));
-    _enemys.push_back(std::make_shared<Enemy>(50, 10, 4, 5.0, 25, _room));
+    _enemys.push_back(std::make_shared<Enemy>(50, 10, 1, 5.0, 25, 50, _room)); //inicializa com 50 de speed
+    _enemys.push_back(std::make_shared<Enemy>(50, 10, 2, 5.0, 25, 50, _room));
+    _enemys.push_back(std::make_shared<Enemy>(50, 10, 3, 5.0, 25, 50, _room));
+    _enemys.push_back(std::make_shared<Enemy>(50, 10, 4, 5.0, 25, 50, _room));
 }
 
 void WaveManager::run(double dt) {

@@ -6,8 +6,8 @@
 
 const float width = 100.0;
 
-Enemy::Enemy(int base_life, int damage, int line, double base_cooldown, double points, Room &room)
-    : _damage(damage), _line(line), _base_cooldown(base_cooldown), _points(points), _room(room),
+Enemy::Enemy(int base_life, int damage, int line, double base_cooldown, double points, double speed, Room &room)
+    : _damage(damage), _line(line), _base_cooldown(base_cooldown), _points(points),_speed(speed), _room(room),
       _shape(sf::Vector2f(width, 100.0)), _health(100, [this]() { this->destroy(); }) { // _shape ta com um tamanho de teste
 
     _health.set_life(base_life);
@@ -54,8 +54,8 @@ void Enemy::run(double dt) {
         _cooldown = _base_cooldown; // e o timer reseta
     }
 
-    double speed = 50;                                   // 50 pixels por segundo(teste)
-    double next_position_x = _position_x - (speed * dt); // Calcula a proxima posicao
+    //double speed = 50;                                    // VELOCIDADE
+    double next_position_x = _position_x - (_speed * dt); // Calcula a proxima posicao
 
     if (can_walk(next_position_x)) {
         // Caso ele possa andar para a proxima posicao
