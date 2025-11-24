@@ -1,7 +1,6 @@
 #include "troop_manager.h"
 #include "solar_energy_troop.h"
 #include "hedgehog_troop.h"
-#include "monkey_troop.h"
 #include "game_manager.h"
 #include "game_room.h"
 #include "globals.h"
@@ -20,9 +19,6 @@ sf::Texture *get_troop_texture(TroopType troop) {
     case TroopType::SolarEnergy:
         return &SolarEnergyTroop::get_texture();
 
-    case TroopType::Monkey:
-        return &MonkeyTroop::get_texture();
-
     default:
         return nullptr;
     }
@@ -37,11 +33,6 @@ TroopManager::TroopManager(GameRoom &room) : _room(room) {
 
     if (!SolarEnergyTroop::load_texture("assets/energia solar.png")) {
         std::cerr << "Nao achou o asset energia solar!\n";
-        std::exit(1);
-    }
-
-    if (!MonkeyTroop::load_texture("assets/monkey.png")) {
-        std::cerr << "Nao achou o asset monkey!\n";
         std::exit(1);
     }
 

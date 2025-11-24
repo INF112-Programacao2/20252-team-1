@@ -13,7 +13,7 @@ enum TroopType {
     Troop2,
     Troop3,
     Troop4,
-    Monkey,
+    Troop5,
     SolarEnergy,
 
     // FieldTroops:
