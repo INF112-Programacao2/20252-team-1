@@ -54,8 +54,6 @@ public:
 
     sf::Vector2f get_position();
 
-    // void set_effect(Effect effect, double time); // Ignorar por enquanto -> ignorar pra sempre
-
     /// Ja multiplica o dano pelo multiplicador, nao precisa multiplicar antes
     void damage(int life);
 };

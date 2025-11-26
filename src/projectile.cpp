@@ -1,5 +1,6 @@
 #include "projectile.h"
 #include "globals.h"
+#include <cmath>
 
 Projectile::Projectile(sf::Vector2f position, sf::Vector2f direction, int damage, double speed, Room &room)
     : _position(position), _direction(direction), _damage(damage), _speed(speed), _room(room) {
@@ -8,6 +9,11 @@ Projectile::Projectile(sf::Vector2f position, sf::Vector2f direction, int damage
     _shape.setFillColor(sf::Color::Red);
     _shape.setOrigin(_shape.getRadius(), _shape.getRadius());
     _shape.setPosition(_position);
+
+    if (_direction.x != 0 || _direction.y != 0) {
+        float angle = std::atan2(_direction.y, _direction.x) * 180 / 3.14159;
+        _shape.setRotation(angle);
+    }
 }
 
 void Projectile::destroy() {

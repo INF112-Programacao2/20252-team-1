@@ -6,21 +6,19 @@
 
 class MonkeyTroop : public Troop {
 private:
-    MonkeyProjectile* _monkey_projectile;
     static sf::Texture _texture;
-public:
-    MonkeyTroop(sf::Vector2f position, int line, double cooldown, Room& room);
-    
 
-    void virtual run(double dt) override;
+public:
+    MonkeyTroop(sf::Vector2f position, int line, double cooldown, Room &room);
+
+    void run(double dt) override;
 
     void fire() override;
 
     void draw() override;
 
-    static sf::Texture& get_texture();
+    static sf::Texture &get_texture();
 
     static bool load_texture(std::string file_path);
-
 };
 #endif // !MONKEY_TROOP_H

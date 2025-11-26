@@ -33,7 +33,7 @@ void TroopProjectile::run(double dt) {
     _position += (float)(_speed * dt) * _direction;
 
     // ve se acertou algum inimigo (pode nao ser o target)
-    GameRoom &game_room = dynamic_cast<GameRoom&>(_room);
+    GameRoom &game_room = dynamic_cast<GameRoom &>(_room);
     if (auto hit = game_room.get_wave_manager().get_enemy_colliding(_position)) {
         on_hit(hit);
         destroy();
@@ -48,7 +48,7 @@ void TroopProjectile::run(double dt) {
 
 void TroopProjectile::on_hit(std::shared_ptr<Enemy> enemy) {
     if (enemy) {
-        //Comportamento default: so da dano
+        // Comportamento default: so da dano
         enemy->damage(_damage * GameManager::get_instance().get_troop_damage_multiplier());
     }
 }

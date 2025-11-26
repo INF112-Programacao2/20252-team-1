@@ -10,7 +10,7 @@
 #include "globals.h"
 
 class TroopProjectile : public Projectile {
-private:
+protected:
     std::weak_ptr<Enemy> _target;
 
 protected:

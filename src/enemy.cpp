@@ -48,6 +48,7 @@ void Enemy::attack() {
 void Enemy::run(double dt) {
     if (is_destroyed())
         return;
+
     _slowdown_timer.update(dt);
     if (_slowdown_timer.timeout()) {
         _speed_multiplier = 1.0; // Reseta speed se acabar o tempo

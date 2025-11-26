@@ -45,10 +45,11 @@ TroopManager::TroopManager(GameRoom &room) : _room(room) {
         std::exit(1);
     }
 
-    if (!MonkeyProjectile::load_texture("assets/banana.png")) { 
+    if (!MonkeyProjectile::load_texture("assets/banana.png")) {
         std::cerr << "Nao achou o asset do projetil de macaco!\n";
-        std::exit(1); 
+        std::exit(1);
     }
+
     // inicializando array de tropas vazio
     for (size_t i = 0; i < _troops.size(); i++)
         _troops[i] = nullptr;

@@ -1,39 +1,34 @@
 #include "monkey_projectile.h"
 #include <cmath>
 
-
 sf::Texture MonkeyProjectile::_texture;
 
-MonkeyProjectile::MonkeyProjectile(sf::Vector2f position, std::weak_ptr<Enemy> target, int damage, double speed, double slowdown_pct, Room& room)
-    : TroopProjectile(position, target, damage, speed, room) {
+MonkeyProjectile::MonkeyProjectile(sf::Vector2f position, std::weak_ptr<Enemy> target, int damage, double speed, double slowdown_pct, Room &room)
+    : TroopProjectile(position, target, damage, speed, room), _shape({35, 35}) {
     _slowdown_pct = slowdown_pct;
     _type = ProjectileType::MonkeyProjectileType;
 
-    _sprite.setTexture(_texture);
-
-    sf::Vector2u texture_size = _texture.getSize();
-    _sprite.setOrigin(texture_size.x / 2.0f, texture_size.y / 2.0f);
-
-    float target_size = 35.0f; //logica de escalamento, a banana eh enorme
-
-    float scale_factor = target_size /std::max(texture_size.x, texture_size.y);
-
-    _sprite.setScale(scale_factor, scale_factor);
+    _shape.setTexture(&_texture);
+    _shape.setOrigin(_shape.getGlobalBounds().getSize() * .5f);
 }
 
 void MonkeyProjectile::draw() {
-    _sprite.setPosition(_position);
+    _shape.setPosition(_position);
 
-    if (_direction.x != 0 || _direction.y != 0) {
-        float angle = std::atan2(_direction.y, _direction.x) * 180 / 3.14159;
-        _sprite.setRotation(angle);
-    }
-
-    _room.get_window().draw(_sprite);
+    _room.get_window().draw(_shape);
 }
 
-void MonkeyProjectile::run(double dt){
+void MonkeyProjectile::run(double dt) {
     TroopProjectile::run(dt);
+
+    if (_target.lock()) {
+        const double acc = 10;
+        _v_speed += acc * dt;
+        _position.y += _v_speed * dt;
+    }
+
+    const double angular_speed = 90;
+    _shape.setRotation(angular_speed * dt + _shape.getRotation());
 }
 
 double MonkeyProjectile::get_slowdown_pct() {
@@ -46,7 +41,6 @@ void MonkeyProjectile::on_hit(std::shared_ptr<Enemy> enemy) {
     if (enemy) {
         enemy->apply_slowdown(1.0 - _slowdown_pct, 2.0);
     }
-
 }
 
 bool MonkeyProjectile::load_texture(std::string file_path) {

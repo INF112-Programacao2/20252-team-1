@@ -6,14 +6,15 @@
 class MonkeyProjectile : public TroopProjectile {
 private:
     double _slowdown_pct; // fator de slowdown no alvo
+    double _v_speed = -90;
     static sf::Texture _texture;
-    sf::Sprite _sprite;
+    sf::RectangleShape _shape;
 
 protected:
-    void on_hit(std::shared_ptr<Enemy> enemy) override; //aplica slowdown
+    void on_hit(std::shared_ptr<Enemy> enemy) override; // aplica slowdown
 
-public: 
-    MonkeyProjectile(sf::Vector2f position, std::weak_ptr<Enemy> target, int damage, double speed, double slowdown_pct, Room& room);
+public:
+    MonkeyProjectile(sf::Vector2f position, std::weak_ptr<Enemy> target, int damage, double speed, double slowdown_pct, Room &room);
 
     double get_slowdown_pct();
 

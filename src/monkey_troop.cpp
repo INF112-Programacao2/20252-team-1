@@ -5,8 +5,8 @@
 
 sf::Texture MonkeyTroop::_texture;
 
-MonkeyTroop::MonkeyTroop(sf::Vector2f position, int line, double cooldown, Room& room)
-    : Troop(position, line, cooldown, room), _monkey_projectile(nullptr) {
+MonkeyTroop::MonkeyTroop(sf::Vector2f position, int line, double cooldown, Room &room)
+    : Troop(position, line, cooldown, room) {
     _type = TroopType::Monkey;
 }
 
@@ -22,33 +22,29 @@ void MonkeyTroop::draw() {
 }
 
 void MonkeyTroop::fire() {
-    GameRoom& game_room = dynamic_cast<GameRoom&>(_room);
+    GameRoom &game_room = dynamic_cast<GameRoom &>(_room);
 
     std::shared_ptr<Enemy> target = game_room.get_wave_manager().get_closest_enemy_on_line(_line);
 
     if (target) {
-
-        int damage = 30;           // Monkey damage
-        double speed = 300.0;      // Projectile speed
-        double slowdown = 0.5;     // 0.5 means 50% speed (passed to apply_slowdown)
+        int damage = 30;
+        double speed = 300.0;
+        double slowdown = 0.5;
 
         auto projectile = std::make_unique<MonkeyProjectile>(
-            _position + sf::Vector2f(50, 50), 
-            target,                           
+            _position + sf::Vector2f(50, 50),
+            target,
             damage,
             speed,
             slowdown,
-            _room
-        );
+            _room);
         game_room.get_troop_manager().spawn_projectile(std::move(projectile));
     }
 }
 
-
-sf::Texture& MonkeyTroop::get_texture() {
+sf::Texture &MonkeyTroop::get_texture() {
     return _texture;
 }
-
 
 bool MonkeyTroop::load_texture(std::string file_path) {
     return _texture.loadFromFile(file_path);

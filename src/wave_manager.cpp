@@ -30,7 +30,7 @@ void WaveManager::spawn_enemy(EnemyType enemy_type, int line) {
 
     case EnemyType::Lumberjack:
         // vida, dano, linha, velocidade, cooldown, pontos, sala
-        _enemys.push_back(std::make_shared<LumberjackEnemy>(100, 25, line, 50.0, 3.0, 20, _room));
+        _enemys.push_back(std::make_shared<LumberjackEnemy>(150, 25, line, 50.0, 3.0, 20, _room));
         break;
 
     default:
@@ -48,7 +48,7 @@ void WaveManager::spawn_wave() {
 
 void WaveManager::run(double dt) {
     // Run dos inimigos
-    for (int i = 0; i < _enemys.size(); ) {
+    for (int i = 0; i < _enemys.size();) {
         _enemys[i]->run(dt);
 
         if (_enemys[i]->is_destroyed()) {
@@ -59,7 +59,7 @@ void WaveManager::run(double dt) {
     }
 
     // Run dos projeteis de inimigos
-    for (int i = 0; i < _projectiles.size(); ) {
+    for (int i = 0; i < _projectiles.size();) {
         _projectiles[i]->run(dt);
 
         if (_projectiles[i]->is_destroyed()) {
@@ -167,7 +167,7 @@ std::vector<std::shared_ptr<Enemy>> WaveManager::get_enemys_on_circle(sf::Vector
 }
 
 std::shared_ptr<Enemy> WaveManager::get_enemy_colliding(sf::Vector2f position) {
-    for (const std::shared_ptr<Enemy>& enemy : _enemys) {
+    for (const std::shared_ptr<Enemy> &enemy : _enemys) {
         if (enemy->collide(position))
             return enemy;
     }

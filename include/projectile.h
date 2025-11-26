@@ -12,8 +12,6 @@ protected:
     sf::Vector2f _direction;
     double _speed;
     int _damage;
-    // Effect _effect = Effect::None;
-    // double _effect_time = 0.0;
     bool _destroyed = false;
     Room &_room;
     sf::CircleShape _shape; //! shape de debug
