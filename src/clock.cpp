@@ -34,3 +34,7 @@ void Clock::resume() {
 double Clock::get_timeout_duration() {
     return _timeout_duration;
 }
+
+void Clock::set_timeout_duration(double timeout_duration) {
+    _timeout_duration = timeout_duration;
+}

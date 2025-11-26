@@ -31,6 +31,8 @@ public:
     void resume();
 
     double get_timeout_duration();
+
+    void set_timeout_duration(double duration);
 };
 
 #endif

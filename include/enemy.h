@@ -13,6 +13,8 @@ protected:
     int _damage;
     int _line; // comeca do 1
     double _speed;
+    double _speed_multiplier = 1.0;
+    Clock _slowdown_timer;
     double _position_x;
     double _base_cooldown;
     double _cooldown;
@@ -41,6 +43,8 @@ public:
 
     virtual void draw();
 
+    void apply_slowdown(double pct, double duration); // pct entre 0-1 pro macaco
+
     /// Verifica se a posicao colide com o inimigo
     bool collide(sf::Vector2f position);
 
@@ -50,7 +54,7 @@ public:
 
     sf::Vector2f get_position();
 
-    // void set_effect(Effect effect, double time); // Ignorar por enquanto
+    // void set_effect(Effect effect, double time); // Ignorar por enquanto -> ignorar pra sempre
 
     /// Ja multiplica o dano pelo multiplicador, nao precisa multiplicar antes
     void damage(int life);

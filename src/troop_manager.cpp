@@ -1,6 +1,7 @@
 #include "troop_manager.h"
 #include "solar_energy_troop.h"
 #include "hedgehog_troop.h"
+#include "monkey_troop.h"
 #include "game_manager.h"
 #include "game_room.h"
 #include "globals.h"
@@ -19,6 +20,9 @@ sf::Texture *get_troop_texture(TroopType troop) {
     case TroopType::SolarEnergy:
         return &SolarEnergyTroop::get_texture();
 
+    case TroopType::Monkey:
+        return &MonkeyTroop::get_texture();
+
     default:
         return nullptr;
     }
@@ -36,6 +40,15 @@ TroopManager::TroopManager(GameRoom &room) : _room(room) {
         std::exit(1);
     }
 
+    if (!MonkeyTroop::load_texture("assets/macaco.png")) {
+        std::cerr << "Nao achou o asset do macaco!\n";
+        std::exit(1);
+    }
+
+    if (!MonkeyProjectile::load_texture("assets/banana.png")) { 
+        std::cerr << "Nao achou o asset do projetil de macaco!\n";
+        std::exit(1); 
+    }
     // inicializando array de tropas vazio
     for (size_t i = 0; i < _troops.size(); i++)
         _troops[i] = nullptr;
@@ -208,8 +221,8 @@ Troop* TroopManager::instantiate_troop(int slot, TroopType troop_type) {
     case TroopType::Troop2:
     case TroopType::Troop3:
     case TroopType::Troop4:
-    case TroopType::Troop5:
-        return new Troop(position, line, 5.0, _room);
+    case TroopType::Monkey:
+        return new MonkeyTroop(position, line, 5.0, _room);
 
     case TroopType::SolarEnergy:
         return new SolarEnergyTroop(position, line, 5.0, 100, _room);

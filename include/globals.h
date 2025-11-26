@@ -13,11 +13,19 @@ enum TroopType {
     Troop2,
     Troop3,
     Troop4,
-    Troop5,
+    Monkey,
     SolarEnergy,
 
     // FieldTroops:
     Hedgehog,
+};
+
+enum ProjectileType {
+    Projectile1 = 0,
+    Projectile2,
+    Projectile3,
+    Projectile4,
+    MonkeyProjectileType,
 };
 // Mudar sempre que adicionar uma troop nova:
 const int TROOP_COUNT = 7;

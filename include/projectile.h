@@ -3,9 +3,11 @@
 
 #include <SFML/Graphics.hpp>
 #include "room.h"
+#include "globals.h"
 
 class Projectile {
 protected:
+    ProjectileType _type = ProjectileType::Projectile1;
     sf::Vector2f _position;
     sf::Vector2f _direction;
     double _speed;

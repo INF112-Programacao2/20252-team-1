@@ -7,7 +7,7 @@
 const float height = 100.0;
 
 Enemy::Enemy(int base_life, int damage, int line, double speed, double base_cooldown, int points, Room &room)
-    : _damage(damage), _line(line), _speed(speed), _base_cooldown(base_cooldown), _points(points), _room(room),
+    : _damage(damage), _line(line), _speed(speed), _base_cooldown(base_cooldown), _slowdown_timer(0), _points(points), _room(room),
       _shape(sf::Vector2f(height, height)), _health(base_life, [this]() { this->destroy(); }), // _shape ta com um tamanho de teste
       _flash_timer(.25) {
 
@@ -48,12 +48,17 @@ void Enemy::attack() {
 void Enemy::run(double dt) {
     if (is_destroyed())
         return;
+    _slowdown_timer.update(dt);
+    if (_slowdown_timer.timeout()) {
+        _speed_multiplier = 1.0; // Reseta speed se acabar o tempo
+    }
 
     _flash_timer.update(dt);
     if (_cooldown > 0)
         _cooldown -= dt;
 
-    double next_position_x = _position_x - (_speed * dt); // Calcula a proxima posicao
+    double current_speed = _speed * _speed_multiplier; // Calcula a velocidade atual
+    double next_position_x = _position_x - (current_speed * dt); // Calcula a proxima posicao
 
     if (can_walk(next_position_x)) {
         // Caso ele possa andar para a proxima posicao
@@ -65,6 +70,12 @@ void Enemy::run(double dt) {
             _cooldown = _base_cooldown; // e o timer reseta
         }
     }
+}
+
+void Enemy::apply_slowdown(double pct, double duration) {
+    _speed_multiplier = pct;
+    _slowdown_timer.set_timeout_duration(duration); //olhar nova funcao de set no clock.h
+    _slowdown_timer.restart();
 }
 
 void Enemy::damage(int life) {
