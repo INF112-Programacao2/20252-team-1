@@ -21,7 +21,7 @@ void MonkeyProjectile::draw() {
 void MonkeyProjectile::run(double dt) {
     TroopProjectile::run(dt);
 
-    if (_target.lock()) {
+    if (_target.lock()) {  //faz o projetil andar em parabola (MT FODA)
         const double acc = 10;
         _v_speed += acc * dt;
         _position.y += _v_speed * dt;

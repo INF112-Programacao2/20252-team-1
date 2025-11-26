@@ -2,6 +2,7 @@
 #include "solar_energy_troop.h"
 #include "hedgehog_troop.h"
 #include "monkey_troop.h"
+#include "squirrel_troop.h"
 #include "game_manager.h"
 #include "game_room.h"
 #include "globals.h"
@@ -14,6 +15,9 @@ const float gap_x = 175; // distancia horizontal dos slots
 // helper
 sf::Texture *get_troop_texture(TroopType troop) {
     switch (troop) {
+    case TroopType::Squirrel:
+        return &SquirrelTroop::get_texture();
+
     case TroopType::Hedgehog:
         return &HedgehogTroop::get_texture();
 
@@ -45,8 +49,18 @@ TroopManager::TroopManager(GameRoom &room) : _room(room) {
         std::exit(1);
     }
 
+    if (!SquirrelTroop::load_texture("assets/esquilo.png")) {
+        std::cerr << "Nao achou o asset do esquilo!\n";
+        std::exit(1);
+    }
+
     if (!MonkeyProjectile::load_texture("assets/banana.png")) {
         std::cerr << "Nao achou o asset do projetil de macaco!\n";
+        std::exit(1);
+    }
+
+    if (!SquirrelProjectile::load_texture("assets/noz.png")) {
+        std::cerr << "Nao achou o asset do projetil de esquilo!\n";
         std::exit(1);
     }
 
@@ -221,7 +235,9 @@ Troop* TroopManager::instantiate_troop(int slot, TroopType troop_type) {
     case TroopType::Troop1:
     case TroopType::Troop2:
     case TroopType::Troop3:
-    case TroopType::Troop4:
+    case TroopType::Squirrel:
+        return new SquirrelTroop(position, line, 10.0, _room);
+
     case TroopType::Monkey:
         return new MonkeyTroop(position, line, 5.0, _room);
 
