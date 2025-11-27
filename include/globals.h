@@ -11,7 +11,7 @@ enum TroopType {
     // Troops:
     Troop1 = 0,
     Troop2,
-    Troop3,
+    Elephant,
     Squirrel,
     Monkey,
     SolarEnergy,
@@ -23,7 +23,7 @@ enum TroopType {
 enum ProjectileType {
     Projectile1 = 0,
     Projectile2,
-    Projectile3,
+    ElephantProjectileType,
     SquirrelProjectileType,
     MonkeyProjectileType,
 };

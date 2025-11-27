@@ -42,6 +42,9 @@ public:
     //inicia o efeito de fogo no muro
     void start_burning(double duration, int damage);
 
+    //extingue o fogo no muro
+    void extinguish(double duration);
+
     //retorna se a posicao esta colidindo com o muro
     bool collide(sf::Vector2f position);
 

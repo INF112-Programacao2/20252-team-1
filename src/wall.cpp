@@ -32,6 +32,14 @@ void Wall::start_burning(double duration, int damage) {
     _burn_dps = static_cast<double>(damage); //define dps baseado no dano do inimigo fogo   
 }
 
+void Wall::extinguish(double duration) {
+    if (_burning_time > 0) {
+        _burning_time -= duration;
+        if (_burning_time < 0) 
+            _burning_time = 0;
+    }
+}
+
 void Wall::run(double dt) {
     _burning_timer.update(dt);
     _flash_timer.update(dt);

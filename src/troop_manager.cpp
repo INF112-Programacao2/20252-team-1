@@ -3,6 +3,7 @@
 #include "hedgehog_troop.h"
 #include "monkey_troop.h"
 #include "squirrel_troop.h"
+#include "elephant_troop.h"
 #include "game_manager.h"
 #include "game_room.h"
 #include "globals.h"
@@ -26,6 +27,9 @@ sf::Texture *get_troop_texture(TroopType troop) {
 
     case TroopType::Monkey:
         return &MonkeyTroop::get_texture();
+
+    case TroopType::Elephant:
+        return &ElephantTroop::get_texture();
 
     default:
         return nullptr;
@@ -54,6 +58,11 @@ TroopManager::TroopManager(GameRoom &room) : _room(room) {
         std::exit(1);
     }
 
+    if (!ElephantTroop::load_texture("assets/elefante.png")) {
+        std::cerr << "Nao achou o asset do elefante!\n";
+        std::exit(1);
+    }
+
     if (!MonkeyProjectile::load_texture("assets/banana.png")) {
         std::cerr << "Nao achou o asset do projetil de macaco!\n";
         std::exit(1);
@@ -64,6 +73,10 @@ TroopManager::TroopManager(GameRoom &room) : _room(room) {
         std::exit(1);
     }
 
+    if (!ElephantProjectile::load_texture("assets/agua.png")) {
+        std::cerr << "Nao achou o asset do projetil de elefante!\n";
+        std::exit(1);
+    }
     // inicializando array de tropas vazio
     for (size_t i = 0; i < _troops.size(); i++)
         _troops[i] = nullptr;
@@ -234,7 +247,9 @@ Troop* TroopManager::instantiate_troop(int slot, TroopType troop_type) {
     //! DEBUG (Troop deveria ser uma interface)
     case TroopType::Troop1:
     case TroopType::Troop2:
-    case TroopType::Troop3:
+    case TroopType::Elephant:
+        return new ElephantTroop(position, line, 12.0, _room);
+
     case TroopType::Squirrel:
         return new SquirrelTroop(position, line, 10.0, _room);
 
