@@ -28,7 +28,7 @@ bool Wall::collide(sf::Vector2f position) {
 }
 
 void Wall::start_burning(double duration, int damage) {
-    _burning_time = duration;
+    _burning_time += duration;
     _burn_dps = static_cast<double>(damage); //define dps baseado no dano do inimigo fogo   
 }
 
