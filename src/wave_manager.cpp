@@ -1,4 +1,5 @@
 #include "wave_manager.h"
+#include "fire_enemy.h"
 #include "lumberjack_enemy.h"
 #include <iostream>
 
@@ -9,6 +10,10 @@ WaveManager::WaveManager(Room &room) : _room(room) {
         std::exit(1);
     }
 
+    if (!FireEnemy::load_texture("assets/fogo.png")) {
+        std::cerr << "Nao achou o asset do inimigo de fogo!\n";
+        std::exit(1);
+    }
     // wave 1:
     // probabilidades, numero de inimigos, delay entre inimigos, delay pra terminar subwave
     SubWave subwave_01 = {{0, 1.0}, 4, 0, 3};
@@ -33,6 +38,11 @@ void WaveManager::spawn_enemy(EnemyType enemy_type, int line) {
         _enemys.push_back(std::make_shared<LumberjackEnemy>(150, 25, line, 50.0, 3.0, 20, _room));
         break;
 
+    case EnemyType::FireEnemyType:
+        // vida, dano , linha, velocidade, cooldown, pontos, burn_timer, sala
+        _enemys.push_back(std::make_shared<FireEnemy>(100, 15, line, 150.0, 4.0, 15, 5, _room));
+        break;
+
     default:
         std::cerr << "Inimigo com ID: " << enemy_type << " nao implementado!" << std::endl;
         break;
@@ -41,7 +51,7 @@ void WaveManager::spawn_enemy(EnemyType enemy_type, int line) {
 
 void WaveManager::spawn_wave() {
     spawn_enemy(EnemyType::Enemy1, 1);
-    spawn_enemy(EnemyType::Enemy1, 2);
+    spawn_enemy(EnemyType::FireEnemyType, 2);
     spawn_enemy(EnemyType::Lumberjack, 3);
     spawn_enemy(EnemyType::Lumberjack, 4);
 }

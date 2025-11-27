@@ -6,22 +6,20 @@
 #include "enemy.h"
 #include <iostream> //! DEBUG
 
-Wall::Wall(int base_life, int spike_damage, Room &room)
+Wall::Wall(int base_life, int spike_damage, Room& room)
     : _health(base_life, std::bind(&Wall::destroy, this)), _spike_damage(spike_damage), _room(room),
-      _flash_timer(.15), _shape({WALL_WIDTH, DESKTOP_SIZE.y - HUD_HEIGHT}) {
+    _flash_timer(.15), _shape({ WALL_WIDTH, DESKTOP_SIZE.y - HUD_HEIGHT }) {
 
     _collider = sf::Rect<float>(
         sf::Vector2f(WALL_POSITION_X, HUD_HEIGHT),
         sf::Vector2f(WALL_WIDTH, DESKTOP_SIZE.y - HUD_HEIGHT));
 
-    _shape.setFillColor(sf::Color(128, 128, 128)); // cor cinza para o muro
+    _shape.setFillColor(sf::Color(128, 128, 128)); //cor cinza para o muro
 };
 
 Wall::~Wall() = default;
 
 void Wall::destroy() {
-    // Callback chamado quando a vida do muro chega a zero -> ondeathcallback
-    // a ideia eh ter algo de verdade aqui -> discutir c/ grupo
     std::cout << "O muro foi de arrasta pra cima" << std::endl;
 }
 
@@ -29,23 +27,55 @@ bool Wall::collide(sf::Vector2f position) {
     return _collider.contains(position) || position.x < _collider.left;
 }
 
+void Wall::start_burning(double duration, int damage) {
+    _burning_time = duration;
+    _burn_dps = static_cast<double>(damage); //define dps baseado no dano do inimigo fogo   
+}
+
 void Wall::run(double dt) {
     _burning_timer.update(dt);
     _flash_timer.update(dt);
+
+    //logica do dano de fogo (damage over time)
+    if (_burning_time > 0) {
+        _burning_time -= dt;
+
+
+        //acumula o dano (pq health é int, nao da pra tirar 0.3 de vida)
+        _burn_damage_accumulator += _burn_dps * dt;
+
+        if (_burn_damage_accumulator >= 1.0) {
+            int damage_to_apply = (int)_burn_damage_accumulator;
+            _health.decrease_life(damage_to_apply);
+            _burn_damage_accumulator -= damage_to_apply;
+        }
+    }
 }
 
 void Wall::draw() {
     _shape.setPosition(sf::Vector2f(WALL_POSITION_X, HUD_HEIGHT));
-    if (_flash_timer.timeout())
-        _shape.setFillColor(sf::Color(128, 128, 128)); // cor cinza para o muro
 
+    //cor base
+    sf::Color color = sf::Color(128, 128, 128);
+
+    //se estiver pegando fogo, fica laranja
+    if (_burning_time > 0) {
+        //oscila um pouco o vermelho pra parecer fogo
+        int red_oscillation = 200 + (std::rand() % 55);
+        color = sf::Color(red_oscillation, 100, 0);
+    }
+
+    //se tomou hit recentemente, pisca branco (prioridade sobre o fogo)
+    if (!_flash_timer.timeout())
+        color = sf::Color::White;
+
+    _shape.setFillColor(color);
     _room.get_window().draw(_shape);
 }
 
 void Wall::hit(EnemyProjectile& projectile) {
     _health.decrease_life(projectile.get_damage());
     _flash_timer.restart();
-    _shape.setFillColor(sf::Color::White);
 
     auto enemy = projectile.get_parent();
     if (enemy) {
@@ -56,7 +86,6 @@ void Wall::hit(EnemyProjectile& projectile) {
 void Wall::hit(Enemy& enemy, int damage) {
     _health.decrease_life(damage);
     _flash_timer.restart();
-    _shape.setFillColor(sf::Color::White);
 
     enemy.damage(_spike_damage);
 }
@@ -81,35 +110,34 @@ void Wall::draw_wall_health_bar() {
     float width = 450.0f;
     float height = 30.0f;
     float x_pos = (_room.get_window().getSize().x / 2.0f) - (width / 2.0f);
-    float y_pos = 40.0f; 
+    float y_pos = 40.0f;
 
     int current_life = _health.get_life();
     int max_life = _health.get_max_life();
-    
-    if (max_life <= 0) max_life = 1; 
 
-    // Calcula a porcentagem de vida
+    if (max_life <= 0) max_life = 1;
+
+    //calcula a porcentagem de vida
     float ratio = static_cast<float>(current_life) / static_cast<float>(max_life);
 
-    // Desenha o fundo da barra de vida
+    //desenha a barra de vida
     sf::RectangleShape background(sf::Vector2f(width, height));
     background.setPosition(x_pos, y_pos);
     background.setFillColor(sf::Color(50, 50, 50));
     background.setOutlineThickness(2.0f);
     background.setOutlineColor(sf::Color::White);
 
-    // Desenha a vida atual
     sf::RectangleShape foreground(sf::Vector2f(width * ratio, height));
     foreground.setPosition(x_pos, y_pos);
 
-    if (ratio < 0.3f) 
-        foreground.setFillColor(sf::Color::Red); // Vermelho se a vida for menor que 30%
-    else 
-        foreground.setFillColor(sf::Color::Green); // Verde para outras porcentagens
+    if (ratio < 0.3f)
+        foreground.setFillColor(sf::Color::Red);
+    else
+        foreground.setFillColor(sf::Color::Green);
 
     sf::Font& font = GameManager::get_instance().get_font();
 
-    // Texto "Muro"
+    //texto da barra de vida
     sf::Text label_text;
     label_text.setFont(font);
     label_text.setString("Muro:");
@@ -119,19 +147,19 @@ void Wall::draw_wall_health_bar() {
     label_text.setOrigin(0, label_bounds.top + label_bounds.height / 2.0f);
     label_text.setPosition(x_pos - label_bounds.width - 15.0f, y_pos + height / 2.0f);
 
-    // Texto dentro da barra de vida, que representa os pontos de vida do muro
+    //texto do valor da vida
     sf::Text value_text;
     value_text.setFont(font);
     std::string life_str = std::to_string(current_life) + " / " + std::to_string(max_life);
-    value_text.setString(life_str);    
+    value_text.setString(life_str);
     value_text.setCharacterSize(20);
-    value_text.setFillColor(sf::Color::White); 
+    value_text.setFillColor(sf::Color::White);
     value_text.setOutlineThickness(1.0f);
     value_text.setOutlineColor(sf::Color::Black);
 
     sf::FloatRect text_bounds = value_text.getLocalBounds();
-    value_text.setOrigin(text_bounds.left + text_bounds.width / 2.0f, 
-                        text_bounds.top  + text_bounds.height / 2.0f);
+    value_text.setOrigin(text_bounds.left + text_bounds.width / 2.0f,
+        text_bounds.top + text_bounds.height / 2.0f);
     value_text.setPosition(x_pos + width / 2.0f, y_pos + height / 2.0f + 5.0f);
 
     _room.get_window().draw(background);

@@ -34,6 +34,7 @@ const int TROOP_PRICES[TROOP_COUNT] = {300, 300, 300, 300, 300, 300, 200};
 enum EnemyType {
     Enemy1 = 0,
     Lumberjack,
+    FireEnemyType,
 };
 const int ENEMY_COUNT = 2; // Mudar sempre que aparecer um inimigo novo
 
