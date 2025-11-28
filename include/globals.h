@@ -23,6 +23,7 @@ enum TroopType {
 enum ProjectileType {
     EnemyBaseProjectile = 0,
     TroopBaseProjectile,
+    HunterProjectileType,
     ElephantProjectileType,
     SquirrelProjectileType,
     MonkeyProjectileType,
