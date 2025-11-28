@@ -70,6 +70,16 @@ void WaveManager::spawn_enemy(EnemyType enemy_type, int line) {
         // vida, dano , linha, velocidade, cooldown, pontos, sala
         _enemys.push_back(std::make_shared<ExcavatorEnemy>(300, 1, line, 30.0, 1, 50, _room));
         break;
+    
+    case EnemyType::Hunter:
+        // vida, dano , linha, velocidade, cooldown, pontos, sala
+        _enemys.push_back(std::make_shared<HunterEnemy>(75, 20, line, 50.0, 6.0, 30, _room));
+        break;
+
+    case EnemyType::Excavator:
+        // vida, dano , linha, velocidade, cooldown, pontos, sala
+        _enemys.push_back(std::make_shared<ExcavatorEnemy>(300, 1, line, 30.0, 1, 50, _room));
+        break;
 
     default:
         std::cerr << "Inimigo com ID: " << enemy_type << " nao implementado!" << std::endl;
