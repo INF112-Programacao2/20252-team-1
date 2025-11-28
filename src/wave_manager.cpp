@@ -1,6 +1,8 @@
 #include "wave_manager.h"
 #include "fire_enemy.h"
 #include "lumberjack_enemy.h"
+#include "hunter_enemy.h"
+#include "excavator_enemy.h"
 #include <iostream>
 
 WaveManager::WaveManager(Room &room) : _room(room) {
@@ -14,6 +16,22 @@ WaveManager::WaveManager(Room &room) : _room(room) {
         std::cerr << "Nao achou o asset do inimigo de fogo!\n";
         std::exit(1);
     }
+
+    if (!HunterEnemy::load_texture("assets/hunter.png")) {
+        std::cerr << "Nao achou o asset do hunter!\n";
+        std::exit(1);
+    }
+
+    if (!HunterEnemy::load_projectile_texture("assets/hunter_projectile.png")) {
+        std::cerr << "Nao achou o asset do projetil do hunter!\n";
+        std::exit(1);
+    }
+
+    if(!ExcavatorEnemy::load_texture("assets/excavator.png")) {
+        std::cerr << "Nao achou o asset do excavator!\n";
+        std::exit(1);
+    }
+
     // wave 1:
     // probabilidades, numero de inimigos, delay entre inimigos, delay pra terminar subwave
     SubWave subwave_01 = {{0, 1.0}, 4, 0, 3};
@@ -42,6 +60,16 @@ void WaveManager::spawn_enemy(EnemyType enemy_type, int line) {
         // vida, dano , linha, velocidade, cooldown, pontos, burn_timer, sala
         _enemys.push_back(std::make_shared<FireEnemy>(100, 15, line, 150.0, 4.0, 15, 5, _room));
         break;
+    
+    case EnemyType::Hunter:
+        // vida, dano , linha, velocidade, cooldown, pontos, sala
+        _enemys.push_back(std::make_shared<HunterEnemy>(75, 20, line, 50.0, 6.0, 30, _room));
+        break;
+
+    case EnemyType::Excavator:
+        // vida, dano , linha, velocidade, cooldown, pontos, sala
+        _enemys.push_back(std::make_shared<ExcavatorEnemy>(300, 1, line, 30.0, 1, 50, _room));
+        break;
 
     default:
         std::cerr << "Inimigo com ID: " << enemy_type << " nao implementado!" << std::endl;
@@ -50,9 +78,9 @@ void WaveManager::spawn_enemy(EnemyType enemy_type, int line) {
 }
 
 void WaveManager::spawn_wave() {
-    spawn_enemy(EnemyType::Enemy1, 1);
+    spawn_enemy(EnemyType::Excavator, 1);
     spawn_enemy(EnemyType::FireEnemyType, 2);
-    spawn_enemy(EnemyType::Lumberjack, 3);
+    spawn_enemy(EnemyType::Hunter, 3);
     spawn_enemy(EnemyType::Lumberjack, 4);
 }
 
