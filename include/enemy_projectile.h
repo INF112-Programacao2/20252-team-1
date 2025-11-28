@@ -20,6 +20,8 @@ public:
     void run(double dt);
 
     std::shared_ptr<Enemy> get_parent();
+
+    void set_texture(sf::Texture* texture);
 };
 
 #endif
