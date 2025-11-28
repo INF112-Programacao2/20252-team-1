@@ -10,7 +10,7 @@ enum TroopType {
 
     // Troops:
     Troop1 = 0,
-    Troop2,
+    Guard,
     Elephant,
     Squirrel,
     Monkey,
@@ -27,6 +27,7 @@ enum ProjectileType {
     ElephantProjectileType,
     SquirrelProjectileType,
     MonkeyProjectileType,
+    GuardProjectileType,
 };
 
 // Mudar sempre que adicionar uma troop nova:

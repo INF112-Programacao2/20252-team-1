@@ -1,10 +1,12 @@
 # Bug ou Feature?
 - Leitura da posição do mouse para de funcionar se o tamanho da janela mudar (o jogo deveria rodar em uma resolução fixa de qualquer maneira)
+- O elefante é extremamente impreciso
 
 # Bugs:
 - Fullscreen não funciona em todos os PCs e nem na versão compilada para windows
 - Menu de pause não aparece na UpgradeRoom (obviamente porque não foi implementado lá)
 - Sair do jogo sem jogar reseta o save (porque não deveria estar salvando no final do jogo)
+- Reembolso de dinheiro ao cancelar compra de tropas é multiplicado pelo upgrade de dinheiro
 
 # Refatoração:
 - Usar um sistema melhor pra definir o tamanho da tela e onde posicionar as coisas
@@ -24,6 +26,10 @@
 - Efeitos de dano melhores no muro
 - Balancear a dificuldade
 
+# Sugestões de upgrades:
+- Aumentar o raio de ataque do esquilo/ouriço
+- Aumentar o stun do guarda/slowndown do macaco (mas precisa nerfar antes)
+
 # Sprites:
 - Todos
 
@@ -35,6 +41,7 @@
 - Salvar o jogo somente no inicio de uma wave
 
 # Gabriel:
-- Implementar destroy do Muro (esperar projeteis)
-- Ajudar com tropas (e inimigos?)
+- Implementar destroy do Muro (esperar o jogo estar implementado 100%)
+- Ajudar com tropas e inimigos
 - Ajudar com upgrades
+- Ajudar a balancear a dificuldade
