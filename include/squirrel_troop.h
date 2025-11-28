@@ -13,7 +13,7 @@ public:
 
     void run(double dt) override;
 
-    void fire() override;
+    bool fire() override;
 
     void draw() override;
 

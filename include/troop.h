@@ -8,7 +8,7 @@
 
 // TODO: transformar numa classe abstrata
 
-//TODO: passar a linha em que a troop esta
+// TODO: passar a linha em que a troop esta
 
 class Troop {
 protected:
@@ -29,7 +29,7 @@ public:
 
     /// Ativa a habilidade
     //! nao e virtual pura por debug
-    virtual void fire();
+    virtual bool fire();
 
     //! nao e virtual pura por debug
     virtual void draw();

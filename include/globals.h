@@ -21,12 +21,13 @@ enum TroopType {
 };
 
 enum ProjectileType {
-    Projectile1 = 0,
-    Projectile2,
+    EnemyBaseProjectile = 0,
+    TroopBaseProjectile,
     ElephantProjectileType,
     SquirrelProjectileType,
     MonkeyProjectileType,
 };
+
 // Mudar sempre que adicionar uma troop nova:
 const int TROOP_COUNT = 7;
 const int TROOP_PRICES[TROOP_COUNT] = {300, 300, 300, 300, 300, 300, 200};

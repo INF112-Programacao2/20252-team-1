@@ -4,9 +4,9 @@
 
 sf::Texture HedgehogTroop::_texture;
 
-HedgehogTroop::HedgehogTroop(sf::Vector2f position, float activation_radius,
+HedgehogTroop::HedgehogTroop(sf::Vector2f position, int damage, float activation_radius,
                              double activation_delay, GameRoom &room)
-    : FieldTroop(position, activation_radius, activation_delay, room) {
+    : FieldTroop(position, activation_radius, activation_delay, room), _damage(damage) {
 
     _type = TroopType::Hedgehog;
 }
@@ -24,7 +24,7 @@ void HedgehogTroop::run(double dt) {
         if (_timer.get_seconds_elapsed() >= _activation_delay * multiplier) {
             GameRoom &game_room = dynamic_cast<GameRoom &>(_room);
             for (std::shared_ptr<Enemy> enemy : game_room.get_wave_manager().get_enemys_on_circle(_position, _activation_radius)) {
-                enemy->damage(50); //! valor debug
+                enemy->damage(_damage);
             }
 
             destroy();
@@ -45,14 +45,15 @@ void HedgehogTroop::draw() {
     sf::RectangleShape rect(sf::Vector2f(side, side));
     rect.setPosition(_position - sf::Vector2f(side / 2, side / 2));
     rect.setTexture(&_texture);
+    rect.setFillColor(_waiting_cooldown ? sf::Color(150, 150, 150) : sf::Color::White);
 
     _room.get_window().draw(rect);
 
     //! DEBUG PRA VISUALIZAR O RAIO DE EXPLOSAO
     if (_waiting_cooldown) {
-        sf::CircleShape circ(_activation_radius);
-        circ.setPosition(_position - sf::Vector2f(_activation_radius, _activation_radius));
-        _room.get_window().draw(circ);
+        // sf::CircleShape circ(_activation_radius);
+        // circ.setPosition(_position - sf::Vector2f(_activation_radius, _activation_radius));
+        // _room.get_window().draw(circ);
     }
 }
 

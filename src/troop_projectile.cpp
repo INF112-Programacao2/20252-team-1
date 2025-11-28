@@ -15,8 +15,8 @@ sf::Vector2f normalize(sf::Vector2f vec) {
 }
 
 TroopProjectile::TroopProjectile(sf::Vector2f position, std::weak_ptr<Enemy> target, int damage,
-                                 double speed, Room &room)
-    : Projectile(position, sf::Vector2f(1, 0), damage, speed, room), _target(target) {
+                                 double speed, Room &room, ProjectileType type)
+    : Projectile(position, sf::Vector2f(1, 0), damage, speed, room, type), _target(target) {
 
     _shape.setFillColor(sf::Color::Yellow);
 }
@@ -36,8 +36,6 @@ void TroopProjectile::run(double dt) {
     GameRoom &game_room = dynamic_cast<GameRoom &>(_room);
     if (auto hit = game_room.get_wave_manager().get_enemy_colliding(_position)) {
         on_hit(hit);
-        destroy();
-
         return;
     }
 
@@ -47,8 +45,12 @@ void TroopProjectile::run(double dt) {
 }
 
 void TroopProjectile::on_hit(std::shared_ptr<Enemy> enemy) {
-    if (enemy) {
-        // Comportamento default: so da dano
-        enemy->damage(_damage * GameManager::get_instance().get_troop_damage_multiplier());
-    }
+    if (enemy)
+        apply_damage(enemy, enemy->get_type_multiplier(_type));
+
+    destroy();
+}
+
+void TroopProjectile::apply_damage(std::shared_ptr<Enemy> enemy, double multiplier) {
+    enemy->damage(_damage * GameManager::get_instance().get_troop_damage_multiplier() * multiplier);
 }

@@ -15,7 +15,7 @@ public:
     SolarEnergyTroop(sf::Vector2f position, int line, double cooldown, int increase_points, Room &room);
 
     /// Gera pontos
-    void fire() override;
+    bool fire() override;
 
     void run(double dt) override;
 

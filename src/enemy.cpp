@@ -8,8 +8,7 @@ const float height = 100.0;
 
 Enemy::Enemy(int base_life, int damage, int line, double speed, double base_cooldown, int points, Room &room)
     : _damage(damage), _line(line), _speed(speed), _base_cooldown(base_cooldown), _slowdown_timer(0), _points(points), _room(room),
-      _shape(sf::Vector2f(height, height)), _health(base_life, [this]() { this->destroy(); }), // _shape ta com um tamanho de teste
-      _flash_timer(.25) {
+      _shape(sf::Vector2f(height, height)), _health(base_life, [this]() { this->destroy(); }) {
 
     _health.set_life(base_life);
     _position_x = GAME_SIZE_X;
@@ -40,9 +39,9 @@ bool Enemy::can_walk(double next_position) {
 }
 
 void Enemy::attack() {
-    GameRoom& game_room = dynamic_cast<GameRoom&>(_room);
+    GameRoom &game_room = dynamic_cast<GameRoom &>(_room);
     game_room.get_wave_manager().spawn_projectile(std::make_unique<EnemyProjectile>(
-        get_position(), shared_from_this(), game_room.get_wall(), 10, 100.0, _room));
+        get_position(), shared_from_this(), game_room.get_wall(), 10, 100.0, _room, ProjectileType::EnemyBaseProjectile));
 }
 
 void Enemy::run(double dt) {
@@ -58,7 +57,7 @@ void Enemy::run(double dt) {
     if (_cooldown > 0)
         _cooldown -= dt;
 
-    double current_speed = _speed * _speed_multiplier; // Calcula a velocidade atual
+    double current_speed = _speed * _speed_multiplier;           // Calcula a velocidade atual
     double next_position_x = _position_x - (current_speed * dt); // Calcula a proxima posicao
 
     if (can_walk(next_position_x)) {
@@ -75,8 +74,12 @@ void Enemy::run(double dt) {
 
 void Enemy::apply_slowdown(double pct, double duration) {
     _speed_multiplier = pct;
-    _slowdown_timer.set_timeout_duration(duration); //olhar nova funcao de set no clock.h
+    _slowdown_timer.set_timeout_duration(duration); // olhar nova funcao de set no clock.h
     _slowdown_timer.restart();
+}
+
+double Enemy::get_type_multiplier(ProjectileType type) {
+    return 1.0; // multiplicador base
 }
 
 void Enemy::damage(int life) {

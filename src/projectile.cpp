@@ -2,8 +2,10 @@
 #include "globals.h"
 #include <cmath>
 
-Projectile::Projectile(sf::Vector2f position, sf::Vector2f direction, int damage, double speed, Room &room)
-    : _position(position), _direction(direction), _damage(damage), _speed(speed), _room(room) {
+Projectile::Projectile(sf::Vector2f position, sf::Vector2f direction, int damage,
+                       double speed, Room &room, ProjectileType type)
+    : _position(position), _direction(direction), _damage(damage), _speed(speed),
+      _room(room), _type(type) {
 
     _shape.setRadius(10.0);
     _shape.setFillColor(sf::Color::Red);
@@ -32,4 +34,8 @@ bool Projectile::is_destroyed() {
 
 int Projectile::get_damage() {
     return _damage;
+}
+
+ProjectileType Projectile::get_type() {
+    return _type;
 }

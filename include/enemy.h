@@ -6,6 +6,7 @@
 #include "room.h"
 #include "health_manager.h"
 #include "clock.h"
+#include "globals.h"
 
 class Enemy : public std::enable_shared_from_this<Enemy> {
 protected:
@@ -24,7 +25,7 @@ protected:
     // std::array<double, EFFECT_COUNT> _effect_times; // array de tempo restante de cada efeito
     Room &_room;
     sf::RectangleShape _shape;
-    Clock _flash_timer;
+    Clock _flash_timer{.2};
 
 protected:
     /// E chamado quando a vida chega a 0
@@ -54,7 +55,10 @@ public:
 
     sf::Vector2f get_position();
 
-    /// Ja multiplica o dano pelo multiplicador, nao precisa multiplicar antes
+    /// Multiplicador do dano que esse inimigo vai tomar pra o projetil (por base 1)
+    virtual double get_type_multiplier(ProjectileType type);
+
+    /// Ja multiplica o dano pelo multiplicador GERAL
     void damage(int life);
 };
 

@@ -15,7 +15,7 @@ SolarEnergyTroop::SolarEnergyTroop(sf::Vector2f position, int line, double coold
     _increase_points = increase_points;
 }
 
-void SolarEnergyTroop::fire() {
+bool SolarEnergyTroop::fire() {
     // spawna texto informando quantos pontos gerou
     std::stringstream s;
     s << "+" << _increase_points;
@@ -27,6 +27,7 @@ void SolarEnergyTroop::fire() {
 
     // aumenta a score
     GameManager::get_instance().add_points(_increase_points);
+    return true;
 }
 
 void SolarEnergyTroop::run(double dt) {

@@ -13,13 +13,16 @@
 - FieldTroop deveria ser posicionada em grid (horizontalmente)?
 
 # Pra fazer:
+- SEPARAR A HUD DO MENU DA LOJA
 - Mais upgrades
-- Inimigos
-- Tela de menu inicial (por tutorial e créditos)
-- Tela de upgrades
 - Mais tropas
+- Mais inimigos
+- Tela de menu inicial (por tutorial e créditos)
 - Efeitos sonoros / música
 - Logica de ganhar o jogo (salvar a wave anterior à vitória)
+- Mostrar o efeito de explosão da noz e da tropa ouriço
+- Efeitos de dano melhores no muro
+- Balancear a dificuldade
 
 # Sprites:
 - Todos
@@ -35,4 +38,3 @@
 - Implementar destroy do Muro (esperar projeteis)
 - Ajudar com tropas (e inimigos?)
 - Ajudar com upgrades
-- Ajudar com projetil

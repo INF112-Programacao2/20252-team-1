@@ -4,9 +4,8 @@
 sf::Texture MonkeyProjectile::_texture;
 
 MonkeyProjectile::MonkeyProjectile(sf::Vector2f position, std::weak_ptr<Enemy> target, int damage, double speed, double slowdown_pct, Room &room)
-    : TroopProjectile(position, target, damage, speed, room), _shape({35, 35}) {
+    : TroopProjectile(position, target, damage, speed, room, ProjectileType::MonkeyProjectileType), _shape({35, 35}) {
     _slowdown_pct = slowdown_pct;
-    _type = ProjectileType::MonkeyProjectileType;
 
     _shape.setTexture(&_texture);
     _shape.setOrigin(_shape.getGlobalBounds().getSize() * .5f);
@@ -21,7 +20,7 @@ void MonkeyProjectile::draw() {
 void MonkeyProjectile::run(double dt) {
     TroopProjectile::run(dt);
 
-    if (_target.lock()) {  //faz o projetil andar em parabola (MT FODA)
+    if (_target.lock()) { // faz o projetil andar em parabola (MT FODA)
         const double acc = 10;
         _v_speed += acc * dt;
         _position.y += _v_speed * dt;

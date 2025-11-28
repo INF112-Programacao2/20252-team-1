@@ -30,7 +30,7 @@ void WaveManager::spawn_enemy(EnemyType enemy_type, int line) {
     switch (enemy_type) {
     case EnemyType::Enemy1:
         // vida, dano, linha, velocidade, cooldown, pontos, sala
-        _enemys.push_back(std::make_shared<Enemy>(50, 10, line, 50.0, 5.0, 10, _room));
+        _enemys.push_back(std::make_shared<Enemy>(75, 10, line, 50.0, 5.0, 10, _room));
         break;
 
     case EnemyType::Lumberjack:
@@ -39,8 +39,8 @@ void WaveManager::spawn_enemy(EnemyType enemy_type, int line) {
         break;
 
     case EnemyType::FireEnemyType:
-        // vida, dano , linha, velocidade, cooldown, pontos, burn_timer, sala
-        _enemys.push_back(std::make_shared<FireEnemy>(100, 15, line, 150.0, 4.0, 15, 5, _room));
+        // vida, dano, linha, velocidade, cooldown, pontos, burn_timer, sala
+        _enemys.push_back(std::make_shared<FireEnemy>(100, 15, line, 150.0, 4.0, 15, 2, _room));
         break;
 
     default:

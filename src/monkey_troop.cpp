@@ -21,7 +21,7 @@ void MonkeyTroop::draw() {
     _room.get_window().draw(sprite);
 }
 
-void MonkeyTroop::fire() {
+bool MonkeyTroop::fire() {
     GameRoom &game_room = dynamic_cast<GameRoom &>(_room);
 
     std::shared_ptr<Enemy> target = game_room.get_wave_manager().get_closest_enemy_on_line(_line);
@@ -39,7 +39,11 @@ void MonkeyTroop::fire() {
             slowdown,
             _room);
         game_room.get_troop_manager().spawn_projectile(std::move(projectile));
+
+        return true;
     }
+
+    return false;
 }
 
 sf::Texture &MonkeyTroop::get_texture() {

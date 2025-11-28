@@ -13,20 +13,24 @@ void Troop::run(double dt) {
 
     double cooldown = _cooldown * GameManager::get_instance().get_cooldown_multiplier();
     if (_timer.get_seconds_elapsed() >= cooldown) {
-        fire();
-        _timer.restart();
+        if (fire()) // so reseta o timer se puder atirar
+            _timer.restart();
     }
 }
 
-void Troop::fire() {
+bool Troop::fire() {
     // atira no inimigo mais perto
-    GameRoom &game_room = dynamic_cast<GameRoom&>(_room);
+    GameRoom &game_room = dynamic_cast<GameRoom &>(_room);
     std::shared_ptr<Enemy> target = game_room.get_wave_manager().get_closest_enemy_on_line(_line);
 
     if (target) {
         game_room.get_troop_manager().spawn_projectile(std::make_unique<TroopProjectile>(
-            _position + sf::Vector2f(50, 50), target, 100, 300.0, _room));
+            _position + sf::Vector2f(50, 50), target, 100, 300.0, _room, ProjectileType::TroopBaseProjectile));
+
+        return true;
     }
+
+    return false;
 }
 
 void Troop::draw() {

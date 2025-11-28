@@ -15,7 +15,7 @@ private:
     Wall &_target;
 
 public:
-    EnemyProjectile(sf::Vector2f postition, std::weak_ptr<Enemy> parent, Wall &target, int damage, double speed, Room &room);
+    EnemyProjectile(sf::Vector2f postition, std::weak_ptr<Enemy> parent, Wall &target, int damage, double speed, Room &room, ProjectileType type);
 
     void run(double dt);
 

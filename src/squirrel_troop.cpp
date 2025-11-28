@@ -23,7 +23,7 @@ void SquirrelTroop::draw() {
     _room.get_window().draw(sprite);
 }
 
-void SquirrelTroop::fire() {
+bool SquirrelTroop::fire() {
     GameRoom& game_room = dynamic_cast<GameRoom&>(_room);
 
     //encontra o alvo (inimigo mais proximo na linha)
@@ -42,9 +42,12 @@ void SquirrelTroop::fire() {
             speed,
             radius,
             _room);
-        //adiciona ao gerenciador
+
         game_room.get_troop_manager().spawn_projectile(std::move(projectile));
+        return true;
     }
+
+    return false;
 }
 
 sf::Texture &SquirrelTroop::get_texture() {

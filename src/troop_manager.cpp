@@ -84,7 +84,7 @@ TroopManager::TroopManager(GameRoom &room) : _room(room) {
     // atualizando tamanho da area dos inimigos
     sf::Vector2f start(WALL_POSITION_X + WALL_WIDTH + 50, HUD_HEIGHT);
     _enemy_area = sf::Rect<float>( // G: N compilava nem fudendo sem esse <float>
-      start, sf::Vector2f(GAME_SIZE_X - 50, DESKTOP_SIZE.y) - start);
+        start, sf::Vector2f(GAME_SIZE_X - 50, DESKTOP_SIZE.y) - start);
 
     // criando array de cartas (itens da loja)
     const int item_width = 125;
@@ -232,7 +232,7 @@ void TroopManager::draw() {
     }
 }
 
-Troop* TroopManager::instantiate_troop(int slot, TroopType troop_type) {
+Troop *TroopManager::instantiate_troop(int slot, TroopType troop_type) {
     if (slot == -1 || _troops[slot] != nullptr || troop_type == TroopType::None)
         return nullptr;
 
@@ -248,7 +248,7 @@ Troop* TroopManager::instantiate_troop(int slot, TroopType troop_type) {
     case TroopType::Troop1:
     case TroopType::Troop2:
     case TroopType::Elephant:
-        return new ElephantTroop(position, line, 12.0, _room);
+        return new ElephantTroop(position, line, 10.0, _room);
 
     case TroopType::Squirrel:
         return new SquirrelTroop(position, line, 10.0, _room);
@@ -264,17 +264,18 @@ Troop* TroopManager::instantiate_troop(int slot, TroopType troop_type) {
     }
 }
 
-FieldTroop* TroopManager::instantiate_field_troop(sf::Vector2f position, TroopType troop_type) {
+FieldTroop *TroopManager::instantiate_field_troop(sf::Vector2f position, TroopType troop_type) {
     if (!_enemy_area.contains(position))
         return nullptr;
 
     // TODO: adicionar as outras tropas que sao do tipo FieldTroop
     switch (troop_type) {
     case TroopType::Hedgehog:
-        return new HedgehogTroop(position, 75.0, 0.5, _room);
+        // posicao, dano, raio, delay, sala
+        return new HedgehogTroop(position, 100, 75.0, 1.5, _room);
 
     default:
-        //std::cerr << '(' << troop_type << ") FieldTroop nao implementada!" << std::endl;
+        // std::cerr << '(' << troop_type << ") FieldTroop nao implementada!" << std::endl;
         return nullptr;
     }
 }
@@ -282,7 +283,7 @@ FieldTroop* TroopManager::instantiate_field_troop(sf::Vector2f position, TroopTy
 void TroopManager::place_troop() {
     sf::Vector2f mouse_pos = (sf::Vector2f)_room.get_mouse_position();
 
-    if (FieldTroop* field_troop = instantiate_field_troop(get_line_pos(), _cursor_troop)) {
+    if (FieldTroop *field_troop = instantiate_field_troop(get_line_pos(), _cursor_troop)) {
         _field_troops.push_back(field_troop);
         _cursor_troop = TroopType::None;
 
@@ -290,7 +291,7 @@ void TroopManager::place_troop() {
     }
 
     int slot = position_to_slot(mouse_pos);
-    if (Troop* troop = instantiate_troop(slot, _cursor_troop)) {
+    if (Troop *troop = instantiate_troop(slot, _cursor_troop)) {
         _troops[slot] = troop;
         _cursor_troop = TroopType::None;
 
@@ -312,7 +313,7 @@ void TroopManager::run(double dt, const std::vector<sf::Event> &event_queue) {
     }
 
     // Run dos projeteis das troops
-    for (int i = 0; i < _projectiles.size(); ) {
+    for (int i = 0; i < _projectiles.size();) {
         _projectiles[i]->run(dt);
 
         if (_projectiles[i]->is_destroyed()) {
@@ -323,7 +324,7 @@ void TroopManager::run(double dt, const std::vector<sf::Event> &event_queue) {
     }
 
     // Run do field troop
-    for (int i = 0; i < _field_troops.size(); ) {
+    for (int i = 0; i < _field_troops.size();) {
         FieldTroop *field_troop = _field_troops[i];
 
         if (!field_troop || field_troop->is_destroyed()) {
@@ -382,7 +383,7 @@ const std::vector<FieldTroop *> &TroopManager::get_field_troops() {
 }
 
 void TroopManager::set_field_troops(const std::vector<std::pair<TroopType, sf::Vector2f>> &field_troops) {
-    for (FieldTroop* field_troop : _field_troops)
+    for (FieldTroop *field_troop : _field_troops)
         delete field_troop;
 
     _field_troops.clear();

@@ -7,7 +7,7 @@
 
 class Projectile {
 protected:
-    ProjectileType _type = ProjectileType::Projectile1;
+    ProjectileType _type = ProjectileType::EnemyBaseProjectile;
     sf::Vector2f _position;
     sf::Vector2f _direction;
     double _speed;
@@ -16,7 +16,7 @@ protected:
     Room &_room;
     sf::CircleShape _shape; //! shape de debug
 
-    Projectile(sf::Vector2f position, sf::Vector2f direction, int damage, double speed, Room &room);
+    Projectile(sf::Vector2f position, sf::Vector2f direction, int damage, double speed, Room &room, ProjectileType type);
 
 public:
     virtual ~Projectile() = default;
@@ -33,6 +33,8 @@ public:
     bool is_destroyed();
 
     int get_damage();
+
+    ProjectileType get_type();
 };
 
 #endif

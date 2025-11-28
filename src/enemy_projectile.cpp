@@ -1,9 +1,9 @@
 #include "enemy_projectile.h"
 #include <SFML/Graphics.hpp>
 
-EnemyProjectile::EnemyProjectile(sf::Vector2f position, std::weak_ptr<Enemy> parent, Wall &target, 
-                                 int damage, double speed, Room &room)
-    : Projectile(position, sf::Vector2f(-1.0f, 0.0f), damage, speed, room),
+EnemyProjectile::EnemyProjectile(sf::Vector2f position, std::weak_ptr<Enemy> parent, Wall &target,
+                                 int damage, double speed, Room &room, ProjectileType type)
+    : Projectile(position, sf::Vector2f(-1.0f, 0.0f), damage, speed, room, type),
       _parent(parent), _target(target) {}
 
 void EnemyProjectile::run(double dt) {
