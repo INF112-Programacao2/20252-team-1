@@ -21,7 +21,7 @@ bool GuardTroop::fire() {
     std::shared_ptr<Enemy> target = game_room.get_wave_manager().get_closest_enemy_on_line(_line);
 
     if (target) {
-        int damage = 4000;
+        int damage = 20;
         double speed = 400.0;
         double stun_time = 1.5; 
 

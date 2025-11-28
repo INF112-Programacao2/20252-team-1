@@ -40,8 +40,10 @@ enum EnemyType {
     FireEnemyType,
     Hunter,
     Excavator,
+    Trashman,
+    Trash,
 };
-const int ENEMY_COUNT = 5; // Mudar sempre que aparecer um inimigo novo
+const int ENEMY_COUNT = 7; // Mudar sempre que aparecer um inimigo novo
 
 const int UPGRADE_COUNT = 5;
 

@@ -1,6 +1,7 @@
 # Bug ou Feature?
 - Leitura da posição do mouse para de funcionar se o tamanho da janela mudar (o jogo deveria rodar em uma resolução fixa de qualquer maneira)
 - O elefante é extremamente impreciso
+- O fogo e o lixo dão dinheiro ao se auto-destruirem (fodase?)
 
 # Bugs:
 - Fullscreen não funciona em todos os PCs e nem na versão compilada para windows

@@ -46,16 +46,18 @@ public:
 
     void spawn_projectile(std::unique_ptr<EnemyProjectile> projectile);
 
-    /// Retorna o inimigo mais proximo da posicao especificada (pode retornar ponteiro vazio)
+    void add_enemy(std::shared_ptr<Enemy> enemy); //pro trashman
+
+    //retorna o inimigo mais proximo da posicao especificada (pode retornar ponteiro vazio)
     std::shared_ptr<Enemy> get_closest_enemy(sf::Vector2f position);
 
-    /// Retorna o inimigo mais proximo na linha (pode ponteiro vazio)
+    //retorna o inimigo mais proximo na linha (pode ponteiro vazio)
     std::shared_ptr<Enemy> get_closest_enemy_on_line(int line);
 
-    /// Retorna todos os inimigos dentro do circulo
+    //retorna todos os inimigos dentro do circulo
     std::vector<std::shared_ptr<Enemy>> get_enemys_on_circle(sf::Vector2f center, float radius);
 
-    /// Retorna o primeiro inimigo que colide com a posicao
+    //retorna o primeiro inimigo que colide com a posicao
     std::shared_ptr<Enemy> get_enemy_colliding(sf::Vector2f position);
 
     int get_wave_idx();

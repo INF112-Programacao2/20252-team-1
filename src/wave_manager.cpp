@@ -3,6 +3,8 @@
 #include "lumberjack_enemy.h"
 #include "hunter_enemy.h"
 #include "excavator_enemy.h"
+#include "trashman_enemy.h"
+#include "trash_enemy.h"
 #include <iostream>
 
 WaveManager::WaveManager(Room &room) : _room(room) {
@@ -32,6 +34,15 @@ WaveManager::WaveManager(Room &room) : _room(room) {
         std::exit(1);
     }
 
+    if (!TrashmanEnemy::load_texture("assets/lixeiro.png")) {
+        std::cerr << "Nao achou o asset do poluidor!\n";
+        std::exit(1);
+    }
+
+    if (!TrashEnemy::load_texture("assets/lixo.png")) {
+        std::cerr << "Nao achou o asset do lixo!\n";
+        std::exit(1);
+    }
     // wave 1:
     // probabilidades, numero de inimigos, delay entre inimigos, delay pra terminar subwave
     SubWave subwave_01 = {{0, 1.0}, 4, 0, 3};
@@ -71,6 +82,14 @@ void WaveManager::spawn_enemy(EnemyType enemy_type, int line) {
         _enemys.push_back(std::make_shared<ExcavatorEnemy>(300, 1, line, 30.0, 1, 50, _room));
         break;
 
+    case EnemyType::Trashman:
+        // vida, dano , linha, velocidade, cooldown, pontos, sala
+        _enemys.push_back(std::make_shared<TrashmanEnemy>(200, 35, line, 40.0, 5.0, 60, _room));
+        break;
+
+    case EnemyType::Trash:
+        //nao spawna lixo diretamente
+        break;
     default:
         std::cerr << "Inimigo com ID: " << enemy_type << " nao implementado!" << std::endl;
         break;
@@ -78,7 +97,7 @@ void WaveManager::spawn_enemy(EnemyType enemy_type, int line) {
 }
 
 void WaveManager::spawn_wave() {
-    spawn_enemy(EnemyType::Excavator, 1);
+    spawn_enemy(EnemyType::Trashman, 1);
     spawn_enemy(EnemyType::FireEnemyType, 2);
     spawn_enemy(EnemyType::Hunter, 3);
     spawn_enemy(EnemyType::Lumberjack, 4);
@@ -152,6 +171,10 @@ void WaveManager::draw() {
 
 void WaveManager::spawn_projectile(std::unique_ptr<EnemyProjectile> projectile) {
     _projectiles.push_back(std::move(projectile));
+}
+
+void WaveManager::add_enemy(std::shared_ptr<Enemy> enemy) { //pro trashman
+    _enemys.push_back(enemy);
 }
 
 /// Retorna a distancia ao quadrado, util para comparar distancias
