@@ -9,9 +9,9 @@ const float height = 100; // Tamanho visual
 ExcavatorEnemy::ExcavatorEnemy(int base_life, int damage, int line, double speed, double base_cooldown, int points, Room &room)
     : Enemy(base_life, damage, line, speed, base_cooldown, points, room) {
 
-    _current_damage = damage;      // Comeca com o dano base do construtor
-    _max_damage = damage * 100.0;  // O dano maximo eh 100x o inicial (sujeito a mudancas)
-    _ramp_up_rate = 2.0;           // Aumenta 2 de dano a cada hit
+    _current_damage = damage;     // Comeca com o dano base do construtor
+    _max_damage = damage * 100.0; // O dano maximo eh 100x o inicial (sujeito a mudancas)
+    _ramp_up_rate = 2.0;          // Aumenta 2 de dano a cada hit
 
     float width = (height * _texture.getSize().x) / _texture.getSize().y;
     _shape.setSize({width, height});
@@ -34,10 +34,18 @@ void ExcavatorEnemy::draw() {
 }
 
 void ExcavatorEnemy::attack() {
-    GameRoom& game_room = dynamic_cast<GameRoom&>(_room);
-    
-    // Aplica o dano atual no muro
-    game_room.get_wall().hit(*this, _current_damage);
+    if (FieldTroop *troop = get_field_troop_colliding(_position_x - 10)) {
+        troop->hit(_current_damage);
+
+        // reseta o dano quando destroi a field troop
+        if (troop->is_destroyed())
+            _current_damage = _damage;
+    } else {
+        GameRoom &game_room = dynamic_cast<GameRoom &>(_room);
+
+        // Aplica o dano atual no muro
+        game_room.get_wall().hit(*this, _current_damage);
+    }
 
     // Aumenta o muro pro proximo hit
     _current_damage += _ramp_up_rate;
@@ -48,6 +56,6 @@ void ExcavatorEnemy::attack() {
     }
 }
 
-bool ExcavatorEnemy::load_texture(const std::string& file_path) {
+bool ExcavatorEnemy::load_texture(const std::string &file_path) {
     return _texture.loadFromFile(file_path);
 }

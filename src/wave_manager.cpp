@@ -69,11 +69,11 @@ void WaveManager::spawn_enemy(EnemyType enemy_type, int line) {
 
     case EnemyType::FireEnemyType:
         // vida, dano, linha, velocidade, cooldown, pontos, burn_timer, sala
-        _enemys.push_back(std::make_shared<FireEnemy>(100, 15, line, 150.0, 4.0, 15, 2, _room));
+        _enemys.push_back(std::make_shared<FireEnemy>(100, 15, line, 150.0, 0, 15, 2, _room));
         break;
 
     case EnemyType::Hunter:
-        // vida, dano , linha, velocidade, cooldown, pontos, sala
+        // vida, dano, linha, velocidade, cooldown, pontos, sala
         _enemys.push_back(std::make_shared<HunterEnemy>(75, 20, line, 50.0, 6.0, 30, _room));
         break;
 
@@ -88,7 +88,7 @@ void WaveManager::spawn_enemy(EnemyType enemy_type, int line) {
         break;
 
     case EnemyType::Trash:
-        //nao spawna lixo diretamente
+        // nao spawna lixo diretamente
         break;
     default:
         std::cerr << "Inimigo com ID: " << enemy_type << " nao implementado!" << std::endl;
@@ -97,7 +97,8 @@ void WaveManager::spawn_enemy(EnemyType enemy_type, int line) {
 }
 
 void WaveManager::spawn_wave() {
-    spawn_enemy(EnemyType::Trashman, 1);
+    // spawn_enemy(EnemyType::Trashman, 1);
+    spawn_enemy(EnemyType::Excavator, 1);
     spawn_enemy(EnemyType::FireEnemyType, 2);
     spawn_enemy(EnemyType::Hunter, 3);
     spawn_enemy(EnemyType::Lumberjack, 4);
@@ -173,7 +174,7 @@ void WaveManager::spawn_projectile(std::unique_ptr<EnemyProjectile> projectile) 
     _projectiles.push_back(std::move(projectile));
 }
 
-void WaveManager::add_enemy(std::shared_ptr<Enemy> enemy) { //pro trashman
+void WaveManager::add_enemy(std::shared_ptr<Enemy> enemy) { // pro trashman
     _enemys.push_back(enemy);
 }
 

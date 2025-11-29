@@ -5,7 +5,8 @@ sf::Texture HedgehogTroop::_texture;
 
 HedgehogTroop::HedgehogTroop(sf::Vector2f position, int damage, float activation_radius,
                              double activation_delay, GameRoom &room)
-    : FieldTroop(position, activation_radius, activation_delay, room), _damage(damage) {
+    : FieldTroop(0, position, room), _activation_radius(activation_radius), 
+      _activation_delay(activation_delay), _damage(damage) {
 
     _type = TroopType::Hedgehog;
 }

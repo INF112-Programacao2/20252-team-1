@@ -7,12 +7,13 @@
 const float height = 100.0;
 
 Enemy::Enemy(int base_life, int damage, int line, double speed, double base_cooldown, int points, Room &room)
-    : _damage(damage), _line(line), _speed(speed), _base_cooldown(base_cooldown), _slowdown_timer(0), _points(points), _room(room),
+    : _damage(damage), _line(line), _speed(speed), _base_cooldown(base_cooldown),
+      _slowdown_timer(0), _points(points), _room(room),
       _shape(sf::Vector2f(height, height)), _health(base_life, [this]() { this->destroy(); }) {
 
     _health.set_life(base_life);
     _position_x = GAME_SIZE_X;
-    _cooldown = 0;
+    _cooldown = base_cooldown * .5;
 
     _shape.setFillColor(sf::Color::White);
     _shape.setOrigin(sf::Vector2f(.5, .5) * height);
@@ -33,9 +34,15 @@ sf::Vector2f Enemy::get_position() {
     return sf::Vector2f(_position_x + height / 2, GameManager::get_line_pos(_line));
 }
 
+FieldTroop *Enemy::get_field_troop_colliding(double next_position) {
+    GameRoom &game_room = dynamic_cast<GameRoom &>(_room);
+
+    return game_room.get_troop_manager().get_field_troop_at(
+        {next_position, GameManager::get_line_pos(_line)});
+}
+
 bool Enemy::can_walk(double next_position) {
-    //! DEBUG
-    return next_position > WALL_POSITION_X + WALL_WIDTH + 300;
+    return next_position > WALL_POSITION_X + WALL_WIDTH;
 }
 
 void Enemy::attack() {
@@ -54,21 +61,20 @@ void Enemy::run(double dt) {
     }
 
     _flash_timer.update(dt);
-    if (_cooldown > 0)
-        _cooldown -= dt;
 
     double current_speed = _speed * _speed_multiplier;           // Calcula a velocidade atual
     double next_position_x = _position_x - (current_speed * dt); // Calcula a proxima posicao
 
-    if (can_walk(next_position_x)) {
+    if (can_walk(next_position_x) && !get_field_troop_colliding(next_position_x)) {
         // Caso ele possa andar para a proxima posicao
         _position_x = next_position_x; // Atualiza a posicao atual
     } else {
-        // Caso nao possa mais andar (chegou no muro)
+        // Caso nao possa mais andar (chegou no muro / field troop)
         if (_cooldown <= 0) {           // E tenha acabado o cooldown de ataque
             attack();                   // o inimigo ataca
             _cooldown = _base_cooldown; // e o timer reseta
-        }
+        } else
+            _cooldown -= dt;
     }
 }
 

@@ -9,6 +9,7 @@
 #include "game_room.h"
 #include "globals.h"
 #include "anteater.h"
+#include "tree_troop.h"
 #include <iostream>
 
 // posicao inicial dos slots (superior esquerdo)
@@ -38,6 +39,9 @@ sf::Texture *get_troop_texture(TroopType troop) {
 
     case TroopType::Guard:
         return &GuardTroop::get_texture();
+
+    case TroopType::Tree:
+        return &TreeTroop::get_texture();
 
     default:
         return nullptr;
@@ -102,6 +106,11 @@ TroopManager::TroopManager(GameRoom &room) : _room(room) {
     }
     if (!AnteaterTroop::load_projectile_texture("assets/dardo.png")) {
         std::cerr << "Nao achou o asset do dardo!\n";
+        std::exit(1);
+    }
+
+    if (!TreeTroop::load_texture("assets/arvore.png")) {
+        std::cerr << "Nao achou o asset da arvore!\n";
         std::exit(1);
     }
 
@@ -234,7 +243,8 @@ void TroopManager::draw() {
     if (_cursor_troop == TroopType::None || _room.is_paused())
         return;
 
-    bool is_fieldtroop = (_cursor_troop == TroopType::Hedgehog);
+    bool is_fieldtroop = (_cursor_troop == TroopType::Hedgehog ||
+                          _cursor_troop == TroopType::Tree);
 
     sf::Vector2f mouse_pos = (sf::Vector2f)_room.get_mouse_position();
     sf::Texture *texture = get_troop_texture(_cursor_troop);
@@ -304,6 +314,10 @@ FieldTroop *TroopManager::instantiate_field_troop(sf::Vector2f position, TroopTy
     case TroopType::Hedgehog:
         // posicao, dano, raio, delay, sala
         return new HedgehogTroop(position, 100, 75.0, 1.5, _room);
+
+    case TroopType::Tree:
+        // vida, posicao, sala
+        return new TreeTroop(50, position, _room);
 
     default:
         // std::cerr << '(' << troop_type << ") FieldTroop nao implementada!" << std::endl;
@@ -424,4 +438,13 @@ void TroopManager::set_field_troops(const std::vector<std::pair<TroopType, sf::V
     for (auto [troop_type, position] : field_troops) {
         _field_troops.push_back(instantiate_field_troop(position, troop_type));
     }
+}
+
+FieldTroop *TroopManager::get_field_troop_at(sf::Vector2f position) {
+    for (FieldTroop *field_troop : _field_troops) {
+        if (field_troop->collide(position))
+            return field_troop;
+    }
+
+    return nullptr;
 }

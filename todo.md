@@ -1,6 +1,6 @@
 # Bug ou Feature?
 - Leitura da posição do mouse para de funcionar se o tamanho da janela mudar (o jogo deveria rodar em uma resolução fixa de qualquer maneira)
-- O elefante é extremamente impreciso
+- O elefante é extremamente impreciso (ele é aimbot, só que a maioria dos inimigos que ele mira já morreram até o tiro chegar)
 - O fogo e o lixo dão dinheiro ao se auto-destruirem (fodase?)
 
 # Bugs:
@@ -40,6 +40,7 @@
 
 # Davi Nobre:
 - Salvar o jogo somente no inicio de uma wave
+- Salvar a vida das field troops (ou restaurar a vida delas no começo da wave pra ficar mais fácil)
 
 # Gabriel:
 - Implementar destroy do Muro (esperar o jogo estar implementado 100%)

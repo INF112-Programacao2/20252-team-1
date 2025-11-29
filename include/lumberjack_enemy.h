@@ -9,8 +9,6 @@ private:
     static sf::Texture _texture;
 
 private:
-    bool can_walk(double next_position) override;
-
     void attack() override;
 
 public:
@@ -18,9 +16,7 @@ public:
 
     void run(double dt) override;
 
-    void draw() override;
-
-    static bool load_texture(const std::string& file_path);
+    static bool load_texture(const std::string &file_path);
 };
 
 #endif

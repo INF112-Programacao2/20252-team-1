@@ -8,8 +8,6 @@ private:
     static sf::Texture _texture;
 
 private:
-    bool can_walk(double next_position) override;
-
     void attack() override;
 
 public:

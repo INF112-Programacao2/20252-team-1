@@ -44,10 +44,10 @@ private:
 
     /// Instancia o objeto Troop do tipo informado (nao aceita field_troop)
     /// E nao insere no array
-    Troop* instantiate_troop(int slot, TroopType troop_type);
-    
+    Troop *instantiate_troop(int slot, TroopType troop_type);
+
     /// Instancia o objeto FieldTroop do tipo informado (nao insere no vetor)
-    FieldTroop* instantiate_field_troop(sf::Vector2f position, TroopType troop_type);
+    FieldTroop *instantiate_field_troop(sf::Vector2f position, TroopType troop_type);
 
 public:
     TroopManager(GameRoom &room);
@@ -65,6 +65,8 @@ public:
 
     const std::vector<FieldTroop *> &get_field_troops();
     void set_field_troops(const std::vector<std::pair<TroopType, sf::Vector2f>> &field_troops);
+
+    FieldTroop *get_field_troop_at(sf::Vector2f position);
 };
 
 #endif

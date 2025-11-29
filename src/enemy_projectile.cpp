@@ -1,5 +1,5 @@
 #include "enemy_projectile.h"
-#include <SFML/Graphics.hpp>
+#include "game_room.h"
 
 EnemyProjectile::EnemyProjectile(sf::Vector2f position, std::weak_ptr<Enemy> parent, Wall &target,
                                  int damage, double speed, Room &room, ProjectileType type)
@@ -8,6 +8,17 @@ EnemyProjectile::EnemyProjectile(sf::Vector2f position, std::weak_ptr<Enemy> par
 
 void EnemyProjectile::run(double dt) {
     // funcao que move o projetil ao muro e checa colisao
+
+    // checar se acertou uma fieldtroop
+    GameRoom &game_room = dynamic_cast<GameRoom &>(_room);
+    FieldTroop *troop = game_room.get_troop_manager().get_field_troop_at(_position);
+
+    if (troop) {
+        troop->hit(_damage);
+
+        destroy();
+        return;
+    }
 
     // checar se colidiu com o muro
     if (_target.collide(_position)) {

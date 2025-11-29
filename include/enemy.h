@@ -7,6 +7,7 @@
 #include "health_manager.h"
 #include "clock.h"
 #include "globals.h"
+#include "field_troop.h"
 
 class Enemy : public std::enable_shared_from_this<Enemy> {
 protected:
@@ -31,6 +32,10 @@ protected:
     /// E chamado quando a vida chega a 0
     virtual void destroy();
 
+    /// Retorna a field troop que colide com a proxima posicao, se existir
+    FieldTroop *get_field_troop_colliding(double next_position);
+
+    /// Verifica se pode andar pra proxima posicao
     virtual bool can_walk(double next_position);
 
     virtual void attack();

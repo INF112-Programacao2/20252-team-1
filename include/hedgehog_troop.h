@@ -7,6 +7,9 @@
 class HedgehogTroop : public FieldTroop {
 private:
     static sf::Texture _texture;
+    Clock _timer;
+    float _activation_radius;
+    double _activation_delay;
     int _damage;
     bool _waiting_cooldown = false;
 

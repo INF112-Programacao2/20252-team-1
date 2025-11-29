@@ -18,6 +18,7 @@ enum TroopType {
 
     // FieldTroops:
     Hedgehog,
+    Tree,
 };
 
 enum ProjectileType {
@@ -32,8 +33,8 @@ enum ProjectileType {
 };
 
 // Mudar sempre que adicionar uma troop nova:
-const int TROOP_COUNT = 7;
-const int TROOP_PRICES[TROOP_COUNT] = {200, 300, 300, 300, 300, 300, 200};
+const int TROOP_COUNT = 8;
+const int TROOP_PRICES[TROOP_COUNT] = {200, 350, 350, 300, 300, 250, 200, 300};
 
 enum EnemyType {
     Enemy1 = 0,
