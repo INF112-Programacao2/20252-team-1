@@ -25,10 +25,3 @@ void EnemyProjectile::run(double dt) {
 std::shared_ptr<Enemy> EnemyProjectile::get_parent() {
     return _parent.lock();
 }
-
-void EnemyProjectile::set_texture(sf::Texture* texture) {
-    _shape.setTexture(texture);
-    _shape.setFillColor(sf::Color::White); 
-    _shape.setRadius(15.f); 
-    _shape.setOrigin(15.f, 15.f);
-}

@@ -14,7 +14,7 @@ protected:
     int _damage;
     bool _destroyed = false;
     Room &_room;
-    sf::CircleShape _shape; //! shape de debug
+    sf::CircleShape _shape;
 
     Projectile(sf::Vector2f position, sf::Vector2f direction, int damage, double speed, Room &room, ProjectileType type);
 
@@ -35,6 +35,9 @@ public:
     int get_damage();
 
     ProjectileType get_type();
+
+    /// modifica a textura e o tamanho dela
+    void set_texture(sf::Texture *texture, float radius);
 };
 
 #endif

@@ -8,6 +8,7 @@
 #include "game_manager.h"
 #include "game_room.h"
 #include "globals.h"
+#include "anteater.h"
 #include <iostream>
 
 // posicao inicial dos slots (superior esquerdo)
@@ -31,6 +32,9 @@ sf::Texture *get_troop_texture(TroopType troop) {
 
     case TroopType::Elephant:
         return &ElephantTroop::get_texture();
+
+    case TroopType::Anteater:
+        return &AnteaterTroop::get_texture();
 
     case TroopType::Guard:
         return &GuardTroop::get_texture();
@@ -92,6 +96,15 @@ TroopManager::TroopManager(GameRoom &room) : _room(room) {
         std::exit(1);
     }
 
+    if (!AnteaterTroop::load_texture("assets/tamandua.png")) {
+        std::cerr << "Nao achou o asset do tamandua!\n";
+        std::exit(1);
+    }
+    if (!AnteaterTroop::load_projectile_texture("assets/dardo.png")) {
+        std::cerr << "Nao achou o asset do dardo!\n";
+        std::exit(1);
+    }
+
     // inicializando array de tropas vazio
     for (size_t i = 0; i < _troops.size(); i++)
         _troops[i] = nullptr;
@@ -115,7 +128,7 @@ TroopManager::TroopManager(GameRoom &room) : _room(room) {
         for (int j = 0; j < cols && idx < TROOP_COUNT; j++, idx++) {
             sf::Vector2f position(
                 size_x - shop_width + (gap * (j + 1) + item_width * j),
-                75 + 200 * i);
+                HUD_HEIGHT + 75 + 200 * i);
 
             _shop_cards[idx] = new TroopCard(
                 position, item_width, (TroopType)idx, TROOP_PRICES[idx],
@@ -177,12 +190,12 @@ void TroopManager::draw_slots() {
 
 void TroopManager::draw_shop() {
     float size_x = get_window().getView().getSize().x;
-    float size_y = get_window().getView().getSize().y;
+    float size_y = get_window().getView().getSize().y - HUD_HEIGHT;
 
     // desenha fundo
     int shop_width = size_x - GAME_SIZE_X;
     sf::RectangleShape background(sf::Vector2f(shop_width, size_y));
-    background.setPosition(sf::Vector2f(size_x - shop_width, 0));
+    background.setPosition(sf::Vector2f(size_x - shop_width, HUD_HEIGHT));
     background.setFillColor(sf::Color(150, 150, 50));
 
     get_window().draw(background);
@@ -259,16 +272,17 @@ Troop *TroopManager::instantiate_troop(int slot, TroopType troop_type) {
 
     // TODO: colocar o resto dos tipos de tropas
     switch (troop_type) {
-    //! DEBUG (Troop deveria ser uma interface)
-    case TroopType::Troop1:
+    case TroopType::Anteater:
+        return new AnteaterTroop(position, line, 4.0, _room);
+
     case TroopType::Guard:
-        return new GuardTroop(position, line, 15.0, _room);
+        return new GuardTroop(position, line, 10.0, _room);
 
     case TroopType::Elephant:
         return new ElephantTroop(position, line, 10.0, _room);
 
     case TroopType::Squirrel:
-        return new SquirrelTroop(position, line, 10.0, _room);
+        return new SquirrelTroop(position, line, 6.0, _room);
 
     case TroopType::Monkey:
         return new MonkeyTroop(position, line, 5.0, _room);
@@ -368,7 +382,9 @@ void TroopManager::run(double dt, const std::vector<sf::Event> &event_queue) {
                 } else if (_cursor_troop != TroopType::None) {
                     // cancela a compra e reembolsa
                     // (se o mouse estiver fora de um slot ocupado)
-                    GameManager::get_instance().add_points(TROOP_PRICES[_cursor_troop]);
+                    GameManager &gm = GameManager::get_instance();
+                    gm.set_points(gm.get_points() + TROOP_PRICES[_cursor_troop]);
+
                     _cursor_troop = TroopType::None;
                 }
             }

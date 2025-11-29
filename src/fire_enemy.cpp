@@ -44,7 +44,6 @@ bool FireEnemy::load_texture(const std::string &file_path) {
     return _texture.loadFromFile(file_path);
 }
 
-#include <iostream>
 double FireEnemy::get_type_multiplier(ProjectileType type) {
     switch (type) {
     case ProjectileType::ElephantProjectileType:

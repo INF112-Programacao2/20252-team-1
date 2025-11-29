@@ -45,7 +45,7 @@ void HunterEnemy::attack() {
         260.0, // Velocidade do projetil
         _room,
         ProjectileType::HunterProjectileType);
-    proj_meio->set_texture(&_projectile_texture);
+    proj_meio->set_texture(&_projectile_texture, 15.f);
     game_room.get_wave_manager().spawn_projectile(std::move(proj_meio));
 
     // Projetil de cima
@@ -57,7 +57,7 @@ void HunterEnemy::attack() {
         250.0,
         _room,
         ProjectileType::HunterProjectileType);
-    proj_cima->set_texture(&_projectile_texture);
+    proj_cima->set_texture(&_projectile_texture, 15.f);
     game_room.get_wave_manager().spawn_projectile(std::move(proj_cima));
 
     // Projetil de baixo
@@ -69,7 +69,7 @@ void HunterEnemy::attack() {
         250.0,
         _room,
         ProjectileType::HunterProjectileType);
-    proj_baixo->set_texture(&_projectile_texture);
+    proj_baixo->set_texture(&_projectile_texture, 15.f);
     game_room.get_wave_manager().spawn_projectile(std::move(proj_baixo));
 }
 

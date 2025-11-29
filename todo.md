@@ -7,7 +7,6 @@
 - Fullscreen não funciona em todos os PCs e nem na versão compilada para windows
 - Menu de pause não aparece na UpgradeRoom (obviamente porque não foi implementado lá)
 - Sair do jogo sem jogar reseta o save (porque não deveria estar salvando no final do jogo)
-- Reembolso de dinheiro ao cancelar compra de tropas é multiplicado pelo upgrade de dinheiro
 
 # Refatoração:
 - Usar um sistema melhor pra definir o tamanho da tela e onde posicionar as coisas
@@ -16,7 +15,7 @@
 - FieldTroop deveria ser posicionada em grid (horizontalmente)?
 
 # Pra fazer:
-- SEPARAR A HUD DO MENU DA LOJA
+- Tratamento de excessão na leitura de assets
 - Mais upgrades
 - Mais tropas
 - Mais inimigos
@@ -26,6 +25,7 @@
 - Mostrar o efeito de explosão da noz e da tropa ouriço
 - Efeitos de dano melhores no muro
 - Balancear a dificuldade
+- Efeito de gradiente na healthbar do muro
 
 # Sugestões de upgrades:
 - Aumentar o raio de ataque do esquilo/ouriço

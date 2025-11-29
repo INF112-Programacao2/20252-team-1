@@ -27,8 +27,8 @@ bool MonkeyTroop::fire() {
     std::shared_ptr<Enemy> target = game_room.get_wave_manager().get_closest_enemy_on_line(_line);
 
     if (target) {
-        int damage = 30;
-        double speed = 300.0;
+        int damage = 35;
+        double speed = 350.0;
         double slowdown = 0.5;
 
         auto projectile = std::make_unique<MonkeyProjectile>(

@@ -33,7 +33,7 @@ void ElephantTroop::run(double dt) {
         auto projectile = std::make_unique<ElephantProjectile>(
             _position + sf::Vector2f(50, 50),
             target,
-            15,    // dano
+            20,    // dano
             350.0, // velocidade
             _room);
 

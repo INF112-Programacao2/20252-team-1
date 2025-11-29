@@ -1,4 +1,3 @@
-#include <iostream> //! DEBUG
 #include "hedgehog_troop.h"
 #include "game_manager.h"
 
@@ -58,7 +57,6 @@ void HedgehogTroop::draw() {
 }
 
 void HedgehogTroop::destroy() {
-    std::cout << "BOOOM" << std::endl;
     _destroyed = true;
 }
 

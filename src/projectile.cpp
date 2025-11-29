@@ -7,7 +7,7 @@ Projectile::Projectile(sf::Vector2f position, sf::Vector2f direction, int damage
     : _position(position), _direction(direction), _damage(damage), _speed(speed),
       _room(room), _type(type) {
 
-    _shape.setRadius(10.0);
+    _shape.setRadius(30.0);
     _shape.setFillColor(sf::Color::Red);
     _shape.setOrigin(_shape.getRadius(), _shape.getRadius());
     _shape.setPosition(_position);
@@ -38,4 +38,11 @@ int Projectile::get_damage() {
 
 ProjectileType Projectile::get_type() {
     return _type;
+}
+
+void Projectile::set_texture(sf::Texture *texture, float radius) {
+    _shape.setTexture(texture);
+    _shape.setRadius(radius);
+    _shape.setOrigin(sf::Vector2f(1, 1) * radius * .5f);
+    _shape.setFillColor(sf::Color::White);
 }

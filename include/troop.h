@@ -12,7 +12,7 @@
 
 class Troop {
 protected:
-    TroopType _type = TroopType::Troop1;
+    TroopType _type = TroopType::Anteater;
     sf::Vector2f _position;
     int _line; // comeca do 1
     double _cooldown;

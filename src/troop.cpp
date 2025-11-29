@@ -25,7 +25,7 @@ bool Troop::fire() {
 
     if (target) {
         game_room.get_troop_manager().spawn_projectile(std::make_unique<TroopProjectile>(
-            _position + sf::Vector2f(50, 50), target, 100, 300.0, _room, ProjectileType::TroopBaseProjectile));
+            _position + sf::Vector2f(50, 50), target, 30, 300.0, _room, ProjectileType::TroopBaseProjectile));
 
         return true;
     }
