@@ -31,14 +31,16 @@ int Enemy::get_line() {
 }
 
 sf::Vector2f Enemy::get_position() {
-    return sf::Vector2f(_position_x + height / 2, GameManager::get_line_pos(_line));
+    // convertendo explicitamente para evitar warning
+    return sf::Vector2f((float)(_position_x + height / 2), GameManager::get_line_pos(_line));
 }
 
 FieldTroop *Enemy::get_field_troop_colliding(double next_position) {
     GameRoom &game_room = dynamic_cast<GameRoom &>(_room);
 
+    // convertendo explicitamente para evitar warning
     return game_room.get_troop_manager().get_field_troop_at(
-        {next_position, GameManager::get_line_pos(_line)});
+        {(float)next_position, GameManager::get_line_pos(_line)});
 }
 
 bool Enemy::can_walk(double next_position) {

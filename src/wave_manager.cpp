@@ -97,7 +97,7 @@ void WaveManager::spawn_enemy(EnemyType enemy_type, int line) {
 }
 
 void WaveManager::spawn_wave() {
-    // spawn_enemy(EnemyType::Trashman, 1);
+    //spawn_enemy(EnemyType::Trashman, 1);
     spawn_enemy(EnemyType::Excavator, 1);
     spawn_enemy(EnemyType::FireEnemyType, 2);
     spawn_enemy(EnemyType::Hunter, 3);
