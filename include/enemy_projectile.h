@@ -12,14 +12,16 @@
 class EnemyProjectile : public Projectile {
 private:
     std::weak_ptr<Enemy> _parent;
-    Wall &_target;
+    Wall& _target;
 
 public:
-    EnemyProjectile(sf::Vector2f postition, std::weak_ptr<Enemy> parent, Wall &target, int damage, double speed, Room &room, ProjectileType type);
+    EnemyProjectile(sf::Vector2f postition, std::weak_ptr<Enemy> parent, Wall& target, int damage, double speed, Room& room, ProjectileType type);
 
     void run(double dt);
 
     std::shared_ptr<Enemy> get_parent();
+
+    void set_direction(sf::Vector2f direction); // negocio inutil q so ta aq pq o businessman usa
 };
 
 #endif
