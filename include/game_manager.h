@@ -12,7 +12,8 @@ private:
     double _cooldown_multiplier = 1.0;       // entre 0-1, quanto menor mais rapido o cooldown
     double _damage_multiplier = 1.0;         // quanto maior mais dano os inimigos sofrem
     double _troop_damage_multiplier = 1.0;   // quanto maior mais dano as tropas dao nos inimigos
-    double _point_multiplier = 1.0;          //quanto maior o valor, maior a pontuacao final
+    double _point_multiplier = 1.0;          // quanto maior o valor, maior a pontuacao final
+    int _crit_chance = 0;                    // quanto maior o valor, maior a chance de critico
     sf::Font _font;
     GameRoom *_game_room = nullptr;
 
@@ -46,6 +47,9 @@ public:
 
     double get_point_multiplier();
     void set_point_multiplier(double point_multiplier);
+
+    int get_crit_chance();
+    void set_crit_chance(int chance);
 
     sf::Font &get_font();
     bool load_font(std::string file_path);

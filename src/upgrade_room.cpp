@@ -11,31 +11,29 @@ UpgradeRoom::UpgradeRoom(sf::RenderWindow &window, RoomManager &room_manager)
     : Room(window, room_manager),
       _upgrades{
           UpgradeUI(
-              "Dano Bruto",                                             // Nome
-              300,                                                      // Preço
-              150,                                                      // Incremento do preço
+              "Ponto Fraco",                                            // Nome
+              1000,                                                      // Preço
+              2000,                                                      // Incremento do preço
               0,                                                        // Nivel atual
-              5,                                                        // Nivel maximo
-              "Aumenta o multiplicador de dano base das tropas em 25%", // Descricao
-              sf::Vector2f(80, 150),                                    // Posicao
+              3,                                                        // Nivel maximo
+              "Aumenta o dano geral que os inimigos levam em 10%",      // Descricao
+              sf::Vector2f(75, 170),                                    // Posicao
               *this,                                                    // Room
 
               []() { // Funcao do upgrade
                   GameManager &gm = GameManager::get_instance();
                   double atual = gm.get_damage_multiplier();
 
-                  gm.set_damage_multiplier(atual + 0.25);
-
-                  std::cout << "Dano: x" << gm.get_damage_multiplier() << std::endl;
+                  gm.set_damage_multiplier(atual + 0.10);
               }),
           UpgradeUI(
               "Ataque Rapido",                                   // Nome
-              200,                                               // Preço
-              100,                                               // Incremento do preço
+              300,                                               // Preço
+              600,                                               // Incremento do preço
               0,                                                 // Nivel atual
               5,                                                 // Nivel máximo
               "Reduz o tempo base de recarga das tropas em 10%", // Descricao
-              sf::Vector2f(380, 150),                            // Posição
+              sf::Vector2f(375, 170),                            // Posição
               *this,                                             // Room
 
               []() { // Funcao do upgrade
@@ -46,17 +44,15 @@ UpgradeRoom::UpgradeRoom(sf::RenderWindow &window, RoomManager &room_manager)
                       novo_cooldown = 0.1; // Limite minimo de cooldown so para garantir
 
                   gm.set_cooldown_multiplier(novo_cooldown);
-
-                  std::cout << "Cooldown: x" << gm.get_cooldown_multiplier() << std::endl;
               }),
           UpgradeUI(
-              "Mais vida",
+              "Mais Vida",
               400,
-              600,
+              800,
               0,
               8,
               "Aumenta a vida maxima e a vida atual do muro em 250",
-              sf::Vector2f(680, 150),
+              sf::Vector2f(675, 170),
               *this,
 
               []() {
@@ -73,7 +69,7 @@ UpgradeRoom::UpgradeRoom(sf::RenderWindow &window, RoomManager &room_manager)
               0,
               3,
               "Agora o muro tem espinhos! Sempre que um inimigo causar dano no muro, este inimigo vai receber dano dos espinhos. +10 de dano por nivel",
-              sf::Vector2f(980, 150),
+              sf::Vector2f(975, 170),
               *this,
 
               []() {
@@ -88,13 +84,41 @@ UpgradeRoom::UpgradeRoom(sf::RenderWindow &window, RoomManager &room_manager)
               0,
               5,
               "Aumenta o ganho total de pontos de todas as fontes em 10%",
-              sf::Vector2f(1280, 150),
+              sf::Vector2f(1275, 170),
               *this,
 
               []() {
                   GameManager &gm = GameManager::get_instance();
                   double atual = gm.get_point_multiplier();
                   gm.set_point_multiplier(atual + 0.10);
+              }),
+          UpgradeUI(
+              "Tropas Fortes", 
+              400,
+              1200,
+              0,
+              5,
+              "Aumenta o dano causado pelas tropas em 15%", 
+              sf::Vector2f(1575, 170),
+              *this,
+              []() {
+                  GameManager &gm = GameManager::get_instance();
+                  double atual = gm.get_troop_damage_multiplier();
+                  gm.set_troop_damage_multiplier(atual + 0.15); 
+              }),
+          UpgradeUI(
+              "Tiro preciso", 
+              800,
+              1600,
+              0,
+              5,
+              "As tropas tem +10% de chance de causar o dobro de dano", 
+              sf::Vector2f(75, 570),
+              *this, 
+              []() { 
+                  GameManager &gm = GameManager::get_instance();
+                  int atual = gm.get_crit_chance();
+                  gm.set_crit_chance(atual + 10); 
               }),
       } {}
 

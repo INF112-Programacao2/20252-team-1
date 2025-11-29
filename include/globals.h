@@ -47,7 +47,7 @@ enum EnemyType {
 };
 const int ENEMY_COUNT = 7; // Mudar sempre que aparecer um inimigo novo
 
-const int UPGRADE_COUNT = 5;
+const int UPGRADE_COUNT = 7;
 
 const sf::Vector2u DESKTOP_SIZE = sf::Vector2u(
     sf::VideoMode::getDesktopMode().width, sf::VideoMode::getDesktopMode().height);

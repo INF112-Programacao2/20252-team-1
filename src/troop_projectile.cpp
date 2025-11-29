@@ -3,6 +3,7 @@
 #include "game_room.h"
 #include "game_manager.h"
 #include <cmath>
+#include <cstdlib>
 #include <SFML/Graphics.hpp>
 
 // Função auxiliar para normalizar um vetor
@@ -19,6 +20,10 @@ TroopProjectile::TroopProjectile(sf::Vector2f position, std::weak_ptr<Enemy> tar
     : Projectile(position, sf::Vector2f(1, 0), damage, speed, room, type), _target(target) {
 
     _shape.setFillColor(sf::Color::Yellow);
+
+    // Pega a chance de critico do game manager e rola o dado com base nessa chance
+    int chance = GameManager::get_instance().get_crit_chance();
+    _is_critical = (std::rand() % 100) < chance;
 }
 
 void TroopProjectile::run(double dt) {
@@ -52,5 +57,16 @@ void TroopProjectile::on_hit(std::shared_ptr<Enemy> enemy) {
 }
 
 void TroopProjectile::apply_damage(std::shared_ptr<Enemy> enemy, double multiplier) {
-    enemy->damage(_damage * GameManager::get_instance().get_troop_damage_multiplier() * multiplier);
+    double global_multiplier = GameManager::get_instance().get_troop_damage_multiplier();
+
+    double crit_multiplier = 0;
+    if (_is_critical) {
+        crit_multiplier = 2.0;
+    }
+    else {
+        crit_multiplier = 1.0;
+    }
+    int final_damage = static_cast<int>(_damage * global_multiplier * multiplier * crit_multiplier);
+
+    enemy->damage(final_damage);
 }

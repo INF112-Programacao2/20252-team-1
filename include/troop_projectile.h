@@ -12,6 +12,7 @@
 class TroopProjectile : public Projectile {
 protected:
     std::weak_ptr<Enemy> _target;
+    bool _is_critical;
 
 protected:
     // Chama quando o inimigo e acertado (DESTROI O PROJECTILE AQUI)

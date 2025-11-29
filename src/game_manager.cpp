@@ -36,6 +36,18 @@ double GameManager::get_troop_damage_multiplier() {
     return _troop_damage_multiplier;
 }
 
+int GameManager::get_crit_chance() {
+    return _crit_chance;
+}
+
+void GameManager::set_crit_chance(int chance) {
+    // Garantindo que a chance nunca vai ultrapassar 100%
+    if (chance > 100) {
+        chance = 100;
+    }
+    _crit_chance = chance;
+}
+
 double GameManager::get_point_multiplier() {
     return _point_multiplier;
 }
