@@ -4,6 +4,7 @@
 #include "hunter_enemy.h"
 #include "excavator_enemy.h"
 #include "trashman_enemy.h"
+#include "businessman_enemy.h"
 #include "trash_enemy.h"
 #include <iostream>
 
@@ -41,6 +42,16 @@ WaveManager::WaveManager(Room &room) : _room(room) {
 
     if (!TrashEnemy::load_texture("assets/lixo.png")) {
         std::cerr << "Nao achou o asset do lixo!\n";
+        std::exit(1);
+    }
+
+    if (!BusinessmanEnemy::load_texture("assets/empresario.png")) {
+        std::cerr << "Nao achou o asset do empresario!\n";
+        std::exit(1);
+    }
+
+    if (!BusinessmanEnemy::load_projectile_texture("assets/dinheiro.png")) {
+        std::cerr << "Nao achou o asset do projetil do empresario!\n";
         std::exit(1);
     }
     // wave 1:
@@ -87,9 +98,15 @@ void WaveManager::spawn_enemy(EnemyType enemy_type, int line) {
         _enemys.push_back(std::make_shared<TrashmanEnemy>(200, 35, line, 40.0, 5.0, 60, _room));
         break;
 
+    case EnemyType::Businessman:
+        // vida, dano , linha, velocidade, cooldown, cura, raio de cura, pontos, sala
+        _enemys.push_back(std::make_shared<BusinessmanEnemy>(100, 5, line, 60.0, 4.0, 5, 200, 80, _room));
+        break;
     case EnemyType::Trash:
         // nao spawna lixo diretamente
         break;
+
+    
     default:
         std::cerr << "Inimigo com ID: " << enemy_type << " nao implementado!" << std::endl;
         break;
@@ -97,11 +114,10 @@ void WaveManager::spawn_enemy(EnemyType enemy_type, int line) {
 }
 
 void WaveManager::spawn_wave() {
-    //spawn_enemy(EnemyType::Trashman, 1);
     spawn_enemy(EnemyType::Excavator, 1);
-    spawn_enemy(EnemyType::FireEnemyType, 2);
-    spawn_enemy(EnemyType::Hunter, 3);
-    spawn_enemy(EnemyType::Lumberjack, 4);
+    spawn_enemy(EnemyType::Businessman, 2);
+    spawn_enemy(EnemyType::Lumberjack, 3);
+    spawn_enemy(EnemyType::Hunter, 4);
 }
 
 void WaveManager::run(double dt) {

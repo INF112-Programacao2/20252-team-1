@@ -47,8 +47,9 @@ enum EnemyType {
     Excavator,
     Trashman,
     Trash,
+    Businessman,
 };
-const int ENEMY_COUNT = 7; // Mudar sempre que aparecer um inimigo novo
+const int ENEMY_COUNT = 8; // Mudar sempre que aparecer um inimigo novo
 
 const int UPGRADE_COUNT = 5;
 

@@ -22,18 +22,16 @@ protected:
     double _cooldown;
     int _points;
     sf::Rect<float> _collider;
-    // vector<Effect> _effects; // vector de enum de efeitos
-    // std::array<double, EFFECT_COUNT> _effect_times; // array de tempo restante de cada efeito
-    Room &_room;
+    Room& _room;
     sf::RectangleShape _shape;
-    Clock _flash_timer{.2};
+    Clock _flash_timer{ .2 };
 
 protected:
     /// E chamado quando a vida chega a 0
     virtual void destroy();
 
     /// Retorna a field troop que colide com a proxima posicao, se existir
-    FieldTroop *get_field_troop_colliding(double next_position);
+    FieldTroop* get_field_troop_colliding(double next_position);
 
     /// Verifica se pode andar pra proxima posicao
     virtual bool can_walk(double next_position);
@@ -41,7 +39,7 @@ protected:
     virtual void attack();
 
 public:
-    Enemy(int base_life, int damage, int line, double speed, double base_cooldown, int points, Room &room);
+    Enemy(int base_life, int damage, int line, double speed, double base_cooldown, int points, Room& room);
 
     virtual ~Enemy();
 
@@ -65,6 +63,9 @@ public:
 
     /// Ja multiplica o dano pelo multiplicador GERAL
     void damage(int life);
+
+    /// cura o inimigo -> usado pelo BusinessmanEnemy
+    void heal(int amount);
 };
 
 #endif
