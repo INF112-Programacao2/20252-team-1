@@ -10,19 +10,23 @@ enum TroopType {
     None = -1,
 
     // Troops:
-    Anteater = 0,
+    SolarEnergy = 0,
+    Anteater,
     Guard,
     Elephant,
     Squirrel,
     Monkey,
     Dolphin,
-    SolarEnergy,
 
     // FieldTroops:
     Hedgehog,
     Tree,
     Troop10,
 };
+
+// Mudar sempre que adicionar uma troop nova:
+const int TROOP_COUNT = 9;
+const int TROOP_PRICES[TROOP_COUNT] = {250, 250, 350, 400, 400, 500, 1500, 200, 300};
 
 enum ProjectileType {
     EnemyBaseProjectile = 0,
@@ -35,10 +39,6 @@ enum ProjectileType {
     GuardProjectileType,
     DolphinProjectileType,
 };
-
-// Mudar sempre que adicionar uma troop nova:
-const int TROOP_COUNT = 10;
-const int TROOP_PRICES[TROOP_COUNT] = {200, 350, 350, 300, 300, 300, 250, 200, 300, 300};
 
 enum EnemyType {
     Lumberjack,

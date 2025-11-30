@@ -71,12 +71,10 @@ void Wall::draw() {
     // se estiver pegando fogo, fica laranja
     if (_burning_time > 0) {
         // oscila um pouco o vermelho pra parecer fogo
-        // oscila um pouco o vermelho pra parecer fogo
         int red_oscillation = 200 + (std::rand() % 55);
         color = sf::Color(red_oscillation, 100, 0);
     }
 
-    // se tomou hit recentemente, pisca branco (prioridade sobre o fogo)
     // se tomou hit recentemente, pisca branco (prioridade sobre o fogo)
     if (!_flash_timer.timeout())
         color = sf::Color(255, 150, 150);
@@ -160,10 +158,18 @@ void Wall::draw_wall_health_bar() {
     sf::RectangleShape foreground(sf::Vector2f(width * ratio, height));
     foreground.setPosition(x_pos, y_pos);
 
-    if (ratio < 0.3f)
-        foreground.setFillColor(sf::Color::Red);
-    else
-        foreground.setFillColor(sf::Color::Green);
+    sf::Color max_life_color = sf::Color::Green;
+    sf::Color min_life_color = sf::Color::Red;
+
+    sf::Color color;
+    double t = (double)_health.get_life() / _health.get_max_life();
+
+    auto lerp = [](int a, int b, double t) { return static_cast<int>(a + (b - a) * t); };
+
+    color.r = lerp(min_life_color.r, max_life_color.r, t);
+    color.g = lerp(min_life_color.g, max_life_color.g, t);
+    color.b = lerp(min_life_color.b, max_life_color.b, t);
+    foreground.setFillColor(color);
 
     sf::Font &font = GameManager::get_instance().get_font();
 

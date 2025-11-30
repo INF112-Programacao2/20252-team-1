@@ -63,9 +63,23 @@ void HealthManager::draw_health_bar(sf::RenderWindow &window, sf::Vector2f posit
     float life_ratio = static_cast<float>(_life) / static_cast<float>(_max_life);
 
     sf::RectangleShape foreground(sf::Vector2f(bar_width * life_ratio, bar_height));
-    foreground.setFillColor(sf::Color(0, 255, 0)); // cor verde pra vida cheia
     foreground.setOrigin(sf::Vector2f(bar_width / 2, bar_height / 2));
     foreground.setPosition(position);
+
+    sf::Color max_life_color = sf::Color::Green;
+    sf::Color min_life_color = sf::Color::Red;
+
+    sf::Color color;
+    double t = (double)_life / _max_life;
+
+    auto lerp = [](int a, int b, double t) { return static_cast<int>(a + (b - a) * t); };
+
+    color.r = lerp(min_life_color.r, max_life_color.r, t);
+    color.g = lerp(min_life_color.g, max_life_color.g, t);
+    color.b = lerp(min_life_color.b, max_life_color.b, t);
+    foreground.setFillColor(color);
+
+    foreground.setFillColor(color);
 
     // Desenha as barras
     window.draw(background);
