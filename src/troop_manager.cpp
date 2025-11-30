@@ -12,13 +12,14 @@
 #include "anteater.h"
 #include "tree_troop.h"
 #include <iostream>
+#include <cmath>
 
 // posicao inicial dos slots (superior esquerdo)
 const sf::Vector2f offset(50, HUD_HEIGHT + PADDING_Y);
 const float gap_x = 175; // distancia horizontal dos slots
 
 // helper
-sf::Texture* get_troop_texture(TroopType troop) {
+sf::Texture *get_troop_texture(TroopType troop) {
     switch (troop) {
     case TroopType::Squirrel:
         return &SquirrelTroop::get_texture();
@@ -52,7 +53,7 @@ sf::Texture* get_troop_texture(TroopType troop) {
     }
 }
 
-TroopManager::TroopManager(GameRoom& room) : _room(room) {
+TroopManager::TroopManager(GameRoom &room) : _room(room) {
     // inicializando texturas das tropas:
     if (!HedgehogTroop::load_texture("assets/ourico.png")) {
         std::cerr << "Nao achou o asset do ourico!\n";
@@ -161,17 +162,17 @@ TroopManager::TroopManager(GameRoom& room) : _room(room) {
 }
 
 TroopManager::~TroopManager() {
-    for (TroopCard* card : _shop_cards)
+    for (TroopCard *card : _shop_cards)
         delete card;
 
-    for (Troop* troop : _troops)
+    for (Troop *troop : _troops)
         delete troop;
 
-    for (FieldTroop* troop : _field_troops)
+    for (FieldTroop *troop : _field_troops)
         delete troop;
 };
 
-sf::RenderWindow& TroopManager::get_window() {
+sf::RenderWindow &TroopManager::get_window() {
     return _room.get_window();
 }
 
@@ -210,8 +211,7 @@ void TroopManager::draw_slots() {
             if (!_room.is_paused() &&
                 position_to_slot((sf::Vector2f)_room.get_mouse_position()) == slot_idx) {
                 color.a = 200;
-            }
-            else {
+            } else {
                 color.a = 100;
             }
 
@@ -234,7 +234,7 @@ void TroopManager::draw_shop() {
     get_window().draw(background);
 
     // desenha cartas da loja
-    for (TroopCard* card : _shop_cards)
+    for (TroopCard *card : _shop_cards)
         card->draw();
 }
 
@@ -246,19 +246,19 @@ void TroopManager::draw() {
     draw_slots();
 
     // desenha tropas
-    for (Troop* troop : _troops) {
+    for (Troop *troop : _troops) {
         if (troop)
             troop->draw();
     }
 
     // desenha tropas de campo
-    for (FieldTroop* field_troop : _field_troops) {
+    for (FieldTroop *field_troop : _field_troops) {
         if (field_troop)
             field_troop->draw();
     }
 
     // desenha projeteis
-    for (auto& projectile : _projectiles)
+    for (auto &projectile : _projectiles)
         projectile->draw();
 
     draw_shop();
@@ -268,25 +268,30 @@ void TroopManager::draw() {
         return;
 
     bool is_fieldtroop = (_cursor_troop == TroopType::Hedgehog ||
-        _cursor_troop == TroopType::Tree);
+                          _cursor_troop == TroopType::Tree);
 
     sf::Vector2f mouse_pos = (sf::Vector2f)_room.get_mouse_position();
-    sf::Texture* texture = get_troop_texture(_cursor_troop);
+    sf::Texture *texture = get_troop_texture(_cursor_troop);
 
     if (texture) {
         sf::RectangleShape sprite(sf::Vector2f(60, 60));
-        sf::Vector2f position = is_fieldtroop ? get_line_pos() : mouse_pos;
+        sf::Vector2f position = mouse_pos;
+        // coloca a fieldtroop em grid
+        if (is_fieldtroop) {
+            position = get_line_pos();
+            position.x = std::round(position.x / sprite.getSize().x) * sprite.getSize().x;
+        }
+
         sprite.setPosition(position - sf::Vector2f(30, 30));
         sprite.setTexture(texture);
 
-        if (is_fieldtroop && !_enemy_area.contains(get_line_pos()))
+        if (is_fieldtroop && !_enemy_area.contains(position))
             sprite.setFillColor(sf::Color(255, 0, 0, 150));
         else
             sprite.setFillColor(sf::Color(255, 255, 255, 150));
 
         get_window().draw(sprite);
-    }
-    else {
+    } else {
         sf::CircleShape circle(30);
         circle.setPosition(mouse_pos - sf::Vector2f(30, 30));
         circle.setFillColor(sf::Color(255, 0, 0, 100));
@@ -295,7 +300,7 @@ void TroopManager::draw() {
     }
 }
 
-Troop* TroopManager::instantiate_troop(int slot, TroopType troop_type) {
+Troop *TroopManager::instantiate_troop(int slot, TroopType troop_type) {
     if (slot == -1 || _troops[slot] != nullptr || troop_type == TroopType::None)
         return nullptr;
 
@@ -333,7 +338,7 @@ Troop* TroopManager::instantiate_troop(int slot, TroopType troop_type) {
     }
 }
 
-FieldTroop* TroopManager::instantiate_field_troop(sf::Vector2f position, TroopType troop_type) {
+FieldTroop *TroopManager::instantiate_field_troop(sf::Vector2f position, TroopType troop_type) {
     if (!_enemy_area.contains(position))
         return nullptr;
 
@@ -356,7 +361,7 @@ FieldTroop* TroopManager::instantiate_field_troop(sf::Vector2f position, TroopTy
 void TroopManager::place_troop() {
     sf::Vector2f mouse_pos = (sf::Vector2f)_room.get_mouse_position();
 
-    if (FieldTroop* field_troop = instantiate_field_troop(get_line_pos(), _cursor_troop)) {
+    if (FieldTroop *field_troop = instantiate_field_troop(get_line_pos(), _cursor_troop)) {
         _field_troops.push_back(field_troop);
         _cursor_troop = TroopType::None;
 
@@ -364,7 +369,7 @@ void TroopManager::place_troop() {
     }
 
     int slot = position_to_slot(mouse_pos);
-    if (Troop* troop = instantiate_troop(slot, _cursor_troop)) {
+    if (Troop *troop = instantiate_troop(slot, _cursor_troop)) {
         _troops[slot] = troop;
         _cursor_troop = TroopType::None;
 
@@ -372,15 +377,15 @@ void TroopManager::place_troop() {
     }
 
     if (_cursor_troop == TroopType::None) {
-        for (TroopCard* card : _shop_cards) {
+        for (TroopCard *card : _shop_cards) {
             if (card->position_meeting(mouse_pos))
                 _cursor_troop = card->buy();
         }
     }
 }
 
-void TroopManager::run(double dt, const std::vector<sf::Event>& event_queue) {
-    for (Troop* troop : _troops) {
+void TroopManager::run(double dt, const std::vector<sf::Event> &event_queue) {
+    for (Troop *troop : _troops) {
         if (troop != nullptr)
             troop->run(dt);
     }
@@ -392,28 +397,26 @@ void TroopManager::run(double dt, const std::vector<sf::Event>& event_queue) {
         if (_projectiles[i]->is_destroyed()) {
             std::swap(_projectiles[i], _projectiles.back());
             _projectiles.pop_back();
-        }
-        else
+        } else
             i++;
     }
 
     // Run do field troop
     for (int i = 0; i < _field_troops.size();) {
-        FieldTroop* field_troop = _field_troops[i];
+        FieldTroop *field_troop = _field_troops[i];
 
         if (!field_troop || field_troop->is_destroyed()) {
             delete field_troop;
             std::swap(_field_troops[i], _field_troops.back());
             _field_troops.pop_back();
-        }
-        else {
+        } else {
             field_troop->run(dt);
             i++;
         }
     }
 
     // colocando uma tropa no mapa
-    for (const sf::Event& event : event_queue) {
+    for (const sf::Event &event : event_queue) {
         if (event.type == sf::Event::MouseButtonReleased) {
             if (event.mouseButton.button == sf::Mouse::Left)
                 place_troop();
@@ -423,11 +426,10 @@ void TroopManager::run(double dt, const std::vector<sf::Event>& event_queue) {
                 if (slot != -1 && _troops[slot] != nullptr) {
                     delete _troops[slot];
                     _troops[slot] = nullptr;
-                }
-                else if (_cursor_troop != TroopType::None) {
+                } else if (_cursor_troop != TroopType::None) {
                     // cancela a compra e reembolsa
                     // (se o mouse estiver fora de um slot ocupado)
-                    GameManager& gm = GameManager::get_instance();
+                    GameManager &gm = GameManager::get_instance();
                     gm.set_points(gm.get_points() + TROOP_PRICES[_cursor_troop]);
 
                     _cursor_troop = TroopType::None;
@@ -441,27 +443,27 @@ void TroopManager::spawn_projectile(std::unique_ptr<TroopProjectile> projectile)
     _projectiles.push_back(std::move(projectile));
 }
 
-std::array<TroopType, TROOP_ROWS* TROOP_COLS> TroopManager::get_troops() {
-    std::array<TroopType, TROOP_ROWS* TROOP_COLS> result;
+std::array<TroopType, TROOP_ROWS * TROOP_COLS> TroopManager::get_troops() {
+    std::array<TroopType, TROOP_ROWS * TROOP_COLS> result;
     for (int i = 0; i < _troops.size(); i++)
         result[i] = (_troops[i] == nullptr) ? TroopType::None : _troops[i]->get_type();
 
     return result;
 }
 
-void TroopManager::set_troops(std::array<TroopType, TROOP_ROWS* TROOP_COLS> troops) {
+void TroopManager::set_troops(std::array<TroopType, TROOP_ROWS * TROOP_COLS> troops) {
     for (int slot = 0; slot < troops.size(); slot++) {
         delete _troops[slot];
         _troops[slot] = instantiate_troop(slot, troops[slot]);
     }
 }
 
-const std::vector<FieldTroop*>& TroopManager::get_field_troops() {
+const std::vector<FieldTroop *> &TroopManager::get_field_troops() {
     return _field_troops;
 }
 
-void TroopManager::set_field_troops(const std::vector<std::pair<TroopType, sf::Vector2f>>& field_troops) {
-    for (FieldTroop* field_troop : _field_troops)
+void TroopManager::set_field_troops(const std::vector<std::pair<TroopType, sf::Vector2f>> &field_troops) {
+    for (FieldTroop *field_troop : _field_troops)
         delete field_troop;
 
     _field_troops.clear();
@@ -471,8 +473,8 @@ void TroopManager::set_field_troops(const std::vector<std::pair<TroopType, sf::V
     }
 }
 
-FieldTroop* TroopManager::get_field_troop_at(sf::Vector2f position) {
-    for (FieldTroop* field_troop : _field_troops) {
+FieldTroop *TroopManager::get_field_troop_at(sf::Vector2f position) {
+    for (FieldTroop *field_troop : _field_troops) {
         if (field_troop->collide(position))
             return field_troop;
     }

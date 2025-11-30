@@ -36,6 +36,8 @@ public:
 
     ProjectileType get_type();
 
+    sf::Vector2f get_position();
+
     /// modifica a textura e o tamanho dela
     void set_texture(sf::Texture *texture, float radius);
 };
