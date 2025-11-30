@@ -6,6 +6,7 @@
 #include "trashman_enemy.h"
 #include "businessman_enemy.h"
 #include "trash_enemy.h"
+#include "game_manager.h"
 #include <iostream>
 
 WaveManager::WaveManager(Room &room) : _room(room) {
@@ -68,9 +69,9 @@ void WaveManager::setup_waves() {
     // empresario
 
     // WAVE 1
-    _waves_config[0][0] = {5, 6.0f, {100.f, 0.f, 0.f, 0.f, 0.f, 0.f, 0.f}};   // subwave 1
-    _waves_config[0][1] = {8, 5.5f, {80.f, 0.f, 20.f, 0.f, 0.f, 0.f, 0.f}};   // subwave 2
-    _waves_config[0][2] = {10, 5.0f, {70.f, 0.f, 30.f, 0.f, 0.f, 0.f, 0.f}};  // subwave 3
+    _waves_config[0][0] = {5, 6.0f, {100.f, 0.f, 0.f, 0.f, 0.f, 0.f, 0.f}};  // subwave 1
+    _waves_config[0][1] = {8, 5.5f, {80.f, 0.f, 20.f, 0.f, 0.f, 0.f, 0.f}};  // subwave 2
+    _waves_config[0][2] = {10, 5.0f, {70.f, 0.f, 30.f, 0.f, 0.f, 0.f, 0.f}}; // subwave 3
 
     // WAVE 2
     _waves_config[1][0] = {15, 4.5f, {60.f, 10.f, 30.f, 0.f, 0.f, 0.f, 0.f}};
@@ -88,7 +89,7 @@ void WaveManager::setup_waves() {
     _waves_config[3][2] = {50, 0.5f, {5.f, 10.f, 25.f, 30.f, 30.f, 0.f, 0.f}};
 }
 
-EnemyType WaveManager::pick_weighted_enemy(const std::array<float, ENEMY_COUNT>& probs) {
+EnemyType WaveManager::pick_weighted_enemy(const std::array<float, ENEMY_COUNT> &probs) {
     // pra nao precisar colocar numeros que somem exatamente em 100% de probabilidade
     float total_weight = 0;
     for (float p : probs) {
@@ -96,7 +97,7 @@ EnemyType WaveManager::pick_weighted_enemy(const std::array<float, ENEMY_COUNT>&
     }
 
     // sorteia um numero de 0 ate total_weight de forma normalizada
-    float random_val = static_cast<float>(rand()) / (float)(RAND_MAX) * total_weight;
+    float random_val = static_cast<float>(rand()) / (float)(RAND_MAX)*total_weight;
 
     // faz uma soma das probabilidades de cada inimigo e ve se o valor sorteado esta dentro dessa area
     // exemplo: lenhador tem 80 de probabilidade e fogo tem 20, a soma total vai ser 100
@@ -109,6 +110,8 @@ EnemyType WaveManager::pick_weighted_enemy(const std::array<float, ENEMY_COUNT>&
             return (EnemyType)i;
         }
     }
+
+    return EnemyType::Lumberjack; // nao e possivel chegar aqui
 }
 
 void WaveManager::spawn_enemy(EnemyType enemy_type, int line) {
@@ -119,38 +122,38 @@ void WaveManager::spawn_enemy(EnemyType enemy_type, int line) {
     case EnemyType::Lumberjack:
         // vida, dano, linha, velocidade, cooldown, pontos, sala
         _enemys.push_back(std::make_shared<LumberjackEnemy>(150 * difficulty_multiplier,
-                          25 * difficulty_multiplier, line, 50.0, 3.0, 20, _room));
+                                                            25 * difficulty_multiplier, line, 50.0, 3.0, 20, _room));
         break;
 
     case EnemyType::FireEnemyType:
         // vida, dano, linha, velocidade, cooldown, pontos, burn_timer, sala
         _enemys.push_back(std::make_shared<FireEnemy>(100 * difficulty_multiplier,
-                          15 * difficulty_multiplier, line, 150.0, 0, 15, 2, _room));
+                                                      15 * difficulty_multiplier, line, 150.0, 0, 15, 2, _room));
         break;
 
     case EnemyType::Hunter:
         // vida, dano, linha, velocidade, cooldown, pontos, sala
         _enemys.push_back(std::make_shared<HunterEnemy>(75 * difficulty_multiplier,
-                          20 * difficulty_multiplier, line, 50.0, 6.0, 30, _room));
+                                                        20 * difficulty_multiplier, line, 50.0, 6.0, 30, _room));
         break;
 
     case EnemyType::Excavator:
         // vida, dano , linha, velocidade, cooldown, pontos, sala
         _enemys.push_back(std::make_shared<ExcavatorEnemy>(300 * difficulty_multiplier,
-                          1 * difficulty_multiplier, line, 30.0, 1, 50, _room));
+                                                           1 * difficulty_multiplier, line, 30.0, 1, 50, _room));
         break;
 
     case EnemyType::Trashman:
         // vida, dano , linha, velocidade, cooldown, pontos, sala
         _enemys.push_back(std::make_shared<TrashmanEnemy>(200 * difficulty_multiplier,
-                          35 * difficulty_multiplier, line, 40.0, 5.0, 60, _room));
+                                                          35 * difficulty_multiplier, line, 40.0, 5.0, 60, _room));
         break;
 
     case EnemyType::Businessman:
         // vida, dano , linha, velocidade, cooldown, cura, raio de cura, pontos, sala
         _enemys.push_back(std::make_shared<BusinessmanEnemy>(100 * difficulty_multiplier,
-                          5 * difficulty_multiplier, line, 60.0, 4.0, 5 * difficulty_multiplier,
-                          200 * difficulty_multiplier, 80, _room));
+                                                             5 * difficulty_multiplier, line, 60.0, 4.0, 5 * difficulty_multiplier,
+                                                             200 * difficulty_multiplier, 80, _room));
         break;
 
     case EnemyType::Trash:
@@ -202,8 +205,7 @@ void WaveManager::run(double dt) {
             double delay_necessario;
             if (_subwave_idx == SUBWAVES_PER_WAVE - 1) {
                 delay_necessario = DELAY_BETWEEN_WAVES;
-            }
-            else {
+            } else {
                 delay_necessario = DELAY_BETWEEN_SUBWAVES;
             }
 
@@ -219,21 +221,24 @@ void WaveManager::run(double dt) {
                 if (_subwave_idx >= SUBWAVES_PER_WAVE) {
                     _subwave_idx = 0;
                     _wave_idx++;
-                    
+
                     if (_wave_idx >= MAX_WAVES) {
                         _game_completed = true;
-                        std::cout << "Fim de jogo" << std::endl; // debug
+                        std::cout << "Fim de jogo" << std::endl; //! debug
                         return;
+                    } else {
+                        // salva o jogo aqui
+                        GameManager::get_instance().get_game_saver()->save();
                     }
-                    std::cout << "Wave " << _wave_idx + 1 << " iniciada" << std::endl; // debug
+
+                    std::cout << "Wave " << _wave_idx + 1 << " iniciada" << std::endl; //! debug
                 } else {
-                    std::cout << "Subwave " << _subwave_idx + 1 << " iniciada" << std::endl; // debug
+                    std::cout << "Subwave " << _subwave_idx + 1 << " iniciada" << std::endl; //! debug
                 }
             }
-        }
-        else {
+        } else {
             // se ainda tem inimigos vivos, o timer fica travado
-            _timer.restart(); 
+            _timer.restart();
         }
         return;
     }

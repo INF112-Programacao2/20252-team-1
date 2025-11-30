@@ -4,7 +4,7 @@
 #include <iostream>
 #include <sstream>
 
-GameSaver::GameSaver(const std::string &save_file_path, GameRoom& game_room, UpgradeRoom& upgrade_room)
+GameSaver::GameSaver(const std::string &save_file_path, GameRoom &game_room, UpgradeRoom &upgrade_room)
     : _save_file_path(save_file_path), _game_room(game_room), _upgrade_room(upgrade_room) {
     // valores default
     _wave_idx = 0;
@@ -72,6 +72,9 @@ void GameSaver::save() {
     }
 
     _save_file.close();
+
+    // Cura as field troops
+    _game_room.get_troop_manager().set_field_troops(_field_troops);
 }
 
 void GameSaver::load() {
@@ -154,9 +157,9 @@ const std::vector<std::pair<TroopType, sf::Vector2f>> &GameSaver::get_field_troo
     return _field_troops;
 }
 
-void GameSaver::set_field_troops(const std::vector<FieldTroop*> &field_troops) {
+void GameSaver::set_field_troops(const std::vector<FieldTroop *> &field_troops) {
     _field_troops.clear();
-    for (FieldTroop* field_troop : field_troops) {
+    for (FieldTroop *field_troop : field_troops) {
         _field_troops.emplace_back(field_troop->get_type(), field_troop->get_position());
     }
 }

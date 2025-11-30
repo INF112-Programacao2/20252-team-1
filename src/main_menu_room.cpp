@@ -5,15 +5,14 @@
 
 const int font_size = 50;
 
-MainMenuRoom::MainMenuRoom(sf::RenderWindow &window, RoomManager &room_manager, GameSaver &game_saver)
+MainMenuRoom::MainMenuRoom(sf::RenderWindow &window, RoomManager &room_manager)
     : Room(window, room_manager),
       _font(GameManager::get_instance().get_font()),
       _continue_button("Continuar Jogo", _font, font_size, *this),
       _new_game_button("Novo Jogo", _font, font_size, *this),
       _tutorial_button("Tutorial", _font, font_size, *this),
       _credits_button("Creditos", _font, font_size, *this),
-      _exit_button("Sair", _font, font_size, *this),
-      _game_saver(game_saver) {
+      _exit_button("Sair", _font, font_size, *this) {
 
     // centraliza os botoes
     _continue_button.center();
@@ -39,7 +38,10 @@ MainMenuRoom::MainMenuRoom(sf::RenderWindow &window, RoomManager &room_manager, 
 
 void MainMenuRoom::change_room(std::string room_name, bool load_save) {
     if (load_save)
-        _game_saver.load();
+        GameManager::get_instance().get_game_saver()->load();
+    else
+        GameManager::get_instance().get_game_saver()->save(); // reseta o save
+
     _room_manager.change_room(room_name);
 }
 

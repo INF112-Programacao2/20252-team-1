@@ -20,9 +20,7 @@ int main() {
     }
 
     const bool FULLSCREEN = true; //! Use false somente para debug
-    const bool WINDOWS = true;    //! DEBUG, coloque true se esta compilando para windows
-
-    // TODO: CONCERTAR A RESOLUCAO DA TELA (NAO FUNCIONA EM TODO PC)
+    const bool WINDOWS = false;   //! DEBUG, coloque true se esta compilando para windows
 
     // deixa em tela cheia
     sf::VideoMode desktop = sf::VideoMode::getDesktopMode();
@@ -48,7 +46,9 @@ int main() {
 
     // Criando o game saver (quem decide se vai carregar ou nao e o main menu)
     GameSaver game_saver("save.txt", game_room, upgrade_room);
-    MainMenuRoom main_menu_room(window, room_manager, game_saver);
+    MainMenuRoom main_menu_room(window, room_manager);
+
+    GameManager::get_instance().set_game_saver(&game_saver);
 
     room_manager.add_room("main_menu", &main_menu_room);
     room_manager.add_room("game", &game_room);
@@ -74,9 +74,6 @@ int main() {
     }
 
     room_manager.close();
-
-    //! DEBUG (so deve salvar no inicio de uma wave)
-    game_saver.save();
 
     return 0;
 }

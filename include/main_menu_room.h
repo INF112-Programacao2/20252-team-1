@@ -5,7 +5,6 @@
 #include <string>
 #include "room.h"
 #include "text_button.h"
-#include "game_saver.h"
 
 class MainMenuRoom : public Room {
 private:
@@ -15,10 +14,9 @@ private:
     TextButton _tutorial_button;
     TextButton _credits_button;
     TextButton _exit_button;
-    GameSaver &_game_saver;
 
 public:
-    MainMenuRoom(sf::RenderWindow &window, RoomManager &room_manager, GameSaver &game_saver);
+    MainMenuRoom(sf::RenderWindow &window, RoomManager &room_manager);
 
     ~MainMenuRoom() = default;
 

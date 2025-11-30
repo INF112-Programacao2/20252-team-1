@@ -32,7 +32,6 @@
 # Pedro:
 
 # Davi Nobre:
-- Salvar o jogo somente no inicio de uma wave
 - Salvar a vida das field troops (ou restaurar a vida delas no começo da wave pra ficar mais fácil)
 
 # Gabriel:

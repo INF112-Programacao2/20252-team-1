@@ -97,3 +97,11 @@ void GameManager::set_game_room(GameRoom* room) {
 GameRoom& GameManager::get_game_room() {
     return *_game_room;
 }
+
+void GameManager::set_game_saver(GameSaver *game_saver) {
+    _game_saver = game_saver;
+}
+
+GameSaver *GameManager::get_game_saver() {
+    return _game_saver;
+}
