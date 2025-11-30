@@ -1,5 +1,6 @@
 #include "businessman_enemy.h"
 #include "game_room.h"
+#include "visual_effect.h"
 #include <cmath>
 #include <iostream>
 
@@ -91,6 +92,11 @@ void BusinessmanEnemy::fire_projectile() {
 
 void BusinessmanEnemy::heal_allies() {
     GameRoom& game_room = dynamic_cast<GameRoom&>(_room);
+
+    // verde translucido
+    game_room.add_effect(std::make_unique<VisualEffect>(
+        get_position(), _heal_radius, 0.5, sf::Color(50, 255, 50, 30), _room
+    ));
 
     // pega todos os inimigos no raio
     auto allies = game_room.get_wave_manager().get_enemys_on_circle(get_position(), _heal_radius);

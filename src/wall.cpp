@@ -4,6 +4,9 @@
 #include "globals.h"
 #include "enemy_projectile.h"
 #include "enemy.h"
+#include "game_room.h"
+#include "visual_effect.h"
+#include <algorithm>
 #include <iostream> //! DEBUG
 
 sf::Texture Wall::_texture;
@@ -47,11 +50,44 @@ void Wall::extinguish(double duration) {
 void Wall::run(double dt) {
     _burning_timer.update(dt);
     _flash_timer.update(dt);
-    _damage_text.run(dt);
+    _particle_timer.update(dt);
+    _damage_text.run(dt);      
 
-    // logica do dano de fogo (damage over time)
+    // logica do dano de fogo (damage over time) e visual
     if (_burning_time > 0) {
         _burning_time -= dt;
+
+        // spawn de particular do fogo
+        if (_particle_timer.get_seconds_elapsed() > 0.05) {
+            GameRoom& game_room = dynamic_cast<GameRoom&>(_room);
+
+            // area aleatoria dentro do muro
+            float random_x = WALL_POSITION_X + (std::rand() % (int)WALL_WIDTH);
+            float random_y = HUD_HEIGHT + (std::rand() % (int)(DESKTOP_SIZE.y - HUD_HEIGHT));
+
+            // cores variadas para o fogo
+            sf::Color fire_colors[] = {
+                sf::Color(255, 69, 0),   // tons de laranja
+                sf::Color(255, 140, 0),  
+                sf::Color(255, 215, 0),  
+                sf::Color(255, 100, 50)  
+            };
+
+            sf::Color chosen_color = fire_colors[std::rand() % 4];
+            chosen_color.a = 150 + (std::rand() % 100); // variacao de alpha
+
+            float size = 10.0f + (std::rand() % 20); // tamanho aleatorio
+
+            game_room.add_effect(std::make_unique<VisualEffect>(
+                sf::Vector2f(random_x, random_y),
+                size,
+                0.8, // duracao
+                chosen_color,
+                _room
+            ));
+
+            _particle_timer.restart();
+        }
 
         // acumula o dano (pq health eh int, nao da pra tirar 0.3 de vida)
         _burn_damage_accumulator += _burn_dps * dt;
@@ -65,21 +101,19 @@ void Wall::run(double dt) {
 }
 
 void Wall::draw() {
-    // cor base
+    _shape.setTexture(&_texture, true);
+
     sf::Color color = sf::Color::White;
 
-    // se estiver pegando fogo, fica laranja
+    // se estiver pegando fogo
     if (_burning_time > 0) {
-        // oscila um pouco o vermelho pra parecer fogo
-        int red_oscillation = 200 + (std::rand() % 55);
-        color = sf::Color(red_oscillation, 100, 0);
+        color = sf::Color(255, 200, 150); // laranja sutil
     }
 
     // se tomou hit recentemente, pisca branco (prioridade sobre o fogo)
     if (!_flash_timer.timeout())
         color = sf::Color(255, 150, 150);
 
-    _shape.setTexture(&_texture);
     _shape.setFillColor(color);
     _room.get_window().draw(_shape);
 

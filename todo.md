@@ -15,7 +15,6 @@
 - Tela de menu inicial (por tutorial e créditos)
 - Música
 - Logica de ganhar e perder o jogo (salvar a wave anterior à vitória)
-- Mostrar o efeito de explosão da noz e da tropa ouriço
 - Efeitos de fogo melhores no muro
 - Balancear a dificuldade
 - Efeito de gradiente na healthbar do muro

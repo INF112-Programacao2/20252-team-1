@@ -1,5 +1,6 @@
 #include "hedgehog_troop.h"
 #include "game_manager.h"
+#include "visual_effect.h"
 
 sf::Texture HedgehogTroop::_texture;
 
@@ -23,6 +24,12 @@ void HedgehogTroop::run(double dt) {
         double multiplier = GameManager::get_instance().get_cooldown_multiplier();
         if (_timer.get_seconds_elapsed() >= _activation_delay * multiplier) {
             GameRoom &game_room = dynamic_cast<GameRoom &>(_room);
+
+            // branco translucido
+            game_room.add_effect(std::make_unique<VisualEffect>(
+                _position, _activation_radius, 0.5, sf::Color(255, 255, 255, 150), _room
+            ));
+
             for (std::shared_ptr<Enemy> enemy : game_room.get_wave_manager().get_enemys_on_circle(_position, _activation_radius)) {
                 enemy->damage(_damage);
             }

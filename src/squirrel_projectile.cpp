@@ -2,6 +2,8 @@
 #include "game_room.h"
 #include "wave_manager.h"
 #include "game_manager.h"
+#include "visual_effect.h"
+#include <iostream>
 
 sf::Texture SquirrelProjectile::_texture;
 
@@ -37,6 +39,12 @@ void SquirrelProjectile::on_hit(std::shared_ptr<Enemy> direct_hit) {
 
     GameRoom &game_room = dynamic_cast<GameRoom &>(_room);
 
+    // vermelho translucido
+    // 50 opacidade
+    game_room.add_effect(std::make_unique<VisualEffect>(
+        _position, _radius, 0.5, sf::Color(255, 50, 50, 150), _room
+    ));
+
     // pega todos os inimigos no raio de explosao
     std::vector<std::shared_ptr<Enemy>> targets = game_room.get_wave_manager().get_enemys_on_circle(_position, _radius);
 
@@ -47,7 +55,6 @@ void SquirrelProjectile::on_hit(std::shared_ptr<Enemy> direct_hit) {
         apply_damage(enemy, enemy->get_type_multiplier(_type));
     }
 
-    // TODO: Efeito visual?
     destroy();
 }
 
