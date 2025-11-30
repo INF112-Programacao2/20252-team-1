@@ -26,9 +26,10 @@ private:
     Clock _flash_timer;
     sf::RectangleShape _shape;
     DissolvingText _damage_text;
+    bool _is_destroyed;
 
 private:
-    void destroy(); // callback do _health
+    void destroy(); //callback do health
 
 public:
     Wall(int base_life, int spike_damage, Room &room);
@@ -68,6 +69,8 @@ public:
     void increase_life(int amount);
 
     void increase_spike_damage(int amount);
+
+    bool game_over();
 
     static sf::Texture& get_texture();
     static bool load_texture(std::string file_path);

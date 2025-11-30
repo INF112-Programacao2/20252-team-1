@@ -21,6 +21,7 @@ private:
     WaveManager _wave_manager;
     sf::Font &_font;
     Wall _wall;
+    bool _game_over;
 
     // lista de efeitos visuais ativos
     std::vector<std::unique_ptr<VisualEffect>> _visual_effects;

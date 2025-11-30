@@ -16,6 +16,9 @@ Wall::Wall(int base_life, int spike_damage, Room &room)
       _flash_timer(.15), _shape({WALL_WIDTH, DESKTOP_SIZE.y - HUD_HEIGHT}),
       _damage_text(sf::Vector2f(WALL_POSITION_X + WALL_WIDTH, DESKTOP_SIZE.y * .5), 1.0, room) {
 
+    //variavel para conferir fim de jogo
+    _is_destroyed = false;
+
     _flash_timer.update(1); // avanca no tempo pra nao piscar na inicializacao
     _collider = sf::Rect<float>(
         sf::Vector2f(WALL_POSITION_X, HUD_HEIGHT),
@@ -28,6 +31,11 @@ Wall::~Wall() = default;
 
 void Wall::destroy() {
     std::cout << "O muro foi de arrasta pra cima" << std::endl;
+    _is_destroyed = true;
+}
+
+bool Wall::game_over() {
+    return _is_destroyed;
 }
 
 bool Wall::collide(sf::Vector2f position) {

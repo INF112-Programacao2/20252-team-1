@@ -15,7 +15,6 @@ GameRoom::GameRoom(sf::RenderWindow &window, RoomManager &room_manager)
       _wall(1000, 0, *this) {
 
     GameManager::get_instance().set_game_room(this);
-
     if (!Wall::load_texture("assets/muro.png")) {
         std::cerr << "Erro abrindo asset do muro!\n";
         std::exit(1);
@@ -45,6 +44,9 @@ GameRoom::~GameRoom() = default;
 void GameRoom::start() {}
 
 void GameRoom::run(double dt, const std::vector<sf::Event> &event_queue) {
+    // variavel para verificar se o jogo acabou
+    _game_over = _wall.game_over();
+
     //* rodando:
     for (const sf::Event &event : event_queue) {
         // ESC pausa
@@ -57,7 +59,7 @@ void GameRoom::run(double dt, const std::vector<sf::Event> &event_queue) {
         }
     }
 
-    if (!_paused) {
+    if (!_paused && !_game_over) {
         _troop_manager.run(dt, event_queue);
         _wave_manager.run(dt);
         _wall.run(dt);
@@ -114,7 +116,35 @@ void GameRoom::run(double dt, const std::vector<sf::Event> &event_queue) {
 
     _window.draw(points_text);
 
-    if (_paused) {
+    if( _game_over) {
+        sf::RectangleShape gameover_rect((sf::Vector2f)DESKTOP_SIZE);
+        gameover_rect.setFillColor(sf::Color(0, 0, 0, 200));
+        _window.draw(gameover_rect);
+
+        sf::Text gameover_text("GAME OVER", _font, 100);
+        gameover_text.setFillColor(sf::Color::Red);
+        gameover_text.setPosition(
+            sf::Vector2f((DESKTOP_SIZE.x - gameover_text.getGlobalBounds().width) / 2,
+                         (DESKTOP_SIZE.y - gameover_text.getGlobalBounds().height) / 2 - 50));
+        _window.draw(gameover_text);
+
+        // botoes do game_over
+        TextButton option_1("Voltar ao menu", _font, 50, [this]() { _room_manager.change_room("main_menu"); 
+                                                                    _game_over = false; }, *this);
+        option_1.center();
+        option_1.offset_position(sf::Vector2f(0, 50));
+        option_1.run(event_queue);
+
+        TextButton option_2("Sair", _font, 50, [this]() { this->_window.close(); }, *this);
+        option_2.center();
+        option_2.offset_position(sf::Vector2f(0, 150));
+        option_2.run(event_queue);
+
+        option_1.draw();
+        option_2.draw();
+    }
+
+    else if (_paused) {
         // desenhando fundo preto do menu de pause
         sf::RectangleShape pause_rect((sf::Vector2f)DESKTOP_SIZE);
         pause_rect.setFillColor(sf::Color(0, 0, 0, 150));
