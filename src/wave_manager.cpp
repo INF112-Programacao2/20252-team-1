@@ -68,7 +68,7 @@ void WaveManager::setup_waves() {
     // empresario
 
     // WAVE 1
-    _waves_config[0][0] = {5, 6.0f, {100.f, 0.f, 0.f, 0.f, 0.f, 0.f, 0.f}};   // subwave 1
+    _waves_config[0][0] = {5, 6.0f, {0.f, 100.f, 0.f, 0.f, 0.f, 0.f, 0.f}};   // subwave 1
     _waves_config[0][1] = {8, 5.5f, {80.f, 0.f, 20.f, 0.f, 0.f, 0.f, 0.f}};   // subwave 2
     _waves_config[0][2] = {10, 5.0f, {70.f, 0.f, 30.f, 0.f, 0.f, 0.f, 0.f}};  // subwave 3
 

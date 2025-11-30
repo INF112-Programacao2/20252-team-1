@@ -5,6 +5,7 @@
 #include "text_button.h"
 #include "game_manager.h"
 #include "room_manager.h"
+#include "visual_effect.h"
 
 GameRoom::GameRoom(sf::RenderWindow &window, RoomManager &room_manager)
     : Room(window, room_manager),
@@ -60,6 +61,19 @@ void GameRoom::run(double dt, const std::vector<sf::Event> &event_queue) {
         _troop_manager.run(dt, event_queue);
         _wave_manager.run(dt);
         _wall.run(dt);
+
+        // atualizando efeitos visuais
+        for (int i = 0; i < _visual_effects.size();) {
+            _visual_effects[i]->run(dt);
+
+            if (_visual_effects[i]->is_finished()) {
+                std::swap(_visual_effects[i], _visual_effects.back());
+                _visual_effects.pop_back();
+            }
+            else {
+                i++;
+            }
+        }
     }
 
     //* desenhando:
@@ -78,6 +92,11 @@ void GameRoom::run(double dt, const std::vector<sf::Event> &event_queue) {
     _wall.draw();
     _wave_manager.draw();
     _troop_manager.draw();
+
+    // desenhando efeitos visuais (desenha por cima de tudo no campo, mas abaixo da HUD)
+    for (auto& effect : _visual_effects) {
+        effect->draw();
+    }
 
     // HUD
     sf::Sprite hud_rect(_hud_background);
@@ -125,6 +144,10 @@ void GameRoom::run(double dt, const std::vector<sf::Event> &event_queue) {
 }
 
 void GameRoom::end() {}
+
+void GameRoom::add_effect(std::unique_ptr<VisualEffect> effect) {
+    _visual_effects.push_back(std::move(effect));
+}
 
 TroopManager &GameRoom::get_troop_manager() {
     return _troop_manager;
