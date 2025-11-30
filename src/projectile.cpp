@@ -40,6 +40,10 @@ ProjectileType Projectile::get_type() {
     return _type;
 }
 
+sf::Vector2f Projectile::get_position() {
+    return _position;
+}
+
 void Projectile::set_texture(sf::Texture *texture, float radius) {
     _shape.setTexture(texture);
     _shape.setRadius(radius);

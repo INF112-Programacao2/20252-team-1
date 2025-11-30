@@ -12,6 +12,7 @@
 #include "anteater.h"
 #include "tree_troop.h"
 #include <iostream>
+#include <cmath>
 
 // posicao inicial dos slots (superior esquerdo)
 const sf::Vector2f offset(25, HUD_HEIGHT + PADDING_Y);
@@ -284,7 +285,13 @@ void TroopManager::draw() {
 
     if (texture) {
         sf::RectangleShape sprite(sf::Vector2f(100, 100));
-        sf::Vector2f position = is_fieldtroop ? get_line_pos() : mouse_pos;
+        sf::Vector2f position = mouse_pos;
+        // coloca a fieldtroop em grid
+        if (is_fieldtroop) {
+            position = get_line_pos();
+            position.x = std::round(position.x / sprite.getSize().x) * sprite.getSize().x;
+        }
+
         sprite.setPosition(position);
         sprite.setOrigin(sprite.getSize() * .5f);
         sprite.setTexture(texture);
@@ -295,7 +302,7 @@ void TroopManager::draw() {
             sprite.setOrigin({30, 10});
         }
 
-        if (is_fieldtroop && !_enemy_area.contains(get_line_pos()))
+        if (is_fieldtroop && !_enemy_area.contains(position))
             sprite.setFillColor(sf::Color(255, 0, 0, 150));
         else
             sprite.setFillColor(sf::Color(255, 255, 255, 150));

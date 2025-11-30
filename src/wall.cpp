@@ -10,7 +10,8 @@ sf::Texture Wall::_texture;
 
 Wall::Wall(int base_life, int spike_damage, Room &room)
     : _health(base_life, std::bind(&Wall::destroy, this)), _spike_damage(spike_damage), _room(room),
-      _flash_timer(.15), _shape({WALL_WIDTH, DESKTOP_SIZE.y - HUD_HEIGHT}) {
+      _flash_timer(.15), _shape({WALL_WIDTH, DESKTOP_SIZE.y - HUD_HEIGHT}),
+      _damage_text(sf::Vector2f(WALL_POSITION_X + WALL_WIDTH, DESKTOP_SIZE.y * .5), 1.0, room) {
 
     _flash_timer.update(1); // avanca no tempo pra nao piscar na inicializacao
     _collider = sf::Rect<float>(
@@ -46,6 +47,7 @@ void Wall::extinguish(double duration) {
 void Wall::run(double dt) {
     _burning_timer.update(dt);
     _flash_timer.update(dt);
+    _damage_text.run(dt);
 
     // logica do dano de fogo (damage over time)
     if (_burning_time > 0) {
@@ -69,10 +71,12 @@ void Wall::draw() {
     // se estiver pegando fogo, fica laranja
     if (_burning_time > 0) {
         // oscila um pouco o vermelho pra parecer fogo
+        // oscila um pouco o vermelho pra parecer fogo
         int red_oscillation = 200 + (std::rand() % 55);
         color = sf::Color(red_oscillation, 100, 0);
     }
 
+    // se tomou hit recentemente, pisca branco (prioridade sobre o fogo)
     // se tomou hit recentemente, pisca branco (prioridade sobre o fogo)
     if (!_flash_timer.timeout())
         color = sf::Color(255, 150, 150);
@@ -80,9 +84,18 @@ void Wall::draw() {
     _shape.setTexture(&_texture);
     _shape.setFillColor(color);
     _room.get_window().draw(_shape);
+
+    _damage_text.draw();
 }
 
 void Wall::hit(EnemyProjectile &projectile) {
+    // texto mostrando o dano
+    sf::Text text(std::to_string(projectile.get_damage()), GameManager::get_instance().get_font(), 20);
+    text.setFillColor(sf::Color::Red);
+    _damage_text.set_text(text);
+    _damage_text.set_position(projectile.get_position());
+    _damage_text.restart();
+
     _health.decrease_life(projectile.get_damage());
     _flash_timer.restart();
 
@@ -93,6 +106,13 @@ void Wall::hit(EnemyProjectile &projectile) {
 }
 
 void Wall::hit(Enemy &enemy, int damage) {
+    // texto mostrando o dano
+    sf::Text text(std::to_string(damage), GameManager::get_instance().get_font(), 20);
+    text.setFillColor(sf::Color::Red);
+    _damage_text.set_text(text);
+    _damage_text.set_position(enemy.get_position() - sf::Vector2f(75, 0));
+    _damage_text.restart();
+
     _health.decrease_life(damage);
     _flash_timer.restart();
 

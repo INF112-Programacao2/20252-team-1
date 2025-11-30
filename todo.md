@@ -1,7 +1,5 @@
 # Bug ou Feature?
-- Leitura da posição do mouse para de funcionar se o tamanho da janela mudar (o jogo deveria rodar em uma resolução fixa de qualquer maneira)
 - O elefante é extremamente impreciso (ele é aimbot, só que a maioria dos inimigos que ele mira já morreram até o tiro chegar)
-- O fogo e o lixo dão dinheiro ao se auto-destruirem
 
 # Bugs:
 - Fullscreen não funciona em todos os PCs e nem na versão compilada para windows
@@ -9,10 +7,8 @@
 - Sair do jogo sem jogar reseta o save (porque não deveria estar salvando no final do jogo)
 
 # Refatoração:
-- Usar um sistema melhor pra definir o tamanho da tela e onde posicionar as coisas
 
 # Perguntas sobre implementação:
-- FieldTroop deveria ser posicionada em grid (horizontalmente)?
 
 # Pra fazer:
 - Tratamento de excessão na leitura de assets

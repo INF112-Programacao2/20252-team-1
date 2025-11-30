@@ -8,6 +8,7 @@
 #include "clock.h"
 #include "globals.h"
 #include "field_troop.h"
+#include "dissolving_text.h"
 
 class Enemy : public std::enable_shared_from_this<Enemy> {
 protected:
@@ -22,16 +23,17 @@ protected:
     double _cooldown;
     int _points;
     sf::Rect<float> _collider;
-    Room& _room;
+    Room &_room;
     sf::RectangleShape _shape;
-    Clock _flash_timer{ .2 };
+    Clock _flash_timer{.2};
+    DissolvingText _damage_text;
 
 protected:
     /// E chamado quando a vida chega a 0
     virtual void destroy();
 
     /// Retorna a field troop que colide com a proxima posicao, se existir
-    FieldTroop* get_field_troop_colliding(double next_position);
+    FieldTroop *get_field_troop_colliding(double next_position);
 
     /// Verifica se pode andar pra proxima posicao
     virtual bool can_walk(double next_position);
@@ -39,7 +41,7 @@ protected:
     virtual void attack();
 
 public:
-    Enemy(int base_life, int damage, int line, double speed, double base_cooldown, int points, Room& room);
+    Enemy(int base_life, int damage, int line, double speed, double base_cooldown, int points, Room &room);
 
     virtual ~Enemy();
 
