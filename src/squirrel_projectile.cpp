@@ -2,7 +2,6 @@
 #include "game_room.h"
 #include "wave_manager.h"
 #include "game_manager.h"
-#include <iostream>
 
 sf::Texture SquirrelProjectile::_texture;
 
@@ -43,8 +42,6 @@ void SquirrelProjectile::on_hit(std::shared_ptr<Enemy> direct_hit) {
 
     // calcula o dano final
     int final_damage = _damage * GameManager::get_instance().get_troop_damage_multiplier();
-
-    std::cout << "Esquilo BOOM! Atingiu " << targets.size() << " inimigos." << std::endl; //! DEBUG
 
     for (auto &enemy : targets) {
         apply_damage(enemy, enemy->get_type_multiplier(_type));

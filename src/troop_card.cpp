@@ -19,15 +19,7 @@ void TroopCard::draw() {
     sf::RectangleShape rect(sf::Vector2f(_width, _width));
     rect.setPosition(_position);
 
-    sf::Color colors[TROOP_COUNT] = {
-        sf::Color::Red, sf::Color::Green, sf::Color::Blue, sf::Color::Magenta,
-        sf::Color::Cyan, sf::Color::White, sf::Color::Yellow,
-        sf::Color(255, 165, 0), // laranja
-        sf::Color(128, 0, 128), // roxo
-        sf::Color(0, 128, 128) // verde-azul
-    };
-
-    rect.setFillColor(_texture ? sf::Color(0, 0, 0, 100) : colors[_troop]);
+    rect.setFillColor(sf::Color(0, 0, 0, 100));
     _room.get_window().draw(rect);
 
     // desenhando o sprite

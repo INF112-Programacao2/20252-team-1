@@ -348,7 +348,7 @@ Troop *TroopManager::instantiate_troop(int slot, TroopType troop_type) {
         return new DolphinTroop(position, line, 7.0, _room);
 
     case TroopType::SolarEnergy:
-        return new SolarEnergyTroop(position, line, 5.0, 100, _room);
+        return new SolarEnergyTroop(position, line, 7.0, 100, _room);
 
     default:
         return nullptr;
@@ -378,7 +378,9 @@ FieldTroop *TroopManager::instantiate_field_troop(sf::Vector2f position, TroopTy
 void TroopManager::place_troop() {
     sf::Vector2f mouse_pos = (sf::Vector2f)_room.get_mouse_position();
 
-    if (FieldTroop *field_troop = instantiate_field_troop(get_line_pos(), _cursor_troop)) {
+    sf::Vector2f position = get_line_pos();
+    position.x = std::round(position.x / 100.0) * 100;
+    if (FieldTroop *field_troop = instantiate_field_troop(position, _cursor_troop)) {
         _field_troops.push_back(field_troop);
         _cursor_troop = TroopType::None;
 

@@ -20,7 +20,7 @@ int main() {
     }
 
     const bool FULLSCREEN = true; //! Use false somente para debug
-    const bool WINDOWS = false;   //! DEBUG, coloque true se esta compilando para windows
+    const bool WINDOWS = true;    //! DEBUG, coloque true se esta compilando para windows
 
     // TODO: CONCERTAR A RESOLUCAO DA TELA (NAO FUNCIONA EM TODO PC)
 
@@ -38,7 +38,7 @@ int main() {
     else
         window.setPosition(sf::Vector2i(50, 50));
 
-    window.setVerticalSyncEnabled(false);
+    window.setVerticalSyncEnabled(true);
 
     // Criando as salas
     RoomManager room_manager;
