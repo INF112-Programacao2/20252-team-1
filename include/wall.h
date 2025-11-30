@@ -19,6 +19,7 @@ private:
     double _burn_damage_accumulator = 0.0; // acumula dano fracionado do fogo
     double _burn_dps = 0.0;                // dano por segundo do fogo
     Clock _burning_timer;
+    Clock _particle_timer;
     int _spike_damage;
     sf::Rect<float> _collider;
     Room &_room;
