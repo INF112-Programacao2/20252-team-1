@@ -4,7 +4,7 @@
 sf::Texture TrashEnemy::_texture;
 
 // constantes visuais
-const float height = 70.0f; // lixo � menor que os outros inimigos
+const float height = 70.0f; // lixo eh menor que os outros inimigos
 
 TrashEnemy::TrashEnemy(int base_life, int damage, int line, double speed, double base_cooldown, int points, double start_x, Room &room)
     : Enemy(base_life, damage, line, speed, base_cooldown, points, room) {
