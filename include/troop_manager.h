@@ -23,6 +23,7 @@ private:
     std::vector<std::unique_ptr<TroopProjectile>> _projectiles;
     TroopType _cursor_troop = TroopType::None; // tropa selecionada no mouse
     sf::Rect<float> _enemy_area;               // retangulo da area dos inimigos
+    sf::Texture _shop_background;
 
 private:
     /// Retorna -1 se a posicao nao esta em nenhum slot, ou o numero do slot se estiver

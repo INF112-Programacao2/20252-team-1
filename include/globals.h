@@ -56,20 +56,20 @@ const int UPGRADE_COUNT = 7;
 const sf::Vector2u DESKTOP_SIZE = sf::Vector2u(
     sf::VideoMode::getDesktopMode().width, sf::VideoMode::getDesktopMode().height);
 
-const int GAME_SIZE_X = sf::VideoMode::getDesktopMode().width - 400;
+const int GAME_SIZE_X = sf::VideoMode::getDesktopMode().width - 300;
 
 const sf::Rect<float> GAME_RECT(sf::Vector2f(0, 0), sf::Vector2f(GAME_SIZE_X, DESKTOP_SIZE.y));
 
 const int TROOP_ROWS = 4;
 const int TROOP_COLS = 3;
 
-const float WALL_POSITION_X = 50 + 175 * 3;
-const float WALL_WIDTH = 120;
+const float WALL_POSITION_X = 50 + 150 * 3;
+const float WALL_WIDTH = 150;
 
 const float HUD_HEIGHT = DESKTOP_SIZE.y * .1;
 
 const float PADDING_Y = DESKTOP_SIZE.y * 0.1; // espaco vazio em cima e em baixo das tropas
-const float TROOP_RADIUS = 75;                // raio do slot
+const float TROOP_RADIUS = 65;                // raio do slot
 const float GAP_Y = (DESKTOP_SIZE.y - HUD_HEIGHT - 2 * PADDING_Y - 2 * TROOP_RADIUS) / (TROOP_ROWS - 1);
 
 #endif

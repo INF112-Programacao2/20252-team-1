@@ -35,7 +35,7 @@ WaveManager::WaveManager(Room &room) : _room(room) {
         std::exit(1);
     }
 
-    if (!TrashmanEnemy::load_texture("assets/lixeiro.png")) {
+    if (!TrashmanEnemy::load_texture("assets/caminhao.png")) {
         std::cerr << "Nao achou o asset do poluidor!\n";
         std::exit(1);
     }
@@ -56,9 +56,9 @@ WaveManager::WaveManager(Room &room) : _room(room) {
     }
     // wave 1:
     // probabilidades, numero de inimigos, delay entre inimigos, delay pra terminar subwave
-    SubWave subwave_01 = {{0, 1.0}, 4, 0, 3};
-    SubWave subwave_02 = {{0, 1.0}, 4, 0, 3};
-    SubWave subwave_03 = {{0, 1.0}, 4, 0, 3};
+    SubWave subwave_01 = {{0, 1, 0, 0, 0, 0, 0, 0}, 4, 0, 3};
+    SubWave subwave_02 = {{0, 1, 0, 0, 0, 0, 0, 0}, 4, 0, 3};
+    SubWave subwave_03 = {{0, 1, 0, 0, 0, 0, 0, 0}, 4, 0, 3};
     _enemys_layout[0] = {subwave_01, subwave_02, subwave_03};
 
     spawn_wave();
@@ -106,7 +106,6 @@ void WaveManager::spawn_enemy(EnemyType enemy_type, int line) {
         // nao spawna lixo diretamente
         break;
 
-    
     default:
         std::cerr << "Inimigo com ID: " << enemy_type << " nao implementado!" << std::endl;
         break;
@@ -114,7 +113,7 @@ void WaveManager::spawn_enemy(EnemyType enemy_type, int line) {
 }
 
 void WaveManager::spawn_wave() {
-    spawn_enemy(EnemyType::Excavator, 1);
+    spawn_enemy(EnemyType::Trashman, 1);
     spawn_enemy(EnemyType::Businessman, 2);
     spawn_enemy(EnemyType::Lumberjack, 3);
     spawn_enemy(EnemyType::Hunter, 4);

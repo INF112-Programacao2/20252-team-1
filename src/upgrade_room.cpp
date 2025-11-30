@@ -120,7 +120,15 @@ UpgradeRoom::UpgradeRoom(sf::RenderWindow &window, RoomManager &room_manager)
                   int atual = gm.get_crit_chance();
                   gm.set_crit_chance(atual + 10); 
               }),
-      } {}
+      } {
+
+    if (!_hud_background.loadFromFile("assets/hud.png")) {
+        std::cerr << "Erro abrindo asset da HUD!\n";
+        std::exit(1);
+    }
+
+    _hud_background.setRepeated(true);
+}
 
 UpgradeRoom::~UpgradeRoom() = default;
 
@@ -143,8 +151,9 @@ void UpgradeRoom::run(double dt, const std::vector<sf::Event> &event_queue) {
         sf::Vector2f(DESKTOP_SIZE.x - points_text.getGlobalBounds().width - 50, 50));
 
     // HUD
-    sf::RectangleShape hud_rect(sf::Vector2f(GAME_SIZE_X + 500, HUD_HEIGHT));
-    hud_rect.setFillColor(sf::Color(135, 75, 0));
+    sf::Sprite hud_rect(_hud_background);
+    hud_rect.setTextureRect(sf::IntRect(0, 0, DESKTOP_SIZE.x, _hud_background.getSize().y));
+    hud_rect.scale(1.2, 1.2);
     _window.draw(hud_rect);
 
     // Upgrades

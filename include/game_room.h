@@ -9,6 +9,9 @@
 
 class GameRoom : public Room {
 private:
+    sf::Texture _background;
+    sf::Texture _background2;
+    sf::Texture _hud_background;
     TroopManager _troop_manager;
     WaveManager _wave_manager;
     sf::Font &_font;

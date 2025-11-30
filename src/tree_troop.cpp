@@ -8,7 +8,7 @@ TreeTroop::TreeTroop(int life, sf::Vector2f position, Room &room)
     _type = TroopType::Tree;
 
     _shape.setTexture(&_texture);
-    _shape.setSize({80, 80});
+    _shape.setSize({100, 100});
     _shape.setOrigin(_shape.getSize() * .5f);
     _shape.setPosition(_position);
 }

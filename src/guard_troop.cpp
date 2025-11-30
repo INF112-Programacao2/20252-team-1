@@ -22,7 +22,7 @@ bool GuardTroop::fire() {
 
     if (target) {
         int damage = 55;
-        double speed = 400.0;
+        double speed = 600.0;
         double stun_time = 1.5;
 
         // centraliza projetil

@@ -43,7 +43,8 @@ void HedgehogTroop::draw() {
     float side = 60;
 
     sf::RectangleShape rect(sf::Vector2f(side, side));
-    rect.setPosition(_position - sf::Vector2f(side / 2, side / 2));
+    rect.setPosition(_position);
+    rect.setOrigin({30, 10});
     rect.setTexture(&_texture);
     rect.setFillColor(_waiting_cooldown ? sf::Color(150, 150, 150) : sf::Color::White);
 

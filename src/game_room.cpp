@@ -14,6 +14,29 @@ GameRoom::GameRoom(sf::RenderWindow &window, RoomManager &room_manager)
       _wall(1000, 0, *this) {
 
     GameManager::get_instance().set_game_room(this);
+
+    if (!Wall::load_texture("assets/muro.png")) {
+        std::cerr << "Erro abrindo asset do muro!\n";
+        std::exit(1);
+    }
+
+    if (!_background.loadFromFile("assets/background.png")) {
+        std::cerr << "Erro abrindo asset do background!\n";
+        std::exit(1);
+    }
+    if (!_background2.loadFromFile("assets/background22.png")) {
+        std::cerr << "Erro abrindo asset do background2!\n";
+        std::exit(1);
+    }
+
+    if (!_hud_background.loadFromFile("assets/hud.png")) {
+        std::cerr << "Erro abrindo asset da HUD!\n";
+        std::exit(1);
+    }
+
+    _background.setRepeated(true);
+    _background2.setRepeated(true);
+    _hud_background.setRepeated(true);
 }
 
 GameRoom::~GameRoom() = default;
@@ -40,15 +63,26 @@ void GameRoom::run(double dt, const std::vector<sf::Event> &event_queue) {
     }
 
     //* desenhando:
-    _window.clear(sf::Color(50, 150, 50));
+    _window.clear();
+
+    sf::Sprite bg(_background);
+    bg.setPosition({0, HUD_HEIGHT});
+    bg.setTextureRect(sf::IntRect(0, 0, WALL_POSITION_X, DESKTOP_SIZE.y - HUD_HEIGHT));
+    _window.draw(bg);
+
+    sf::Sprite bg2(_background2);
+    bg2.setPosition({WALL_POSITION_X, HUD_HEIGHT});
+    bg2.setTextureRect(sf::IntRect(0, 0, GAME_SIZE_X - WALL_POSITION_X, DESKTOP_SIZE.y - HUD_HEIGHT));
+    _window.draw(bg2);
 
     _wall.draw();
     _wave_manager.draw();
     _troop_manager.draw();
 
     // HUD
-    sf::RectangleShape hud_rect(sf::Vector2f(DESKTOP_SIZE.x, HUD_HEIGHT));
-    hud_rect.setFillColor(sf::Color(135, 75, 0));
+    sf::Sprite hud_rect(_hud_background);
+    hud_rect.setTextureRect(sf::IntRect(0, 0, DESKTOP_SIZE.x, _hud_background.getSize().y));
+    hud_rect.scale(1.2, 1.2);
     _window.draw(hud_rect);
     _wall.draw_wall_health_bar();
 

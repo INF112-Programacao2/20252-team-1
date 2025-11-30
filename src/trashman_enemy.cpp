@@ -5,7 +5,7 @@
 sf::Texture TrashmanEnemy::_texture;
 
 //altura visual
-const float height = 100;
+const float height = 150;
 //distancia que ele para do muro (maior que a do Hunter que eh 400)
 const float SPAWN_RANGE = 600.0f;
 
