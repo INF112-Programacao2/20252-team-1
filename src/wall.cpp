@@ -51,7 +51,7 @@ void Wall::run(double dt) {
     if (_burning_time > 0) {
         _burning_time -= dt;
 
-        // acumula o dano (pq health � int, nao da pra tirar 0.3 de vida)
+        // acumula o dano (pq health eh int, nao da pra tirar 0.3 de vida)
         _burn_damage_accumulator += _burn_dps * dt;
 
         if (_burn_damage_accumulator >= 1.0) {

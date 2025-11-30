@@ -2,6 +2,7 @@
 #define GLOBALS_H
 
 #include <SFML/Graphics.hpp>
+#include <array>
 
 // * constantes globais do projeto que fazem sentido compartilhar
 
@@ -40,7 +41,6 @@ const int TROOP_COUNT = 10;
 const int TROOP_PRICES[TROOP_COUNT] = {200, 350, 350, 300, 300, 300, 250, 200, 300, 300};
 
 enum EnemyType {
-    Enemy1 = 0,
     Lumberjack,
     FireEnemyType,
     Hunter,
@@ -49,7 +49,7 @@ enum EnemyType {
     Trash,
     Businessman,
 };
-const int ENEMY_COUNT = 8; // Mudar sempre que aparecer um inimigo novo
+const int ENEMY_COUNT = 7; // Mudar sempre que aparecer um inimigo novo
 
 const int UPGRADE_COUNT = 7;
 

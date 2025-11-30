@@ -54,54 +54,105 @@ WaveManager::WaveManager(Room &room) : _room(room) {
         std::cerr << "Nao achou o asset do projetil do empresario!\n";
         std::exit(1);
     }
-    // wave 1:
-    // probabilidades, numero de inimigos, delay entre inimigos, delay pra terminar subwave
-    SubWave subwave_01 = {{0, 1, 0, 0, 0, 0, 0, 0}, 4, 0, 3};
-    SubWave subwave_02 = {{0, 1, 0, 0, 0, 0, 0, 0}, 4, 0, 3};
-    SubWave subwave_03 = {{0, 1, 0, 0, 0, 0, 0, 0}, 4, 0, 3};
-    _enemys_layout[0] = {subwave_01, subwave_02, subwave_03};
 
-    spawn_wave();
+    setup_waves();
 }
 
 WaveManager::~WaveManager() = default;
 
-void WaveManager::spawn_enemy(EnemyType enemy_type, int line) {
-    switch (enemy_type) {
-    case EnemyType::Enemy1:
-        // vida, dano, linha, velocidade, cooldown, pontos, sala
-        _enemys.push_back(std::make_shared<Enemy>(75, 10, line, 50.0, 5.0, 10, _room));
-        break;
+void WaveManager::setup_waves() {
+    // explicando o layout do waves config:
+    // [index da wave][index da subwave]
+    // numero de inimigos da subwave / intervalo entre cada spawn de subwaves /
+    // array de probabilidades: lenhador, fogo, cacador, escavador, poluidor, lixo (nao faz diferenca),
+    // empresario
 
+    // WAVE 1
+    _waves_config[0][0] = {5, 6.0f, {100.f, 0.f, 0.f, 0.f, 0.f, 0.f, 0.f}};   // subwave 1
+    _waves_config[0][1] = {8, 5.5f, {80.f, 0.f, 20.f, 0.f, 0.f, 0.f, 0.f}};   // subwave 2
+    _waves_config[0][2] = {10, 5.0f, {70.f, 0.f, 30.f, 0.f, 0.f, 0.f, 0.f}};  // subwave 3
+
+    // WAVE 2
+    _waves_config[1][0] = {15, 4.5f, {60.f, 10.f, 30.f, 0.f, 0.f, 0.f, 0.f}};
+    _waves_config[1][1] = {20, 4.0f, {50.f, 10.f, 30.f, 10.f, 0.f, 0.f, 0.f}};
+    _waves_config[1][2] = {22, 3.5f, {40.f, 20.f, 30.f, 10.f, 0.f, 0.f, 0.f}};
+
+    // WAVE 3
+    _waves_config[2][0] = {25, 3.0f, {30.f, 30.f, 30.f, 10.f, 0.f, 0.f, 0.f}};
+    _waves_config[2][1] = {28, 2.5f, {20.f, 25.f, 25.f, 25.f, 5.f, 0.f, 0.f}};
+    _waves_config[2][2] = {30, 2.0f, {10.f, 20.f, 30.f, 25.f, 15.f, 0.f, 0.f}};
+
+    // WAVE 4
+    _waves_config[3][0] = {35, 1.5f, {10.f, 20.f, 30.f, 30.f, 10.f, 0.f, 0.f}};
+    _waves_config[3][1] = {40, 1.0f, {5.f, 15.f, 30.f, 30.f, 20.f, 0.f, 0.f}};
+    _waves_config[3][2] = {50, 0.5f, {5.f, 10.f, 25.f, 30.f, 30.f, 0.f, 0.f}};
+}
+
+EnemyType WaveManager::pick_weighted_enemy(const std::array<float, ENEMY_COUNT>& probs) {
+    // pra nao precisar colocar numeros que somem exatamente em 100% de probabilidade
+    float total_weight = 0;
+    for (float p : probs) {
+        total_weight += p;
+    }
+
+    // sorteia um numero de 0 ate total_weight de forma normalizada
+    float random_val = static_cast<float>(rand()) / (float)(RAND_MAX) * total_weight;
+
+    // faz uma soma das probabilidades de cada inimigo e ve se o valor sorteado esta dentro dessa area
+    // exemplo: lenhador tem 80 de probabilidade e fogo tem 20, a soma total vai ser 100
+    // se o numero sorteado for <= 80, lenhador vai ser spawnado, se cair > 80 e <= 100,
+    // o fogo vai ser spawnado
+    float current_sum = 0;
+    for (int i = 0; i < ENEMY_COUNT; i++) {
+        current_sum += probs[i];
+        if (random_val <= current_sum) {
+            return (EnemyType)i;
+        }
+    }
+}
+
+void WaveManager::spawn_enemy(EnemyType enemy_type, int line) {
+    // multiplicador de dificuldade que aumenta a cada wave que avanca
+    double difficulty_multiplier = 1.0 + (_wave_idx * 0.25);
+
+    switch (enemy_type) {
     case EnemyType::Lumberjack:
         // vida, dano, linha, velocidade, cooldown, pontos, sala
-        _enemys.push_back(std::make_shared<LumberjackEnemy>(150, 25, line, 50.0, 3.0, 20, _room));
+        _enemys.push_back(std::make_shared<LumberjackEnemy>(150 * difficulty_multiplier,
+                          25 * difficulty_multiplier, line, 50.0, 3.0, 20, _room));
         break;
 
     case EnemyType::FireEnemyType:
         // vida, dano, linha, velocidade, cooldown, pontos, burn_timer, sala
-        _enemys.push_back(std::make_shared<FireEnemy>(100, 15, line, 150.0, 0, 15, 2, _room));
+        _enemys.push_back(std::make_shared<FireEnemy>(100 * difficulty_multiplier,
+                          15 * difficulty_multiplier, line, 150.0, 0, 15, 2, _room));
         break;
 
     case EnemyType::Hunter:
         // vida, dano, linha, velocidade, cooldown, pontos, sala
-        _enemys.push_back(std::make_shared<HunterEnemy>(75, 20, line, 50.0, 6.0, 30, _room));
+        _enemys.push_back(std::make_shared<HunterEnemy>(75 * difficulty_multiplier,
+                          20 * difficulty_multiplier, line, 50.0, 6.0, 30, _room));
         break;
 
     case EnemyType::Excavator:
         // vida, dano , linha, velocidade, cooldown, pontos, sala
-        _enemys.push_back(std::make_shared<ExcavatorEnemy>(300, 1, line, 30.0, 1, 50, _room));
+        _enemys.push_back(std::make_shared<ExcavatorEnemy>(300 * difficulty_multiplier,
+                          1 * difficulty_multiplier, line, 30.0, 1, 50, _room));
         break;
 
     case EnemyType::Trashman:
         // vida, dano , linha, velocidade, cooldown, pontos, sala
-        _enemys.push_back(std::make_shared<TrashmanEnemy>(200, 35, line, 40.0, 5.0, 60, _room));
+        _enemys.push_back(std::make_shared<TrashmanEnemy>(200 * difficulty_multiplier,
+                          35 * difficulty_multiplier, line, 40.0, 5.0, 60, _room));
         break;
 
     case EnemyType::Businessman:
         // vida, dano , linha, velocidade, cooldown, cura, raio de cura, pontos, sala
-        _enemys.push_back(std::make_shared<BusinessmanEnemy>(100, 5, line, 60.0, 4.0, 5, 200, 80, _room));
+        _enemys.push_back(std::make_shared<BusinessmanEnemy>(100 * difficulty_multiplier,
+                          5 * difficulty_multiplier, line, 60.0, 4.0, 5 * difficulty_multiplier,
+                          200 * difficulty_multiplier, 80, _room));
         break;
+
     case EnemyType::Trash:
         // nao spawna lixo diretamente
         break;
@@ -110,13 +161,6 @@ void WaveManager::spawn_enemy(EnemyType enemy_type, int line) {
         std::cerr << "Inimigo com ID: " << enemy_type << " nao implementado!" << std::endl;
         break;
     }
-}
-
-void WaveManager::spawn_wave() {
-    spawn_enemy(EnemyType::Trashman, 1);
-    spawn_enemy(EnemyType::Businessman, 2);
-    spawn_enemy(EnemyType::Lumberjack, 3);
-    spawn_enemy(EnemyType::Hunter, 4);
 }
 
 void WaveManager::run(double dt) {
@@ -142,35 +186,79 @@ void WaveManager::run(double dt) {
             i++;
     }
 
-    // delay ate a proxima wave
-    double delay = 0;
+    if (_game_completed)
+        return;
 
-    // verifica o fim da subwave e atualiza pra proxima
-    if (!_is_waiting_delay && _enemys.size() == 0) {
-        _is_waiting_delay = true;
-        delay = _enemys_layout[_wave_idx][_subwave_idx].ending_delay;
+    _timer.update(dt);
 
-        _subwave_idx++;
-        if (_subwave_idx >= 3) {
-            _subwave_idx = 0;
-            _wave_idx++;
-            delay = _wave_ending_delay;
+    // pega a configuracao da subwave atual
+    const SubWave &config = _waves_config[_wave_idx][_subwave_idx];
+
+    // esperando o intervalo para a proxima subwave
+    if (_is_waiting_next_subwave) {
+        // se ja matou todos os inimigos, comeca a contar o tempo para a proxima
+        if (_enemys.empty()) {
+            // define quanto tempo esperar (2 segs entre subwaves e 5 entre waves)
+            double delay_necessario;
+            if (_subwave_idx == SUBWAVES_PER_WAVE - 1) {
+                delay_necessario = DELAY_BETWEEN_WAVES;
+            }
+            else {
+                delay_necessario = DELAY_BETWEEN_SUBWAVES;
+            }
+
+            if (_timer.get_seconds_elapsed() >= delay_necessario) {
+                // reseta o estado pra comecara spawnar de novo
+                _is_waiting_next_subwave = false;
+                _spawned_in_subwave = 0;
+                _timer.restart();
+
+                _subwave_idx++; // avanca o indice da subwave
+
+                // se acabaram as subwaves, vai pra proxima wave
+                if (_subwave_idx >= SUBWAVES_PER_WAVE) {
+                    _subwave_idx = 0;
+                    _wave_idx++;
+                    
+                    if (_wave_idx >= MAX_WAVES) {
+                        _game_completed = true;
+                        std::cout << "Fim de jogo" << std::endl; // debug
+                        return;
+                    }
+                    std::cout << "Wave " << _wave_idx + 1 << " iniciada" << std::endl; // debug
+                } else {
+                    std::cout << "Subwave " << _subwave_idx + 1 << " iniciada" << std::endl; // debug
+                }
+            }
         }
-
-        // TODO: mostrar que ganhou o jogo
-        if (_wave_idx >= MAX_WAVES) {
-            _wave_idx = MAX_WAVES; // nao deixa dar overflow no array por enquanto
-            return;
+        else {
+            // se ainda tem inimigos vivos, o timer fica travado
+            _timer.restart(); 
         }
+        return;
     }
 
-    if (_is_waiting_delay) {
-        _timer.update(dt);
+    // bloco pra quando a rodada ta ativa e ainda tem inimigos pra nascer
+    if (_is_spawning) {
+        if (_spawned_in_subwave < config.enemy_count) {
+            // tenta spawnar se passou o intervalo de spawn
+            if (_timer.get_seconds_elapsed() >= config.spawn_interval) {
+                // sorteia o inimigo
+                EnemyType type = pick_weighted_enemy(config.probabilities);
+                // sorteia a linha
+                int line = (rand() % 4) + 1;
 
-        if (_timer.get_seconds_elapsed() >= delay) {
-            spawn_wave();
+                // spawna o tipo de inimigo sorteado
+                spawn_enemy(type, line);
+
+                _spawned_in_subwave++;
+                _timer.restart();
+            }
+        }
+        // quando acaba de spawnar tudo dessa subwave, entra no modo espera
+        else {
+            _is_waiting_next_subwave = true;
             _timer.restart();
-            _is_waiting_delay = false;
         }
     }
 }
@@ -257,5 +345,22 @@ int WaveManager::get_wave_idx() {
 }
 
 void WaveManager::set_wave_idx(int wave_idx) {
+    // validacao de seguranca
+    if (wave_idx < 0)
+        wave_idx = 0;
+    if (wave_idx >= MAX_WAVES)
+        wave_idx = MAX_WAVES - 1;
+
+    // define a nova wave
     _wave_idx = wave_idx;
+
+    // reseta os estados das subwaves
+    _subwave_idx = 0;
+    _spawned_in_subwave = 0;
+
+    // reseta os timers e os estados de espera
+    _is_waiting_next_subwave = false;
+    _is_spawning = true;
+    _game_completed = false;
+    _timer.restart();
 }
