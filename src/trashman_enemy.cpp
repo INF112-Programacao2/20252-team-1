@@ -4,9 +4,9 @@
 
 sf::Texture TrashmanEnemy::_texture;
 
-//altura visual
+// altura visual
 const float height = 150;
-//distancia que ele para do muro (maior que a do Hunter que eh 400)
+// distancia que ele para do muro (maior que a do Hunter que eh 400)
 const float SPAWN_RANGE = 600.0f;
 
 TrashmanEnemy::TrashmanEnemy(int base_life, int damage, int line, double speed, double base_cooldown, int points, Room &room)
@@ -23,7 +23,7 @@ bool TrashmanEnemy::can_walk(double next_position) {
     return next_position > (WALL_POSITION_X + WALL_WIDTH + SPAWN_RANGE);
 }
 
-void TrashmanEnemy::attack() {
+void TrashmanEnemy::attack(FieldTroop *field_troop) {
     GameRoom &game_room = dynamic_cast<GameRoom &>(_room);
 
     // cria o inimigo Lixo na posicao atual do Lixeiro

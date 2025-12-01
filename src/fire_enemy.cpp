@@ -28,9 +28,9 @@ void FireEnemy::draw() {
     Enemy::draw();
 }
 
-void FireEnemy::attack() {
-    if (FieldTroop *troop = get_field_troop_colliding(_position_x - 10)) {
-        troop->hit(_damage); // nao da efeito de fogo
+void FireEnemy::attack(FieldTroop* field_troop) {
+    if (field_troop) {
+        field_troop->hit(_damage); // nao da efeito de fogo
 
         _health.set_life(0);
         return;

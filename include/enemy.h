@@ -38,7 +38,7 @@ protected:
     /// Verifica se pode andar pra proxima posicao
     virtual bool can_walk(double next_position);
 
-    virtual void attack();
+    virtual void attack(FieldTroop *field_troop);
 
 public:
     Enemy(int base_life, int damage, int line, double speed, double base_cooldown, int points, Room &room);

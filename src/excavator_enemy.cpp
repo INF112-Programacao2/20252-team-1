@@ -33,12 +33,12 @@ void ExcavatorEnemy::draw() {
     Enemy::draw();
 }
 
-void ExcavatorEnemy::attack() {
-    if (FieldTroop *troop = get_field_troop_colliding(_position_x - 10)) {
-        troop->hit(_current_damage);
+void ExcavatorEnemy::attack(FieldTroop* field_troop) {
+    if (field_troop) {
+        field_troop->hit(_current_damage);
 
-        // reseta o dano quando destroi a field troop
-        if (troop->is_destroyed())
+        // reseta o dano quando destroi a field field_troop
+        if (field_troop->is_destroyed())
             _current_damage = _damage;
     } else {
         GameRoom &game_room = dynamic_cast<GameRoom &>(_room);

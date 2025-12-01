@@ -33,7 +33,7 @@ void HunterEnemy::draw() {
     Enemy::draw();
 }
 
-void HunterEnemy::attack() {
+void HunterEnemy::attack(FieldTroop* field_troop) {
     GameRoom &game_room = dynamic_cast<GameRoom &>(_room);
 
     // Projetil central

@@ -19,9 +19,9 @@ TrashEnemy::TrashEnemy(int base_life, int damage, int line, double speed, double
     _shape.setPosition(get_position());
 }
 
-void TrashEnemy::attack() {
-    if (FieldTroop *troop = get_field_troop_colliding(_position_x - 10)) {
-        troop->hit(_damage);
+void TrashEnemy::attack(FieldTroop *field_troop) {
+    if (field_troop) {
+        field_troop->hit(_damage);
         _health.set_life(0);
         return;
     }

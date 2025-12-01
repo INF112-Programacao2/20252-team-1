@@ -9,7 +9,7 @@ private:
     static sf::Texture _texture;
 
 private:
-    void attack() override;
+    void attack(FieldTroop* field_troop) override;
 
 public:
     LumberjackEnemy(int base_life, int damage, int line, double speed, double base_cooldown, int points, Room &room);

@@ -6,23 +6,13 @@
 
 GameSaver::GameSaver(const std::string &save_file_path, GameRoom &game_room, UpgradeRoom &upgrade_room)
     : _save_file_path(save_file_path), _game_room(game_room), _upgrade_room(upgrade_room) {
-    // valores default
-    _wave_idx = 0;
-    _points = 1000;
-    _wall_life = 1000;
-    for (auto &troop_type : _troops) {
-        troop_type = TroopType::None;
-    }
-    for (auto &value : _upgrades) {
-        value = 0;
-    }
-
+    new_game();
     update_game_state();
 }
 
 void GameSaver::new_game() {
     _wave_idx = 0;
-    _points = 1000;
+    _points = 1250;
     _wall_life = 1000;
     for (auto& troop_type : _troops) {
         troop_type = TroopType::None;
@@ -31,10 +21,10 @@ void GameSaver::new_game() {
         value = 0;
     }
     _field_troops.clear();
+
     update_game_state();
     save();
 }
-
 
 void GameSaver::load_game_state() {
     _wave_idx = _game_room.get_wave_manager().get_wave_idx();

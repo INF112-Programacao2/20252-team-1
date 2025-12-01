@@ -8,7 +8,7 @@ private:
     static sf::Texture _texture;
 
 private:
-    void attack() override;
+    void attack(FieldTroop* field_troop) override;
 
 public:
     //adicionado parametro start_x para spawnar na posicao do trashman

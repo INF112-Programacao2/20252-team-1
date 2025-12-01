@@ -21,7 +21,6 @@ enum TroopType {
     // FieldTroops:
     Hedgehog,
     Tree,
-    Troop10,
 };
 
 // Mudar sempre que adicionar uma troop nova:

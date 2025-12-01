@@ -18,10 +18,10 @@ void LumberjackEnemy::run(double dt) {
     Enemy::run(dt);
 }
 
-void LumberjackEnemy::attack() {
+void LumberjackEnemy::attack(FieldTroop* field_troop) {
     // ve se tem alguma fieldtroop na frente
-    if (FieldTroop *troop = get_field_troop_colliding(_position_x - 10)) {
-        troop->hit(_damage);
+    if (field_troop) {
+        field_troop->hit(_damage);
         return;
     }
 

@@ -56,7 +56,7 @@ void BusinessmanEnemy::draw() {
     Enemy::draw();
 }
 
-void BusinessmanEnemy::attack() {
+void BusinessmanEnemy::attack(FieldTroop* field_troop) {
     // inicia a sequencia de ataque
     _is_attacking = true;
     _shots_fired = 0;

@@ -12,7 +12,7 @@ private:
 private:
     bool can_walk(double next_position) override;
 
-    void attack() override;
+    void attack(FieldTroop* field_troop) override;
 
 public:
     HunterEnemy(int base_life, int damage, int line, double speed, double base_cooldown, int points, Room &room);

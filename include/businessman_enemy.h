@@ -19,23 +19,22 @@ private:
 private:
     bool can_walk(double next_position) override;
 
-    void attack() override;
+    void attack(FieldTroop *field_troop) override;
 
     void fire_projectile();
 
     void heal_allies();
 
 public:
-    BusinessmanEnemy(int base_life, int damage, int line, double speed, double base_cooldown, int heal_amount, double heal_radius, int points, Room& room);
+    BusinessmanEnemy(int base_life, int damage, int line, double speed, double base_cooldown, int heal_amount, double heal_radius, int points, Room &room);
 
     void run(double dt) override;
 
     void draw() override;
 
-    static bool load_texture(const std::string& file_path);
+    static bool load_texture(const std::string &file_path);
 
-    static bool load_projectile_texture(const std::string& file_path);
+    static bool load_projectile_texture(const std::string &file_path);
 };
-
 
 #endif // !BUSINESSMAN_ENEMY_H

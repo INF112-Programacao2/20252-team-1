@@ -47,7 +47,7 @@ bool Enemy::can_walk(double next_position) {
     return next_position > WALL_POSITION_X + WALL_WIDTH;
 }
 
-void Enemy::attack() {
+void Enemy::attack(FieldTroop *field_troop) {
     GameRoom &game_room = dynamic_cast<GameRoom &>(_room);
     game_room.get_wave_manager().spawn_projectile(std::make_unique<EnemyProjectile>(
         get_position(), shared_from_this(), game_room.get_wall(), 10, 100.0, _room, ProjectileType::EnemyBaseProjectile));
@@ -68,13 +68,15 @@ void Enemy::run(double dt) {
     double current_speed = _speed * _speed_multiplier;           // Calcula a velocidade atual
     double next_position_x = _position_x - (current_speed * dt); // Calcula a proxima posicao
 
-    if (can_walk(next_position_x) && !get_field_troop_colliding(next_position_x)) {
+    FieldTroop *field_troop = get_field_troop_colliding(next_position_x);
+
+    if (can_walk(next_position_x) && !field_troop) {
         // Caso ele possa andar para a proxima posicao
         _position_x = next_position_x; // Atualiza a posicao atual
     } else {
         // Caso nao possa mais andar (chegou no muro / field troop)
         if (_cooldown <= 0) {           // E tenha acabado o cooldown de ataque
-            attack();                   // o inimigo ataca
+            attack(field_troop);        // o inimigo ataca
             _cooldown = _base_cooldown; // e o timer reseta
         } else
             _cooldown -= dt;
@@ -95,8 +97,10 @@ void Enemy::damage(int life) {
     if (life <= 0)
         return;
 
+    int total_damage = life * GameManager::get_instance().get_damage_multiplier();
+
     // texto mostrando o dano
-    sf::Text text(std::to_string(life), GameManager::get_instance().get_font(), 20);
+    sf::Text text(std::to_string(total_damage), GameManager::get_instance().get_font(), 20);
     text.setFillColor(sf::Color::Red);
     _damage_text.set_text(text);
     _damage_text.set_position(get_position() - sf::Vector2f(50, 50));
@@ -104,7 +108,7 @@ void Enemy::damage(int life) {
 
     _flash_timer.restart();
     _shape.setFillColor(sf::Color::Red);
-    _health.decrease_life(life * GameManager::get_instance().get_damage_multiplier());
+    _health.decrease_life(total_damage);
 }
 
 void Enemy::heal(int amount) {

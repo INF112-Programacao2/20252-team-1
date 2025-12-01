@@ -6,7 +6,7 @@ sf::Texture HedgehogTroop::_texture;
 
 HedgehogTroop::HedgehogTroop(sf::Vector2f position, int damage, float activation_radius,
                              double activation_delay, GameRoom &room)
-    : FieldTroop(0, position, room), _activation_radius(activation_radius), 
+    : FieldTroop(0, position, room), _activation_radius(activation_radius),
       _activation_delay(activation_delay), _damage(damage) {
 
     _type = TroopType::Hedgehog;
@@ -27,11 +27,10 @@ void HedgehogTroop::run(double dt) {
 
             // branco translucido
             game_room.add_effect(std::make_unique<VisualEffect>(
-                _position, _activation_radius, 0.5, sf::Color(255, 255, 255, 150), _room
-            ));
+                _position, _activation_radius, 0.5, sf::Color(255, 255, 255, 150), _room));
 
             for (std::shared_ptr<Enemy> enemy : game_room.get_wave_manager().get_enemys_on_circle(_position, _activation_radius)) {
-                enemy->damage(_damage);
+                enemy->damage(_damage * GameManager::get_instance().get_troop_damage_multiplier());
             }
 
             destroy();
