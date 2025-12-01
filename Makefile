@@ -12,7 +12,7 @@ ifeq ($(WARNINGS), 1)
 endif
 
 CXXFLAGS += -std=c++17 -Iinclude
-LDFLAGS := -lsfml-graphics -lsfml-window -lsfml-system
+LDFLAGS := -lsfml-graphics -lsfml-window -lsfml-audio -lsfml-system
 
 SRC_DIR := src
 OBJ_DIR := obj

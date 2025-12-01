@@ -22,7 +22,7 @@ public:
 
     void change_room(std::string room_name, bool load_save);
 
-    void start() {};
+    void start();
 
     void run(double dt, const std::vector<sf::Event> &event_queue);
 

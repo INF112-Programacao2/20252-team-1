@@ -2,6 +2,7 @@
 #define GAME_MANAGER_H
 
 #include <SFML/Graphics.hpp>
+#include <SFML/Audio.hpp>
 #include <string>
 #include "game_saver.h"
 
@@ -18,6 +19,12 @@ private:
     sf::Font _font;
     GameRoom *_game_room = nullptr;
     GameSaver *_game_saver;
+
+    // audios
+    sf::Music _menu_music;
+    sf::Music _game_music;
+    sf::Music _victory_music;
+    sf::Music _defeat_music;
 
 private:
     GameManager() {}
@@ -59,6 +66,16 @@ public:
 
     // update para melhor o error handling
     void load_font(std::string file_path);
+
+    // metodos para audio
+    void load_musics(); // carrega tudo
+    void play_menu_music(); // toca musica do menu
+    void play_game_music(); // toca musica do jogo
+    void pause_game_music(); // pausa musica do jogo
+    void resume_game_music(); // volta musica do jogo
+    void play_victory_music(); // toca musica de vitoria
+    void play_defeat_music(); // toca musica de derrota
+    void stop_all_music(); // para todas as musicas
 
     /// Retorna o indice da linha mais proxima, comecando do 0
     static int get_line(sf::Vector2f position);

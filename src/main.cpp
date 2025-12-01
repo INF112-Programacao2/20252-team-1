@@ -12,8 +12,9 @@ int main() {
     try {
         std::srand(std::time(0));
 
-        // carrega a fonte no game manager, da throw se falhar
+        // carrega a fonte e as musicas no game manager, da throw se falhar
         GameManager::get_instance().load_font("assets/Minecraftia-Regular.ttf");
+        GameManager::get_instance().load_musics();
 
         const bool FULLSCREEN = true; //! Use false somente para debug
         const bool WINDOWS = false;   //! DEBUG, coloque true se esta compilando para windows

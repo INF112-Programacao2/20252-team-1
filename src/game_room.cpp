@@ -41,7 +41,10 @@ GameRoom::GameRoom(sf::RenderWindow &window, RoomManager &room_manager)
 
 GameRoom::~GameRoom() = default;
 
-void GameRoom::start() {}
+void GameRoom::start() {
+    GameManager::get_instance().play_game_music();
+    _music_played = false;
+}
 
 void GameRoom::run(double dt, const std::vector<sf::Event> &event_queue) {
     // variavel para verificar se o jogo acabou
@@ -51,8 +54,17 @@ void GameRoom::run(double dt, const std::vector<sf::Event> &event_queue) {
     for (const sf::Event &event : event_queue) {
         // ESC pausa
         if (event.type == sf::Event::KeyPressed) {
-            if (event.key.code == sf::Keyboard::Escape)
+            if (event.key.code == sf::Keyboard::Escape) {
                 _paused = !_paused;
+
+                // pausa musica do jogo
+                if (_paused) {
+                    GameManager::get_instance().pause_game_music();
+                }
+                else {
+                    GameManager::get_instance().resume_game_music();
+                }
+            }
 
             if (event.key.code == sf::Keyboard::Tab)
                 _room_manager.change_room("upgrade");
@@ -118,6 +130,11 @@ void GameRoom::run(double dt, const std::vector<sf::Event> &event_queue) {
 
     // logica de vitoria
     if (_wave_manager.is_completed()) {
+        if (!_music_played) {
+            GameManager::get_instance().play_victory_music(); // toca musica de vitoria sem loopar
+            _music_played = true;
+        }
+
         sf::RectangleShape win_rect((sf::Vector2f)DESKTOP_SIZE);
         win_rect.setFillColor(sf::Color(0, 0, 0, 200));
         _window.draw(win_rect);
@@ -130,6 +147,7 @@ void GameRoom::run(double dt, const std::vector<sf::Event> &event_queue) {
         _window.draw(win_text);
 
         TextButton option_1("Voltar ao menu", _font, 50, [this]() {
+            GameManager::get_instance().stop_all_music(); // para musica de vitoria
             _room_manager.change_room("main_menu");
             }, *this);
         option_1.center();
@@ -145,6 +163,11 @@ void GameRoom::run(double dt, const std::vector<sf::Event> &event_queue) {
         option_2.draw();
     }
     else if( _game_over) {
+        if (!_music_played) {
+            GameManager::get_instance().play_defeat_music(); // toca musica de derrota sem loopar
+            _music_played = true;
+        }
+
         sf::RectangleShape gameover_rect((sf::Vector2f)DESKTOP_SIZE);
         gameover_rect.setFillColor(sf::Color(0, 0, 0, 200));
         _window.draw(gameover_rect);
@@ -157,8 +180,11 @@ void GameRoom::run(double dt, const std::vector<sf::Event> &event_queue) {
         _window.draw(gameover_text);
 
         // botoes do game_over
-        TextButton option_1("Voltar ao menu", _font, 50, [this]() { _room_manager.change_room("main_menu"); 
-                                                                    _game_over = false; }, *this);
+        TextButton option_1("Voltar ao menu", _font, 50, [this]() { 
+            GameManager::get_instance().stop_all_music(); // para musica de derrota
+            _room_manager.change_room("main_menu");                                                         
+            _game_over = false;
+            }, *this);
         option_1.center();
         option_1.offset_position(sf::Vector2f(0, 50));
         option_1.run(event_queue);
@@ -185,13 +211,17 @@ void GameRoom::run(double dt, const std::vector<sf::Event> &event_queue) {
         pause_text.setPosition(DESKTOP_SIZE.x / 2, DESKTOP_SIZE.y / 2 - 150);
         _window.draw(pause_text);
 
-        TextButton option_1("Continuar", _font, 50, [this]() { this->_paused = false; }, *this);
+        TextButton option_1("Continuar", _font, 50, [this]() { 
+            this->_paused = false;
+            GameManager::get_instance().resume_game_music(); // continua musica
+            }, *this);
         option_1.center();
         option_1.offset_position(sf::Vector2f(0, -30)); 
         option_1.run(event_queue);
 
         TextButton option_2("Voltar ao menu", _font, 50, [this]() {
             this->_paused = false;
+            GameManager::get_instance().stop_all_music(); // para musica do jogo
             _room_manager.change_room("main_menu");
             }, *this);
         option_2.center();

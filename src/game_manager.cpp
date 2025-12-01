@@ -69,9 +69,88 @@ sf::Font &GameManager::get_font() {
 // atualizacao do error handling
 void GameManager::load_font(std::string file_path) {
     if (!_font.loadFromFile(file_path)) {
-        throw std::runtime_error("Failha em carregar a fonte de " + file_path);
+        throw std::runtime_error("Falha em carregar a fonte de " + file_path);
     }
 }
+
+// implementacao dos metodos de audio
+
+void GameManager::load_musics() {
+    if (!_menu_music.openFromFile("assets/menu principal.ogg")) {
+        throw std::runtime_error("Erro carregando musica: assets/menu principal.ogg");
+    }
+    if (!_game_music.openFromFile("assets/jogo principal.ogg")) {
+        throw std::runtime_error("Erro carregando musica: assets/jogo principal.ogg");
+    }
+    if (!_victory_music.openFromFile("assets/vitoria.ogg")) {
+        throw std::runtime_error("Erro carregando musica: assets/vitoria.ogg");
+    }
+    if (!_defeat_music.openFromFile("assets/derrota.wav")) {
+        throw std::runtime_error("Erro carregando musica: assets/derrota.wav");
+    }
+
+    // configuracao de loops das musicas
+    _menu_music.setLoop(true);
+    _game_music.setLoop(true);
+    _victory_music.setLoop(false);
+    _defeat_music.setLoop(false);
+}
+
+void GameManager::stop_all_music() {
+    _menu_music.stop();
+    _game_music.stop();
+    _victory_music.stop();
+    _defeat_music.stop();
+}
+
+void GameManager::play_menu_music() {
+    // para as outras musicas -> deve ter um metodo melhor pra isso mas sla
+    _game_music.stop();
+    _victory_music.stop();
+    _defeat_music.stop();
+
+    if (_menu_music.getStatus() != sf::Music::Playing) {
+        _menu_music.play();
+    }
+}
+
+void GameManager::play_game_music() {
+    _menu_music.stop();
+    _victory_music.stop();
+    _defeat_music.stop();
+
+    // se for pra upgrade room a musica continua
+    if (_game_music.getStatus() != sf::Music::Playing) {
+        _game_music.play();
+    }
+}
+
+void GameManager::pause_game_music() {
+    if (_game_music.getStatus() == sf::Music::Playing) {
+        _game_music.pause();
+    }
+}
+
+void GameManager::resume_game_music() {
+    if (_game_music.getStatus() == sf::Music::Paused) {
+        _game_music.play();
+    }
+}
+
+void GameManager::play_victory_music() {
+    _game_music.stop();
+    if (_victory_music.getStatus() != sf::Music::Playing) {
+        _victory_music.play();
+    }
+}
+
+void GameManager::play_defeat_music() {
+    _game_music.stop();
+    if (_defeat_music.getStatus() != sf::Music::Playing) {
+        _defeat_music.play();
+    }
+}
+
 
 void GameManager::set_cooldown_multiplier(double cooldown_multiplier) {
     _cooldown_multiplier = cooldown_multiplier;

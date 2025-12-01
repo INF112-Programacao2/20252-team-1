@@ -141,8 +141,17 @@ void UpgradeRoom::run(double dt, const std::vector<sf::Event> &event_queue) {
     for (const sf::Event &event : event_queue) {
 
         if (event.type == sf::Event::KeyPressed) {
-            if (event.key.code == sf::Keyboard::Escape)
+            if (event.key.code == sf::Keyboard::Escape) {
                 _paused = !_paused;
+
+                // pausa musica
+                if (_paused) {
+                    GameManager::get_instance().pause_game_music();
+                }
+                else {
+                    GameManager::get_instance().resume_game_music();
+                }
+            }
 
             if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Tab)
                 _room_manager.rollback_room();
@@ -187,13 +196,17 @@ void UpgradeRoom::run(double dt, const std::vector<sf::Event> &event_queue) {
         pause_text.setPosition(DESKTOP_SIZE.x / 2, DESKTOP_SIZE.y / 2 - 150);
         _window.draw(pause_text);
 
-        TextButton option_1("Continuar", font, 50, [this]() { this->_paused = false; }, *this);
+        TextButton option_1("Continuar", font, 50, [this]() { 
+            this->_paused = false; 
+            GameManager::get_instance().resume_game_music();
+        }, *this);
         option_1.center();
         option_1.offset_position(sf::Vector2f(0, -30));
         option_1.run(event_queue);
 
         TextButton option_2("Voltar ao menu", font, 50, [this]() {
             this->_paused = false;
+            GameManager::get_instance().stop_all_music();
             _room_manager.change_room("main_menu");
             }, *this);
         option_2.center();

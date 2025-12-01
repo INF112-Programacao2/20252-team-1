@@ -2,6 +2,7 @@
 
 # Bugs:
 - continuar às vezes não carrega as últimas tropas -> N consegui reproduzir
+- O painel solar n atualiza o texto flutuante de pontos depois de um upgrade, mas dá os pontos certos eu acho
 
 # Refatoração:
 
@@ -10,7 +11,6 @@
 # Pra fazer:
 - Mais upgrades
 - Tela de menu inicial (por tutorial e créditos)
-- Música
 - Balancear a dificuldade
 - Tutorial e Créditos
 

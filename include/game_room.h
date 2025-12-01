@@ -22,6 +22,7 @@ private:
     sf::Font &_font;
     Wall _wall;
     bool _game_over;
+    bool _music_played = false;
 
     // lista de efeitos visuais ativos
     std::vector<std::unique_ptr<VisualEffect>> _visual_effects;

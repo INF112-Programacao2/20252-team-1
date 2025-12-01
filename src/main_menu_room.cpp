@@ -36,6 +36,11 @@ MainMenuRoom::MainMenuRoom(sf::RenderWindow &window, RoomManager &room_manager)
     _exit_button.set_on_click_callback([this]() { this->get_window().close(); });
 }
 
+void MainMenuRoom::start() {
+    // comeca musica do menu
+    GameManager::get_instance().play_menu_music();
+}
+
 void MainMenuRoom::change_room(std::string room_name, bool load_save) {
     if (load_save)
         GameManager::get_instance().get_game_saver()->load();
