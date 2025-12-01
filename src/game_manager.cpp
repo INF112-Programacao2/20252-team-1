@@ -1,6 +1,7 @@
 #include "game_manager.h"
 #include "globals.h"
 #include <cmath>
+#include <stdexcept>
 
 void GameManager::reset() {
     _points = 0;
@@ -65,8 +66,11 @@ sf::Font &GameManager::get_font() {
     return _font;
 }
 
-bool GameManager::load_font(std::string file_path) {
-    return _font.loadFromFile(file_path);
+// atualizacao do error handling
+void GameManager::load_font(std::string file_path) {
+    if (!_font.loadFromFile(file_path)) {
+        throw std::runtime_error("Failha em carregar a fonte de " + file_path);
+    }
 }
 
 void GameManager::set_cooldown_multiplier(double cooldown_multiplier) {

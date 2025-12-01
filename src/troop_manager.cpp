@@ -13,6 +13,7 @@
 #include "tree_troop.h"
 #include <iostream>
 #include <cmath>
+#include <stdexcept>
 
 // posicao inicial dos slots (superior esquerdo)
 const sf::Vector2f offset(25, HUD_HEIGHT + PADDING_Y);
@@ -55,83 +56,68 @@ sf::Texture *get_troop_texture(TroopType troop) {
 
 TroopManager::TroopManager(GameRoom &room) : _room(room) {
     // inicializando texturas das tropas:
+    // novo error handling
     if (!HedgehogTroop::load_texture("assets/ourico.png")) {
-        std::cerr << "Nao achou o asset do ourico!\n";
-        std::exit(1);
+        throw std::runtime_error("Nao achou o asset do ourico!");
     }
 
     if (!SolarEnergyTroop::load_texture("assets/energia solar.png")) {
-        std::cerr << "Nao achou o asset energia solar!\n";
-        std::exit(1);
+        throw std::runtime_error("Nao achou o asset energia solar!");
     }
 
     if (!MonkeyTroop::load_texture("assets/macaco.png")) {
-        std::cerr << "Nao achou o asset do macaco!\n";
-        std::exit(1);
+        throw std::runtime_error("Nao achou o asset do macaco!");
     }
 
     if (!SquirrelTroop::load_texture("assets/esquilo.png")) {
-        std::cerr << "Nao achou o asset do esquilo!\n";
-        std::exit(1);
+        throw std::runtime_error("Nao achou o asset do esquilo!");
     }
 
     if (!ElephantTroop::load_texture("assets/elefante.png")) {
-        std::cerr << "Nao achou o asset do elefante!\n";
-        std::exit(1);
+        throw std::runtime_error("Nao achou o asset do elefante!");
     }
 
     if (!GuardTroop::load_texture("assets/guarda.png")) {
-        std::cerr << "Nao achou o asset do guarda!\n";
-        std::exit(1);
+        throw std::runtime_error("Nao achou o asset do guarda!");
     }
 
     if (!MonkeyProjectile::load_texture("assets/banana.png")) {
-        std::cerr << "Nao achou o asset do projetil de macaco!\n";
-        std::exit(1);
+        throw std::runtime_error("Nao achou o asset do projetil de macaco!");
     }
 
     if (!SquirrelProjectile::load_texture("assets/noz.png")) {
-        std::cerr << "Nao achou o asset do projetil de esquilo!\n";
-        std::exit(1);
+        throw std::runtime_error("Nao achou o asset do projetil de esquilo!");
     }
 
     if (!ElephantProjectile::load_texture("assets/agua.png")) {
-        std::cerr << "Nao achou o asset do projetil de elefante!\n";
-        std::exit(1);
+        throw std::runtime_error("Nao achou o asset do projetil de elefante!");
     }
 
     if (!GuardProjectile::load_texture("assets/taser.png")) {
-        std::cerr << "Nao achou o asset do projetil de guarda!\n";
-        std::exit(1);
+        throw std::runtime_error("Nao achou o asset do projetil de guarda!");
     }
 
     if (!AnteaterTroop::load_texture("assets/tamandua.png")) {
-        std::cerr << "Nao achou o asset do tamandua!\n";
-        std::exit(1);
+        throw std::runtime_error("Nao achou o asset do tamandua!");
     }
     if (!AnteaterTroop::load_projectile_texture("assets/dardo.png")) {
-        std::cerr << "Nao achou o asset do dardo!\n";
-        std::exit(1);
+        throw std::runtime_error("Nao achou o asset do dardo!");
     }
 
     if (!TreeTroop::load_texture("assets/arvore.png")) {
-        std::cerr << "Nao achou o asset da arvore!\n";
-        std::exit(1);
+        throw std::runtime_error("Nao achou o asset da arvore!");
     }
 
     if (!DolphinTroop::load_texture("assets/golfinho.png")) {
-        std::cerr << "Nao achou o asset do boto!\n";
-        std::exit(1);
+        throw std::runtime_error("Nao achou o asset do boto!");
     }
 
     if (!DolphinProjectile::load_texture("assets/bolha.png")) {
-        std::cerr << "Nao achou o asset do projetil do boto!\n";
-        std::exit(1);
+        throw std::runtime_error("Nao achou o asset do projetil do boto!");
     }
 
     if (!_shop_background.loadFromFile("assets/shop background.png")) {
-        std::cerr << "Nao achou o asset do background da loja!\n";
-        std::exit(1);
+        throw std::runtime_error("Nao achou o asset do background da loja!");
     }
 
     // inicializando array de tropas vazio
@@ -327,7 +313,6 @@ Troop *TroopManager::instantiate_troop(int slot, TroopType troop_type) {
     int line = row + 1;
     sf::Vector2f position(15 + offset.x + gap_x * col, 15 + offset.y + GAP_Y * row);
 
-    // TODO: colocar o resto dos tipos de tropas
     switch (troop_type) {
     case TroopType::Anteater:
         return new AnteaterTroop(position, line, 4.0, _room);

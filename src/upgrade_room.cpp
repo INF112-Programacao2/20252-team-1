@@ -6,6 +6,7 @@
 #include "wall.h"
 #include <iostream>
 #include <cmath>
+#include <stdexcept>
 
 UpgradeRoom::UpgradeRoom(sf::RenderWindow &window, RoomManager &room_manager)
     : Room(window, room_manager),
@@ -122,9 +123,9 @@ UpgradeRoom::UpgradeRoom(sf::RenderWindow &window, RoomManager &room_manager)
               }),
       } {
 
+    // novo error handling
     if (!_hud_background.loadFromFile("assets/hud.png")) {
-        std::cerr << "Erro abrindo asset da HUD!\n";
-        std::exit(1);
+        throw std::runtime_error("Erro abrindo asset da HUD para upgrade room (assets/hud.png)");
     }
 
     _hud_background.setRepeated(true);

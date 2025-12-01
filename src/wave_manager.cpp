@@ -8,52 +8,45 @@
 #include "trash_enemy.h"
 #include "game_manager.h"
 #include <iostream>
+#include <stdexcept>
 
 WaveManager::WaveManager(Room &room) : _room(room) {
     // carregando texturas:
+    // novo error handling
     if (!LumberjackEnemy::load_texture("assets/madeireiro.png")) {
-        std::cerr << "Nao achou o asset do madeireiro!\n";
-        std::exit(1);
+        throw std::runtime_error("Nao achou o asset do madeireiro!");
     }
 
     if (!FireEnemy::load_texture("assets/fogo.png")) {
-        std::cerr << "Nao achou o asset do inimigo de fogo!\n";
-        std::exit(1);
+        throw std::runtime_error("Nao achou o asset do inimigo de fogo!");
     }
 
     if (!HunterEnemy::load_texture("assets/hunter.png")) {
-        std::cerr << "Nao achou o asset do hunter!\n";
-        std::exit(1);
+        throw std::runtime_error("Nao achou o asset do hunter!");
     }
 
     if (!HunterEnemy::load_projectile_texture("assets/hunter_projectile.png")) {
-        std::cerr << "Nao achou o asset do projetil do hunter!\n";
-        std::exit(1);
+        throw std::runtime_error("Nao achou o asset do projetil do hunter!");
     }
 
     if (!ExcavatorEnemy::load_texture("assets/excavator.png")) {
-        std::cerr << "Nao achou o asset do excavator!\n";
-        std::exit(1);
+        throw std::runtime_error("Nao achou o asset do excavator!");
     }
 
     if (!TrashmanEnemy::load_texture("assets/caminhao.png")) {
-        std::cerr << "Nao achou o asset do poluidor!\n";
-        std::exit(1);
+        throw std::runtime_error("Nao achou o asset do poluidor!");
     }
 
     if (!TrashEnemy::load_texture("assets/lixo.png")) {
-        std::cerr << "Nao achou o asset do lixo!\n";
-        std::exit(1);
+        throw std::runtime_error("Nao achou o asset do lixo!");
     }
 
     if (!BusinessmanEnemy::load_texture("assets/empresario.png")) {
-        std::cerr << "Nao achou o asset do empresario!\n";
-        std::exit(1);
+        throw std::runtime_error("Nao achou o asset do empresario!");
     }
 
     if (!BusinessmanEnemy::load_projectile_texture("assets/dinheiro.png")) {
-        std::cerr << "Nao achou o asset do projetil do empresario!\n";
-        std::exit(1);
+        throw std::runtime_error("Nao achou o asset do projetil do empresario!");
     }
 
     setup_waves();
@@ -122,7 +115,7 @@ void WaveManager::spawn_enemy(EnemyType enemy_type, int line) {
     case EnemyType::Lumberjack:
         // vida, dano, linha, velocidade, cooldown, pontos, sala
         _enemys.push_back(std::make_shared<LumberjackEnemy>(150 * difficulty_multiplier,
-                                                            2500 * difficulty_multiplier, line, 50.0, 3.0, 20, _room));
+                                                            25 * difficulty_multiplier, line, 50.0, 3.0, 20, _room));
         break;
 
     case EnemyType::FireEnemyType:

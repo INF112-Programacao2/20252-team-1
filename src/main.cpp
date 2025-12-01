@@ -1,5 +1,6 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
+#include <stdexcept> // novo error handling
 #include "room_manager.h"
 #include "game_room.h"
 #include "game_manager.h"
@@ -8,72 +9,76 @@
 #include "game_saver.h"
 
 int main() {
-    std::srand(std::time(0));
+    try {
+        std::srand(std::time(0));
 
-    // carrega a fonte no game manager
-    if (!GameManager::get_instance().load_font("assets/Minecraftia-Regular.ttf")) {
-        std::cerr << "***\nNao foi possivel encontrar a fonte em \""
-                  << "assets/Minecraftia-Regular.ttf"
-                  << "\"\n***" << std::endl;
+        // carrega a fonte no game manager, da throw se falhar
+        GameManager::get_instance().load_font("assets/Minecraftia-Regular.ttf");
 
-        std::exit(1);
-    }
+        const bool FULLSCREEN = true; //! Use false somente para debug
+        const bool WINDOWS = false;   //! DEBUG, coloque true se esta compilando para windows
 
-    const bool FULLSCREEN = true; //! Use false somente para debug
-    const bool WINDOWS = false;   //! DEBUG, coloque true se esta compilando para windows
+        // deixa em tela cheia
+        sf::VideoMode desktop = sf::VideoMode::getDesktopMode();
+        sf::RenderWindow window(
+            sf::VideoMode(desktop.width, desktop.height),
+            "Jogo",
+            (FULLSCREEN ? (WINDOWS ? sf::Style::Fullscreen
+                : (sf::Style::Titlebar | sf::Style::Close))
+                : 7));
 
-    // deixa em tela cheia
-    sf::VideoMode desktop = sf::VideoMode::getDesktopMode();
-    sf::RenderWindow window(
-        sf::VideoMode(desktop.width, desktop.height),
-        "Jogo",
-        (FULLSCREEN ? (WINDOWS ? sf::Style::Fullscreen
-                               : (sf::Style::Titlebar | sf::Style::Close))
-                    : 7));
+        if (FULLSCREEN)
+            window.setPosition(sf::Vector2i(0, 0));
+        else
+            window.setPosition(sf::Vector2i(50, 50));
 
-    if (FULLSCREEN)
-        window.setPosition(sf::Vector2i(0, 0));
-    else
-        window.setPosition(sf::Vector2i(50, 50));
+        window.setVerticalSyncEnabled(true);
 
-    window.setVerticalSyncEnabled(true);
+        // Criando as salas
+        RoomManager room_manager;
 
-    // Criando as salas
-    RoomManager room_manager;
+        GameRoom game_room(window, room_manager);
+        UpgradeRoom upgrade_room(window, room_manager);
 
-    GameRoom game_room(window, room_manager);
-    UpgradeRoom upgrade_room(window, room_manager);
+        // Criando o game saver (quem decide se vai carregar ou nao e o main menu)
+        GameSaver game_saver("save.txt", game_room, upgrade_room);
+        MainMenuRoom main_menu_room(window, room_manager);
 
-    // Criando o game saver (quem decide se vai carregar ou nao e o main menu)
-    GameSaver game_saver("save.txt", game_room, upgrade_room);
-    MainMenuRoom main_menu_room(window, room_manager);
+        GameManager::get_instance().set_game_saver(&game_saver);
 
-    GameManager::get_instance().set_game_saver(&game_saver);
+        room_manager.add_room("main_menu", &main_menu_room);
+        room_manager.add_room("game", &game_room);
+        room_manager.add_room("upgrade", &upgrade_room);
+        room_manager.change_room("main_menu");
 
-    room_manager.add_room("main_menu", &main_menu_room);
-    room_manager.add_room("game", &game_room);
-    room_manager.add_room("upgrade", &upgrade_room);
-    room_manager.change_room("main_menu");
+        sf::Clock delta_clock; // calcula o delta time (segundos entre o ultimo frame)
 
-    sf::Clock delta_clock; // calcula o delta time (segundos entre o ultimo frame)
+        // loop principal
+        while (window.isOpen()) {
+            sf::Event event;
+            while (window.pollEvent(event)) {
+                //! fecha a janela quando aperta 'R' ou clica no botao (somente debug)
+                if ((event.type == sf::Event::Closed) ||
+                    (event.type == sf::Event::KeyReleased && event.key.code == sf::Keyboard::R)) {
+                    window.close();
+                }
 
-    // loop principal
-    while (window.isOpen()) {
-        sf::Event event;
-        while (window.pollEvent(event)) {
-            //! fecha a janela quando aperta 'R' ou clica no botao (somente debug)
-            if ((event.type == sf::Event::Closed) ||
-                (event.type == sf::Event::KeyReleased && event.key.code == sf::Keyboard::R)) {
-                window.close();
+                room_manager.add_event(event);
             }
 
-            room_manager.add_event(event);
+            room_manager.run(delta_clock.restart().asSeconds());
         }
 
-        room_manager.run(delta_clock.restart().asSeconds());
+        room_manager.close();
     }
-
-    room_manager.close();
+    catch (const std::exception& e) {
+        std::cerr << "ERRO CRITICO: " << e.what() << std::endl;
+        return 1;
+    }
+    catch (...) {
+        std::cerr << "ERRO DESCONHECIDO OCORREU!" << std::endl;
+        return 1;
+    }
 
     return 0;
 }

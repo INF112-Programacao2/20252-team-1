@@ -1,5 +1,6 @@
 #include <iostream>
 #include <cmath>
+#include <stdexcept> 
 #include "game_room.h"
 #include "globals.h"
 #include "text_button.h"
@@ -15,23 +16,22 @@ GameRoom::GameRoom(sf::RenderWindow &window, RoomManager &room_manager)
       _wall(1000, 0, *this) {
 
     GameManager::get_instance().set_game_room(this);
+
+    // novo error handling
     if (!Wall::load_texture("assets/muro.png")) {
-        std::cerr << "Erro abrindo asset do muro!\n";
-        std::exit(1);
+        throw std::runtime_error("Erro abrindo asset do muro (assets/muro.png)");
     }
 
     if (!_background.loadFromFile("assets/background.png")) {
-        std::cerr << "Erro abrindo asset do background!\n";
-        std::exit(1);
+        throw std::runtime_error("Erro abrindo asset do background (assets/background.png)");
     }
+
     if (!_background2.loadFromFile("assets/background22.png")) {
-        std::cerr << "Erro abrindo asset do background2!\n";
-        std::exit(1);
+        throw std::runtime_error("Erro abrindo asset do background2 (assets/background22.png)");
     }
 
     if (!_hud_background.loadFromFile("assets/hud.png")) {
-        std::cerr << "Erro abrindo asset da HUD!\n";
-        std::exit(1);
+        throw std::runtime_error("Erro abrindo asset da HUD (assets/hud.png)");
     }
 
     _background.setRepeated(true);

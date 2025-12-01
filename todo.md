@@ -8,7 +8,6 @@
 # Perguntas sobre implementação:
 
 # Pra fazer:
-- Tratamento de exceção na leitura de assets
 - Mais upgrades
 - Tela de menu inicial (por tutorial e créditos)
 - Música

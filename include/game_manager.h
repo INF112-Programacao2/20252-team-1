@@ -56,7 +56,9 @@ public:
     void set_crit_chance(int chance);
 
     sf::Font &get_font();
-    bool load_font(std::string file_path);
+
+    // update para melhor o error handling
+    void load_font(std::string file_path);
 
     /// Retorna o indice da linha mais proxima, comecando do 0
     static int get_line(sf::Vector2f position);
