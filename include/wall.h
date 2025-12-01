@@ -15,6 +15,7 @@ private:
     static sf::Texture _texture;
 
     HealthManager _health;
+    double _resistance = 0.0;
     double _burning_time = 0.0;
     double _burn_damage_accumulator = 0.0; // acumula dano fracionado do fogo
     double _burn_dps = 0.0;                // dano por segundo do fogo
@@ -70,6 +71,8 @@ public:
 
     void set_spike_damage(int amount);
     void increase_spike_damage(int amount);
+
+    void increase_resistance(double amount);
 
     bool game_over();
 

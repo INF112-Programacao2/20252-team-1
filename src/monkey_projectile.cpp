@@ -1,4 +1,5 @@
 #include "monkey_projectile.h"
+#include "game_manager.h"
 #include <cmath>
 
 sf::Texture MonkeyProjectile::_texture;
@@ -9,6 +10,9 @@ MonkeyProjectile::MonkeyProjectile(sf::Vector2f position, std::weak_ptr<Enemy> t
 
     _shape.setTexture(&_texture);
     _shape.setOrigin(_shape.getGlobalBounds().getSize() * .5f);
+
+    double mult = GameManager::get_instance().get_special_ability_multiplier();
+    _slowdown_pct = slowdown_pct * mult;
 }
 
 void MonkeyProjectile::draw() {

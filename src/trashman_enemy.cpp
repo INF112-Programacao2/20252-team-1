@@ -6,8 +6,8 @@ sf::Texture TrashmanEnemy::_texture;
 
 // altura visual
 const float height = 150;
-// distancia que ele para do muro (maior que a do Hunter que eh 400)
-const float SPAWN_RANGE = 600.0f;
+// distancia que ele para do muro
+const float SPAWN_RANGE = 540.0f;
 
 TrashmanEnemy::TrashmanEnemy(int base_life, int damage, int line, double speed, double base_cooldown, int points, Room &room)
     : Enemy(base_life, damage, line, speed, base_cooldown, points, room) {
@@ -54,4 +54,22 @@ void TrashmanEnemy::draw() {
 
 bool TrashmanEnemy::load_texture(const std::string &file_path) {
     return _texture.loadFromFile(file_path);
+}
+
+double TrashmanEnemy::get_type_multiplier(ProjectileType type) {
+    switch (type) {
+    case ProjectileType::AnteaterProjectileType:
+        return 0.75;
+    case ProjectileType::MonkeyProjectileType:
+        return 0.75;
+    case ProjectileType::DolphinProjectileType:
+        return 1.5;
+    case ProjectileType::GuardProjectileType:
+        return 1.25;
+    case ProjectileType::SquirrelProjectileType:
+        return 1.5;
+
+    default:
+        return 1.0;
+    }
 }

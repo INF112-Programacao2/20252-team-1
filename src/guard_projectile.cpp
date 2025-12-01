@@ -1,4 +1,5 @@
 #include "guard_projectile.h"
+#include "game_manager.h"
 
 sf::Texture GuardProjectile::_texture;
 
@@ -6,6 +7,10 @@ GuardProjectile::GuardProjectile(sf::Vector2f position, std::weak_ptr<Enemy> tar
     : TroopProjectile(position, target, damage, speed, room, ProjectileType::GuardProjectileType), _stun_duation(stun_duration), _shape({ 35, 35 }) {
     _shape.setTexture(&_texture);
     _shape.setOrigin(_shape.getGlobalBounds().getSize() * .5f);
+
+    double mult = GameManager::get_instance().get_special_ability_multiplier();
+    double base_time = _stun_duation.get_timeout_duration();
+    _stun_duation.set_timeout_duration(base_time * mult);
 }
 
 void GuardProjectile::draw() {

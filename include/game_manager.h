@@ -11,11 +11,12 @@ class GameRoom;
 class GameManager {
 private:
     int _points = 0;
-    double _cooldown_multiplier = 1.0;     // entre 0-1, quanto menor mais rapido o cooldown
-    double _damage_multiplier = 1.0;       // quanto maior mais dano os inimigos sofrem
-    double _troop_damage_multiplier = 1.0; // quanto maior mais dano as tropas dao nos inimigos
-    double _point_multiplier = 1.0;        // quanto maior o valor, maior a pontuacao final
-    int _crit_chance = 0;                  // quanto maior o valor, maior a chance de critico
+    double _cooldown_multiplier = 1.0;          // entre 0-1, quanto menor mais rapido o cooldown
+    double _damage_multiplier = 1.0;            // quanto maior mais dano os inimigos sofrem
+    double _troop_damage_multiplier = 1.0;      // quanto maior mais dano as tropas dao nos inimigos
+    double _point_multiplier = 1.0;             // quanto maior o valor, maior a pontuacao final
+    int _crit_chance = 0;                       // quanto maior o valor, maior a chance de critico
+    double _special_ability_multiplier = 1.0;   // quanto maioro valor, maior a potencia das habilidades das tropas
     sf::Font _font;
     GameRoom *_game_room = nullptr;
     GameSaver *_game_saver;
@@ -61,6 +62,9 @@ public:
 
     int get_crit_chance();
     void set_crit_chance(int chance);
+
+    double get_special_ability_multiplier();
+    void set_special_ability_multiplier(double value);
 
     sf::Font &get_font();
 

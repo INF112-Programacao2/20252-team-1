@@ -7,6 +7,7 @@ const float width = 250.f;
 const float height = 300.f;
 const float padding_x = 20.f;
 const int desc_tamanho = 14;
+sf::Texture UpgradeUI::_bg_texture;
 
 UpgradeUI::UpgradeUI(std::string nome, int preco, int incremento, int level, int max_level, std::string descricao,
     sf::Vector2f position, Room &room, std::function<void()> on_buy_callback)
@@ -132,11 +133,18 @@ void UpgradeUI::draw() {
 
     sf::RectangleShape rectangle({width, height});
 
-    if(is_hovering) {
-        rectangle.setFillColor(sf::Color(125, 65, 40));
-        rectangle.setOutlineColor(sf::Color::Yellow);
+    if (_bg_texture.getSize().x > 0) {
+        rectangle.setTexture(&_bg_texture);
+        rectangle.setFillColor(sf::Color::White); // Reseta a cor para mostrar a imagem original
     } else {
-        rectangle.setFillColor(sf::Color(85, 25, 0));
+        // Fallback: Se não tiver textura, usa a cor marrom antiga
+        rectangle.setFillColor(is_hovering ? sf::Color(125, 65, 40) : sf::Color(85, 25, 0));
+    }
+
+    if (is_hovering) {
+        rectangle.setOutlineColor(sf::Color::Yellow);
+    } 
+    else {
         rectangle.setOutlineColor(sf::Color::White);
     }
 
@@ -211,4 +219,8 @@ void UpgradeUI::set_level(int level) {
     _preco = _base_price + (_incremento * level);
     for (int i = 0; i < level; i++)
         _on_buy_callback(); // compra os upgrades
+}
+
+bool UpgradeUI::load_texture(const std::string& path) {
+    return _bg_texture.loadFromFile(path);
 }

@@ -13,24 +13,24 @@ UpgradeRoom::UpgradeRoom(sf::RenderWindow &window, RoomManager &room_manager)
       _upgrades{
           UpgradeUI(
               "Ponto Fraco",                                            // Nome
-              1000,                                                      // Preço
-              2000,                                                      // Incremento do preço
+              1000,                                                     // Preço
+              1850,                                                     // Incremento do preço
               0,                                                        // Nivel atual
               3,                                                        // Nivel maximo
               "Aumenta o dano geral que os inimigos levam em 10%",      // Descricao
-              sf::Vector2f(75, 170),                                    // Posicao
+              sf::Vector2f(1275, 170),                                   // Posicao
               *this,                                                    // Room
 
               []() { // Funcao do upgrade
                   GameManager &gm = GameManager::get_instance();
                   double atual = gm.get_damage_multiplier();
 
-                  gm.set_damage_multiplier(atual + 0.10);
+                  gm.set_damage_multiplier(atual + 0.1);
               }),
           UpgradeUI(
               "Ataque Rapido",                                   // Nome
-              300,                                               // Preço
-              600,                                               // Incremento do preço
+              800,                                               // Preço
+              1500,                                              // Incremento do preço
               0,                                                 // Nivel atual
               5,                                                 // Nivel máximo
               "Reduz o tempo base de recarga das tropas em 10%", // Descricao
@@ -48,12 +48,12 @@ UpgradeRoom::UpgradeRoom(sf::RenderWindow &window, RoomManager &room_manager)
               }),
           UpgradeUI(
               "Mais Vida",
-              400,
+              500,
               800,
               0,
               8,
               "Aumenta a vida maxima e a vida atual do muro em 250",
-              sf::Vector2f(675, 170),
+              sf::Vector2f(75, 170),
               *this,
 
               []() {
@@ -65,27 +65,27 @@ UpgradeRoom::UpgradeRoom(sf::RenderWindow &window, RoomManager &room_manager)
               }),
           UpgradeUI(
               "Espinhos",
-              500,
-              400,
+              700,
+              1200,
               0,
               3,
-              "Agora o muro tem espinhos! Sempre que um inimigo causar dano no muro, este inimigo vai receber dano dos espinhos. +10 de dano por nivel",
+              "Agora a floresta tem espinhos! Sempre que um inimigo causar dano nela, este inimigo vai receber dano dos espinhos. +15 de dano por nivel",
               sf::Vector2f(975, 170),
               *this,
 
               []() {
                   GameManager &gm = GameManager::get_instance();
                   Wall &wall = gm.get_game_room().get_wall();
-                  wall.increase_spike_damage(10);
+                  wall.increase_spike_damage(15);
               }),
           UpgradeUI(
               "Investidor",
               1000,
-              5000,
+              3000,
               0,
               5,
               "Aumenta o ganho total de pontos de todas as fontes em 10%",
-              sf::Vector2f(1275, 170),
+              sf::Vector2f(1575, 170),
               *this,
 
               []() {
@@ -95,24 +95,24 @@ UpgradeRoom::UpgradeRoom(sf::RenderWindow &window, RoomManager &room_manager)
               }),
           UpgradeUI(
               "Tropas Fortes", 
-              400,
-              1200,
+              900,
+              2000,
               0,
               5,
-              "Aumenta o dano causado pelas tropas em 15%", 
-              sf::Vector2f(1575, 170),
+              "Aumenta o dano causado pelas tropas em 20%", 
+              sf::Vector2f(675, 170),
               *this,
               []() {
                   GameManager &gm = GameManager::get_instance();
                   double atual = gm.get_troop_damage_multiplier();
-                  gm.set_troop_damage_multiplier(atual + 0.15); 
+                  gm.set_troop_damage_multiplier(atual + 0.2); 
               }),
           UpgradeUI(
-              "Tiro preciso", 
-              800,
+              "Tiro Preciso", 
+              1000,
               1600,
               0,
-              5,
+              3,
               "As tropas tem +10% de chance de causar o dobro de dano", 
               sf::Vector2f(75, 570),
               *this, 
@@ -121,6 +121,34 @@ UpgradeRoom::UpgradeRoom(sf::RenderWindow &window, RoomManager &room_manager)
                   int atual = gm.get_crit_chance();
                   gm.set_crit_chance(atual + 10); 
               }),
+          UpgradeUI(
+              "Floresta Densa",
+              1000,
+              1450,
+              0,
+              5,
+              "Aumenta a resistencia da floresta em 10%",
+              sf::Vector2f(375, 570),
+              *this,
+              []() {
+                  GameManager &gm = GameManager::get_instance();
+                  Wall &wall = gm.get_game_room().get_wall();
+                  wall.increase_resistance(0.1);
+              }),
+          UpgradeUI(
+              "Maestria",
+              1250,
+              1500,
+              0,
+              5,
+              "Aumenta a eficacia das habilidades especiais das tropas (lentidao, atordoamento, area) em 10%", 
+              sf::Vector2f(675, 570),
+              *this,
+              []() {
+                  GameManager &gm = GameManager::get_instance();
+                  double atual = gm.get_special_ability_multiplier();
+                  gm.set_special_ability_multiplier(atual + 0.1); 
+                }),
       } {
 
     // novo error handling
@@ -129,6 +157,20 @@ UpgradeRoom::UpgradeRoom(sf::RenderWindow &window, RoomManager &room_manager)
     }
 
     _hud_background.setRepeated(true);
+
+    if (!UpgradeUI::load_texture("assets/madeira.png")) {
+        std::cerr << "Erro abrindo o asset do upgrade!\n";
+        std::exit(1);
+    }
+
+    if (!_bg_texture.loadFromFile("assets/folhasbg.png")) {
+        std::cerr << "Erro abrindo o asset do background de upgrades!\n";
+        std::exit(1);
+    } 
+    _bg_sprite.setTexture(_bg_texture);
+    float scaleX = (float)DESKTOP_SIZE.x / _bg_texture.getSize().x;
+    float scaleY = (float)DESKTOP_SIZE.y / _bg_texture.getSize().y;
+    _bg_sprite.setScale(scaleX, scaleY);
 }
 
 UpgradeRoom::~UpgradeRoom() = default;
@@ -158,7 +200,7 @@ void UpgradeRoom::run(double dt, const std::vector<sf::Event> &event_queue) {
         }
     }
 
-    _window.clear(sf::Color(50, 150, 50));
+    _window.draw(_bg_sprite);
 
     sf::Text points_text(
         "Pontos: " + std::to_string(GameManager::get_instance().get_points()), (GameManager::get_instance().get_font()), 40);
@@ -171,6 +213,11 @@ void UpgradeRoom::run(double dt, const std::vector<sf::Event> &event_queue) {
     hud_rect.setTextureRect(sf::IntRect(0, 0, DESKTOP_SIZE.x, _hud_background.getSize().y));
     hud_rect.scale(1.2, 1.2);
     _window.draw(hud_rect);
+
+    // Health_bar
+    GameManager &gm = GameManager::get_instance();
+    Wall &wall = gm.get_game_room().get_wall();
+    wall.draw_wall_health_bar();
 
     // Upgrades
     for (auto &upgrade : _upgrades) {

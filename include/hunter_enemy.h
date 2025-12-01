@@ -24,6 +24,8 @@ public:
     static bool load_texture(const std::string& file_path);
 
     static bool load_projectile_texture(const std::string& file_path);
+
+    double get_type_multiplier(ProjectileType type) override;
 };
 
 #endif

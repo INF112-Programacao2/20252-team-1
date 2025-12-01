@@ -8,7 +8,7 @@ sf::Texture HunterEnemy::_projectile_texture;
 // Altura visual
 const float height = 100;
 // Distancia do muro que ele deve parar
-const float ATTACK_RANGE = 400.0f;
+const float ATTACK_RANGE = 640.0f;
 
 HunterEnemy::HunterEnemy(int base_life, int damage, int line, double speed, double base_cooldown, int points, Room &room)
     : Enemy(base_life, damage, line, speed, base_cooldown, points, room) {
@@ -79,4 +79,20 @@ bool HunterEnemy::load_texture(const std::string &file_path) {
 
 bool HunterEnemy::load_projectile_texture(const std::string &file_path) {
     return _projectile_texture.loadFromFile(file_path);
+}
+
+double HunterEnemy::get_type_multiplier(ProjectileType type) {
+    switch (type) {
+    case ProjectileType::AnteaterProjectileType:
+        return 1.05;
+    case ProjectileType::ElephantProjectileType:
+        return 0.5;
+    case ProjectileType::DolphinProjectileType:
+        return 0.75;
+    case ProjectileType::GuardProjectileType:
+        return 1.5;
+
+    default:
+        return 1.0;
+    }
 }

@@ -21,6 +21,8 @@ public:
     void draw() override;
     
     static bool load_texture(const std::string& file_path);
+
+    double get_type_multiplier(ProjectileType type) override;
 };
 
 

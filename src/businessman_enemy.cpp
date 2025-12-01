@@ -9,8 +9,7 @@ sf::Texture BusinessmanEnemy::_projectile_texture;
 
 const float height = 100;
 
-// o hunter para em 400 entao 250 faz o Businessman chegar mais perto
-const float ATTACK_RANGE = 250.0f;
+const float ATTACK_RANGE = 500.0f;
 
 BusinessmanEnemy::BusinessmanEnemy(int base_life, int damage, int line, double speed, double base_cooldown, int heal_amount, double heal_radius, int points, Room& room)
     : Enemy(base_life, damage, line, speed, base_cooldown, points, room) {
@@ -113,4 +112,20 @@ bool BusinessmanEnemy::load_texture(const std::string& file_path) {
 
 bool BusinessmanEnemy::load_projectile_texture(const std::string& file_path) {
     return _projectile_texture.loadFromFile(file_path);
+}
+
+double BusinessmanEnemy::get_type_multiplier(ProjectileType type) {
+    switch (type) {
+    case ProjectileType::AnteaterProjectileType:
+        return 1.05;
+    case ProjectileType::ElephantProjectileType:
+        return 0.5;
+    case ProjectileType::DolphinProjectileType:
+        return 0.75;
+    case ProjectileType::GuardProjectileType:
+        return 1.5;
+
+    default:
+        return 1.0;
+    }
 }
