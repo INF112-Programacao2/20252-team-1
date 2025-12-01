@@ -6,6 +6,7 @@
 #include "room.h"
 #include "upgradeUI.h"
 #include "globals.h"
+#include "volume_controller.h"
 
 class UpgradeRoom : public Room {
 private:
@@ -14,6 +15,7 @@ private:
     sf::Texture _hud_background;
     sf::Texture _bg_texture;
     sf::Sprite _bg_sprite;
+    VolumeController _volume_control;
 
 public:
     UpgradeRoom(sf::RenderWindow &window, RoomManager &room_manager);

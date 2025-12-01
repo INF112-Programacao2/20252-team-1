@@ -13,7 +13,8 @@ GameRoom::GameRoom(sf::RenderWindow &window, RoomManager &room_manager)
       _troop_manager(*this),
       _wave_manager(*this),
       _font(GameManager::get_instance().get_font()),
-      _wall(1000, 0, *this) {
+      _wall(1000, 0, *this),
+      _volume_control(*this) {
 
     GameManager::get_instance().set_game_room(this);
 
@@ -128,7 +129,7 @@ void GameRoom::run(double dt, const std::vector<sf::Event> &event_queue) {
 
     // Mostra a wave
     sf::Text wave_text("Onda: " + std::to_string(_wave_manager.get_wave_idx() + 1), _font, 40);
-    wave_text.setPosition(sf::Vector2f(170, 50)); 
+    wave_text.setPosition(sf::Vector2f(170, 50));
     _window.draw(wave_text);
 
     // logica de vitoria
@@ -234,6 +235,9 @@ void GameRoom::run(double dt, const std::vector<sf::Event> &event_queue) {
         option_1.draw();
         option_2.draw();
         option_3.draw();
+
+        _volume_control.run(event_queue);
+        _volume_control.draw();
     }
 
     // !DEBUG (MOSTRA FRAMERATE)

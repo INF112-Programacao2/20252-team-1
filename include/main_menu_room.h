@@ -5,6 +5,7 @@
 #include <string>
 #include "room.h"
 #include "text_button.h"
+#include "volume_controller.h"
 
 class MainMenuRoom : public Room {
 private:
@@ -14,6 +15,7 @@ private:
     TextButton _tutorial_button;
     TextButton _credits_button;
     TextButton _exit_button;
+    VolumeController _volume_controller;
 
 public:
     MainMenuRoom(sf::RenderWindow &window, RoomManager &room_manager);

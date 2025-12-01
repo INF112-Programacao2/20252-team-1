@@ -11,12 +11,12 @@ class GameRoom;
 class GameManager {
 private:
     int _points = 0;
-    double _cooldown_multiplier = 1.0;          // entre 0-1, quanto menor mais rapido o cooldown
-    double _damage_multiplier = 1.0;            // quanto maior mais dano os inimigos sofrem
-    double _troop_damage_multiplier = 1.0;      // quanto maior mais dano as tropas dao nos inimigos
-    double _point_multiplier = 1.0;             // quanto maior o valor, maior a pontuacao final
-    int _crit_chance = 0;                       // quanto maior o valor, maior a chance de critico
-    double _special_ability_multiplier = 1.0;   // quanto maioro valor, maior a potencia das habilidades das tropas
+    double _cooldown_multiplier = 1.0;        // entre 0-1, quanto menor mais rapido o cooldown
+    double _damage_multiplier = 1.0;          // quanto maior mais dano os inimigos sofrem
+    double _troop_damage_multiplier = 1.0;    // quanto maior mais dano as tropas dao nos inimigos
+    double _point_multiplier = 1.0;           // quanto maior o valor, maior a pontuacao final
+    int _crit_chance = 0;                     // quanto maior o valor, maior a chance de critico
+    double _special_ability_multiplier = 1.0; // quanto maioro valor, maior a potencia das habilidades das tropas
     sf::Font _font;
     GameRoom *_game_room = nullptr;
     GameSaver *_game_saver;
@@ -26,6 +26,7 @@ private:
     sf::Music _game_music;
     sf::Music _victory_music;
     sf::Music _defeat_music;
+    float _volume = 50;
 
 private:
     GameManager() {}
@@ -72,14 +73,18 @@ public:
     void load_font(std::string file_path);
 
     // metodos para audio
-    void load_musics(); // carrega tudo
-    void play_menu_music(); // toca musica do menu
-    void play_game_music(); // toca musica do jogo
-    void pause_game_music(); // pausa musica do jogo
-    void resume_game_music(); // volta musica do jogo
+    void load_musics();        // carrega tudo
+    void play_menu_music();    // toca musica do menu
+    void play_game_music();    // toca musica do jogo
+    void pause_game_music();   // pausa musica do jogo
+    void resume_game_music();  // volta musica do jogo
     void play_victory_music(); // toca musica de vitoria
-    void play_defeat_music(); // toca musica de derrota
-    void stop_all_music(); // para todas as musicas
+    void play_defeat_music();  // toca musica de derrota
+    void stop_all_music();     // para todas as musicas
+    float get_music_volume();
+    void set_music_volume(float volume);
+    void increase_volume(float volume);
+    void decrease_volume(float volume);
 
     /// Retorna o indice da linha mais proxima, comecando do 0
     static int get_line(sf::Vector2f position);

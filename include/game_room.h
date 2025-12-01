@@ -8,6 +8,7 @@
 #include "wave_manager.h"
 #include "wall.h"
 #include "room.h"
+#include "volume_controller.h"
 
 // forward declaration para evitar include circular
 class VisualEffect;
@@ -23,6 +24,7 @@ private:
     Wall _wall;
     bool _game_over;
     bool _music_played = false;
+    VolumeController _volume_control;
 
     // lista de efeitos visuais ativos
     std::vector<std::unique_ptr<VisualEffect>> _visual_effects;

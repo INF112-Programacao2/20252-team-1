@@ -104,9 +104,13 @@ void GameManager::load_musics() {
 
     // configuracao de loops das musicas
     _menu_music.setLoop(true);
+    _menu_music.setVolume(_volume);
     _game_music.setLoop(true);
+    _game_music.setVolume(_volume);
     _victory_music.setLoop(false);
+    _victory_music.setVolume(_volume);
     _defeat_music.setLoop(false);
+    _defeat_music.setVolume(_volume);
 }
 
 void GameManager::stop_all_music() {
@@ -136,6 +140,37 @@ void GameManager::play_game_music() {
     if (_game_music.getStatus() != sf::Music::Playing) {
         _game_music.play();
     }
+}
+
+float GameManager::get_music_volume() {
+    return _volume;
+}
+
+void GameManager::set_music_volume(float volume) {
+    _volume = volume;
+
+    _menu_music.setVolume(_volume);
+    _game_music.setVolume(_volume);
+    _victory_music.setVolume(_volume);
+    _defeat_music.setVolume(_volume);
+}
+
+void GameManager::increase_volume(float volume) {
+    _volume = std::min(100.f, _volume + volume);
+
+    _menu_music.setVolume(_volume);
+    _game_music.setVolume(_volume);
+    _victory_music.setVolume(_volume);
+    _defeat_music.setVolume(_volume);
+}
+
+void GameManager::decrease_volume(float volume) {
+    _volume = std::max(0.f, _volume - volume);
+
+    _menu_music.setVolume(_volume);
+    _game_music.setVolume(_volume);
+    _victory_music.setVolume(_volume);
+    _defeat_music.setVolume(_volume);
 }
 
 void GameManager::pause_game_music() {

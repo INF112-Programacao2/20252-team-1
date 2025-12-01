@@ -12,7 +12,8 @@ MainMenuRoom::MainMenuRoom(sf::RenderWindow &window, RoomManager &room_manager)
       _new_game_button("Novo Jogo", _font, font_size, *this),
       _tutorial_button("Tutorial", _font, font_size, *this),
       _credits_button("Creditos", _font, font_size, *this),
-      _exit_button("Sair", _font, font_size, *this) {
+      _exit_button("Sair", _font, font_size, *this),
+      _volume_controller(*this) {
 
     // centraliza os botoes
     _continue_button.center();
@@ -57,6 +58,8 @@ void MainMenuRoom::run(double _dt, const std::vector<sf::Event> &event_queue) {
     _credits_button.run(event_queue);
     _exit_button.run(event_queue);
 
+    _volume_controller.run(event_queue);
+
     draw();
 }
 
@@ -68,6 +71,8 @@ void MainMenuRoom::draw() {
     _tutorial_button.draw();
     _credits_button.draw();
     _exit_button.draw();
+
+    _volume_controller.draw();
 
     get_window().display();
 }

@@ -12,14 +12,14 @@ UpgradeRoom::UpgradeRoom(sf::RenderWindow &window, RoomManager &room_manager)
     : Room(window, room_manager),
       _upgrades{
           UpgradeUI(
-              "Ponto Fraco",                                            // Nome
-              1000,                                                     // Preço
-              1850,                                                     // Incremento do preço
-              0,                                                        // Nivel atual
-              3,                                                        // Nivel maximo
-              "Aumenta o dano geral que os inimigos levam em 10%",      // Descricao
-              sf::Vector2f(1275, 170),                                   // Posicao
-              *this,                                                    // Room
+              "Ponto Fraco",                                       // Nome
+              1000,                                                // Preço
+              1850,                                                // Incremento do preço
+              0,                                                   // Nivel atual
+              3,                                                   // Nivel maximo
+              "Aumenta o dano geral que os inimigos levam em 10%", // Descricao
+              sf::Vector2f(1275, 170),                             // Posicao
+              *this,                                               // Room
 
               []() { // Funcao do upgrade
                   GameManager &gm = GameManager::get_instance();
@@ -94,32 +94,32 @@ UpgradeRoom::UpgradeRoom(sf::RenderWindow &window, RoomManager &room_manager)
                   gm.set_point_multiplier(atual + 0.10);
               }),
           UpgradeUI(
-              "Tropas Fortes", 
+              "Tropas Fortes",
               900,
               2000,
               0,
               5,
-              "Aumenta o dano causado pelas tropas em 20%", 
+              "Aumenta o dano causado pelas tropas em 20%",
               sf::Vector2f(675, 170),
               *this,
               []() {
                   GameManager &gm = GameManager::get_instance();
                   double atual = gm.get_troop_damage_multiplier();
-                  gm.set_troop_damage_multiplier(atual + 0.2); 
+                  gm.set_troop_damage_multiplier(atual + 0.2);
               }),
           UpgradeUI(
-              "Tiro Preciso", 
+              "Tiro Preciso",
               1000,
               1600,
               0,
               3,
-              "As tropas tem +10% de chance de causar o dobro de dano", 
+              "As tropas tem +10% de chance de causar o dobro de dano",
               sf::Vector2f(75, 570),
-              *this, 
-              []() { 
+              *this,
+              []() {
                   GameManager &gm = GameManager::get_instance();
                   int atual = gm.get_crit_chance();
-                  gm.set_crit_chance(atual + 10); 
+                  gm.set_crit_chance(atual + 10);
               }),
           UpgradeUI(
               "Floresta Densa",
@@ -141,15 +141,16 @@ UpgradeRoom::UpgradeRoom(sf::RenderWindow &window, RoomManager &room_manager)
               1500,
               0,
               5,
-              "Aumenta a eficacia das habilidades especiais das tropas (lentidao, atordoamento, area) em 10%", 
+              "Aumenta a eficacia das habilidades especiais das tropas (lentidao, atordoamento, area) em 10%",
               sf::Vector2f(675, 570),
               *this,
               []() {
                   GameManager &gm = GameManager::get_instance();
                   double atual = gm.get_special_ability_multiplier();
-                  gm.set_special_ability_multiplier(atual + 0.1); 
-                }),
-      } {
+                  gm.set_special_ability_multiplier(atual + 0.1);
+              }),
+      },
+      _volume_control(*this) {
 
     // novo error handling
     if (!_hud_background.loadFromFile("assets/hud.png")) {
@@ -166,7 +167,7 @@ UpgradeRoom::UpgradeRoom(sf::RenderWindow &window, RoomManager &room_manager)
     if (!_bg_texture.loadFromFile("assets/folhasbg.png")) {
         std::cerr << "Erro abrindo o asset do background de upgrades!\n";
         std::exit(1);
-    } 
+    }
     _bg_sprite.setTexture(_bg_texture);
     float scaleX = (float)DESKTOP_SIZE.x / _bg_texture.getSize().x;
     float scaleY = (float)DESKTOP_SIZE.y / _bg_texture.getSize().y;
@@ -189,8 +190,7 @@ void UpgradeRoom::run(double dt, const std::vector<sf::Event> &event_queue) {
                 // pausa musica
                 if (_paused) {
                     GameManager::get_instance().pause_game_music();
-                }
-                else {
+                } else {
                     GameManager::get_instance().resume_game_music();
                 }
             }
@@ -235,7 +235,7 @@ void UpgradeRoom::run(double dt, const std::vector<sf::Event> &event_queue) {
         pause_rect.setFillColor(sf::Color(0, 0, 0, 150));
         _window.draw(pause_rect);
 
-        sf::Font& font = GameManager::get_instance().get_font();
+        sf::Font &font = GameManager::get_instance().get_font();
         sf::Text pause_text("JOGO PAUSADO", font, 80);
         pause_text.setFillColor(sf::Color::White);
         sf::FloatRect bounds = pause_text.getLocalBounds();
@@ -245,8 +245,7 @@ void UpgradeRoom::run(double dt, const std::vector<sf::Event> &event_queue) {
 
         TextButton option_1("Continuar", font, 50, [this]() { 
             this->_paused = false; 
-            GameManager::get_instance().resume_game_music();
-        }, *this);
+            GameManager::get_instance().resume_game_music(); }, *this);
         option_1.center();
         option_1.offset_position(sf::Vector2f(0, -30));
         option_1.run(event_queue);
@@ -254,8 +253,7 @@ void UpgradeRoom::run(double dt, const std::vector<sf::Event> &event_queue) {
         TextButton option_2("Voltar ao menu", font, 50, [this]() {
             this->_paused = false;
             GameManager::get_instance().stop_all_music();
-            _room_manager.change_room("main_menu");
-            }, *this);
+            _room_manager.change_room("main_menu"); }, *this);
         option_2.center();
         option_2.offset_position(sf::Vector2f(0, 70));
         option_2.run(event_queue);
@@ -268,6 +266,9 @@ void UpgradeRoom::run(double dt, const std::vector<sf::Event> &event_queue) {
         option_1.draw();
         option_2.draw();
         option_3.draw();
+
+        _volume_control.run(event_queue);
+        _volume_control.draw();
     }
 
     _window.display();
