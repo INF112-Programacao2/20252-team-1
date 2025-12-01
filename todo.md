@@ -1,8 +1,6 @@
 # Bug ou Feature?
 
 # Bugs:
-- Fullscreen não funciona em todos os PCs e nem na versão compilada para windows
-- Menu de pause não aparece na UpgradeRoom (obviamente porque não foi implementado lá)
 
 # Refatoração:
 
@@ -13,7 +11,6 @@
 - Mais upgrades
 - Tela de menu inicial (por tutorial e créditos)
 - Música
-- Logica de ganhar o jogo (salvar a wave anterior à vitória)
 - Balancear a dificuldade
 - Tutorial e Créditos
 
@@ -28,7 +25,6 @@
 # Pedro:
 
 # Davi Nobre:
-- Salvar a vida das field troops (ou restaurar a vida delas no começo da wave pra ficar mais fácil)
 
 # Gabriel:
 - Ajudar com upgrades

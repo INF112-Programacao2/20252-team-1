@@ -373,3 +373,7 @@ void WaveManager::set_wave_idx(int wave_idx) {
     _game_completed = false;
     _timer.restart();
 }
+
+bool WaveManager::is_completed() {
+    return _game_completed;
+}

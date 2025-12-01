@@ -138,8 +138,14 @@ void UpgradeRoom::start() {
 
 void UpgradeRoom::run(double dt, const std::vector<sf::Event> &event_queue) {
     for (const sf::Event &event : event_queue) {
-        if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Tab)
-            _room_manager.rollback_room();
+
+        if (event.type == sf::Event::KeyPressed) {
+            if (event.key.code == sf::Keyboard::Escape)
+                _paused = !_paused;
+
+            if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Tab)
+                _room_manager.rollback_room();
+        }
     }
 
     _window.clear(sf::Color(50, 150, 50));
@@ -158,11 +164,50 @@ void UpgradeRoom::run(double dt, const std::vector<sf::Event> &event_queue) {
 
     // Upgrades
     for (auto &upgrade : _upgrades) {
-        upgrade.run(dt, event_queue);
+        if (!_paused) {
+            upgrade.run(dt, event_queue);
+        }
         upgrade.draw();
     }
 
     _window.draw(points_text);
+
+    if (_paused) {
+        // menu de pausa na upgrade room
+        sf::RectangleShape pause_rect((sf::Vector2f)DESKTOP_SIZE);
+        pause_rect.setFillColor(sf::Color(0, 0, 0, 150));
+        _window.draw(pause_rect);
+
+        sf::Font& font = GameManager::get_instance().get_font();
+        sf::Text pause_text("JOGO PAUSADO", font, 80);
+        pause_text.setFillColor(sf::Color::White);
+        sf::FloatRect bounds = pause_text.getLocalBounds();
+        pause_text.setOrigin(bounds.width / 2, bounds.height / 2);
+        pause_text.setPosition(DESKTOP_SIZE.x / 2, DESKTOP_SIZE.y / 2 - 150);
+        _window.draw(pause_text);
+
+        TextButton option_1("Continuar", font, 50, [this]() { this->_paused = false; }, *this);
+        option_1.center();
+        option_1.offset_position(sf::Vector2f(0, -30));
+        option_1.run(event_queue);
+
+        TextButton option_2("Voltar ao menu", font, 50, [this]() {
+            this->_paused = false;
+            _room_manager.change_room("main_menu");
+            }, *this);
+        option_2.center();
+        option_2.offset_position(sf::Vector2f(0, 70));
+        option_2.run(event_queue);
+
+        TextButton option_3("Salvar e Sair", font, 50, [this]() { this->_window.close(); }, *this);
+        option_3.center();
+        option_3.offset_position(sf::Vector2f(0, 170));
+        option_3.run(event_queue);
+
+        option_1.draw();
+        option_2.draw();
+        option_3.draw();
+    }
 
     _window.display();
 }

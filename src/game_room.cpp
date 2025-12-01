@@ -116,7 +116,35 @@ void GameRoom::run(double dt, const std::vector<sf::Event> &event_queue) {
 
     _window.draw(points_text);
 
-    if( _game_over) {
+    // logica de vitoria
+    if (_wave_manager.is_completed()) {
+        sf::RectangleShape win_rect((sf::Vector2f)DESKTOP_SIZE);
+        win_rect.setFillColor(sf::Color(0, 0, 0, 200));
+        _window.draw(win_rect);
+
+        sf::Text win_text("VOCE VENCEU!", _font, 100);
+        win_text.setFillColor(sf::Color::Green);
+        sf::FloatRect bounds = win_text.getLocalBounds();
+        win_text.setOrigin(bounds.width / 2, bounds.height / 2);
+        win_text.setPosition(DESKTOP_SIZE.x / 2, DESKTOP_SIZE.y / 2 - 100);
+        _window.draw(win_text);
+
+        TextButton option_1("Voltar ao menu", _font, 50, [this]() {
+            _room_manager.change_room("main_menu");
+            }, *this);
+        option_1.center();
+        option_1.offset_position(sf::Vector2f(0, 50));
+        option_1.run(event_queue);
+
+        TextButton option_2("Sair", _font, 50, [this]() { this->_window.close(); }, *this);
+        option_2.center();
+        option_2.offset_position(sf::Vector2f(0, 150));
+        option_2.run(event_queue);
+
+        option_1.draw();
+        option_2.draw();
+    }
+    else if( _game_over) {
         sf::RectangleShape gameover_rect((sf::Vector2f)DESKTOP_SIZE);
         gameover_rect.setFillColor(sf::Color(0, 0, 0, 200));
         _window.draw(gameover_rect);
@@ -150,19 +178,36 @@ void GameRoom::run(double dt, const std::vector<sf::Event> &event_queue) {
         pause_rect.setFillColor(sf::Color(0, 0, 0, 150));
         _window.draw(pause_rect);
 
-        // criando botoes
+        sf::Text pause_text("JOGO PAUSADO", _font, 80);
+        pause_text.setFillColor(sf::Color::White);
+        sf::FloatRect bounds = pause_text.getLocalBounds();
+        pause_text.setOrigin(bounds.width / 2, bounds.height / 2);
+        pause_text.setPosition(DESKTOP_SIZE.x / 2, DESKTOP_SIZE.y / 2 - 150);
+        _window.draw(pause_text);
+
         TextButton option_1("Continuar", _font, 50, [this]() { this->_paused = false; }, *this);
         option_1.center();
-        option_1.offset_position(sf::Vector2f(0, -50));
+        option_1.offset_position(sf::Vector2f(0, -30)); 
         option_1.run(event_queue);
 
-        TextButton option_2("Salvar e Sair", _font, 50, [this]() { this->_window.close(); }, *this);
+        TextButton option_2("Voltar ao menu", _font, 50, [this]() {
+            this->_paused = false;
+            _room_manager.change_room("main_menu");
+            }, *this);
         option_2.center();
-        option_2.offset_position(sf::Vector2f(0, 50));
+        option_2.offset_position(sf::Vector2f(0, 70));
         option_2.run(event_queue);
+
+        TextButton option_3("Salvar e Sair", _font, 50, [this]() {
+            this->_window.close();
+            }, *this);
+        option_3.center();
+        option_3.offset_position(sf::Vector2f(0, 170));
+        option_3.run(event_queue);
 
         option_1.draw();
         option_2.draw();
+        option_3.draw();
     }
 
     // !DEBUG (MOSTRA FRAMERATE)

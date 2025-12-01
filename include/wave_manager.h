@@ -80,6 +80,8 @@ public:
     int get_wave_idx(); // +1 pra mostrar na UI
 
     void set_wave_idx(int wave_idx);
+
+    bool is_completed();
 };
 
 #endif
