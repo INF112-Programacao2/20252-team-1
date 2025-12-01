@@ -1,9 +1,7 @@
 # Bug ou Feature?
 
 # Bugs:
-- Sair para o menu não reseta um monte de coisa:
-    - continuar às vezes não carrega as últimas tropas
-    - o level dos upgrades são resetados, mas os multiplicadores não (até no novo jogo)
+- continuar às vezes não carrega as últimas tropas -> N consegui reproduzir
 
 # Refatoração:
 

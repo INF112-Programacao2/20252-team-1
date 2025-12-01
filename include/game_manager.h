@@ -30,6 +30,8 @@ public:
         return instance;
     }
 
+    void reset();
+
     int get_points();
 
     /// Retorna true se puder remover e false se nao tiver pontos suficientes

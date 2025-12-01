@@ -36,6 +36,9 @@ void GameSaver::load_game_state() {
 }
 
 void GameSaver::update_game_state() {
+
+    GameManager::get_instance().reset(); // implementacao macabra
+
     _game_room.get_wave_manager().set_wave_idx(_wave_idx);
     GameManager::get_instance().set_points(_points);
     _upgrade_room.set_upgrade_levels(_upgrades); // vem antes do set_life do wall

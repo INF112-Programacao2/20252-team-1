@@ -2,6 +2,15 @@
 #include "globals.h"
 #include <cmath>
 
+void GameManager::reset() {
+    _points = 0;
+    _cooldown_multiplier = 1.0;
+    _damage_multiplier = 1.0;
+    _troop_damage_multiplier = 1.0;
+    _point_multiplier = 1.0;
+    _crit_chance = 0;
+}
+
 int GameManager::get_points() {
     return _points;
 }

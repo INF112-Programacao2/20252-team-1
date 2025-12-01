@@ -11,6 +11,7 @@ private:
     sf::Font _font;
     sf::Text _nome;
     int _preco;
+    int _base_price;
     int _incremento;
     int _level;
     int _max_level;

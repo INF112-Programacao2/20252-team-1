@@ -11,6 +11,7 @@ const int desc_tamanho = 14;
 UpgradeUI::UpgradeUI(std::string nome, int preco, int incremento, int level, int max_level, std::string descricao,
     sf::Vector2f position, Room &room, std::function<void()> on_buy_callback)
     : _preco(preco),
+      _base_price(preco),
       _incremento(incremento),
       _level(level),
       _max_level(max_level),
@@ -207,7 +208,7 @@ int UpgradeUI::get_level() const {
 
 void UpgradeUI::set_level(int level) {
     _level = level;
-    _preco += _incremento * level;
+    _preco = _base_price + (_incremento * level);
     for (int i = 0; i < level; i++)
         _on_buy_callback(); // compra os upgrades
 }
