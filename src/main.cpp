@@ -7,6 +7,7 @@
 #include "main_menu_room.h"
 #include "upgrade_room.h"
 #include "game_saver.h"
+#include "credits_room.h"
 
 int main() {
     std::srand(std::time(0));
@@ -45,6 +46,7 @@ int main() {
     try {
         GameRoom game_room(window, room_manager);
         UpgradeRoom upgrade_room(window, room_manager);
+        CreditsRoom credits_room(window, room_manager);
 
         // Criando o game saver (quem decide se vai carregar ou nao e o main menu)
         GameSaver game_saver("save.txt", game_room, upgrade_room);
@@ -55,7 +57,9 @@ int main() {
         room_manager.add_room("main_menu", &main_menu_room);
         room_manager.add_room("game", &game_room);
         room_manager.add_room("upgrade", &upgrade_room);
+        room_manager.add_room("Creditos", &credits_room);
         room_manager.change_room("main_menu");
+        
 
         sf::Clock delta_clock; // calcula o delta time (segundos entre o ultimo frame)
 
