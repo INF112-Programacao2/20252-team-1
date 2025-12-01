@@ -9,35 +9,40 @@
 #include "game_saver.h"
 
 int main() {
-    try {
-        std::srand(std::time(0));
+    std::srand(std::time(0));
 
+    try {
         // carrega a fonte e as musicas no game manager, da throw se falhar
         GameManager::get_instance().load_font("assets/Minecraftia-Regular.ttf");
         GameManager::get_instance().load_musics();
+    } catch (const std::exception &e) {
+        std::cerr << "ERRO CRITICO: " << e.what() << std::endl;
+        return 1;
+    }
 
-        const bool FULLSCREEN = true; //! Use false somente para debug
-        const bool WINDOWS = false;   //! DEBUG, coloque true se esta compilando para windows
+    const bool FULLSCREEN = true; //! Use false somente para debug
+    const bool WINDOWS = false;   //! DEBUG, coloque true se esta compilando para windows
 
-        // deixa em tela cheia
-        sf::VideoMode desktop = sf::VideoMode::getDesktopMode();
-        sf::RenderWindow window(
-            sf::VideoMode(desktop.width, desktop.height),
-            "Jogo",
-            (FULLSCREEN ? (WINDOWS ? sf::Style::Fullscreen
-                : (sf::Style::Titlebar | sf::Style::Close))
-                : 7));
+    // deixa em tela cheia
+    sf::VideoMode desktop = sf::VideoMode::getDesktopMode();
+    sf::RenderWindow window(
+        sf::VideoMode(desktop.width, desktop.height),
+        "Jogo",
+        (FULLSCREEN ? (WINDOWS ? sf::Style::Fullscreen
+                               : (sf::Style::Titlebar | sf::Style::Close))
+                    : 7));
 
-        if (FULLSCREEN)
-            window.setPosition(sf::Vector2i(0, 0));
-        else
-            window.setPosition(sf::Vector2i(50, 50));
+    if (FULLSCREEN)
+        window.setPosition(sf::Vector2i(0, 0));
+    else
+        window.setPosition(sf::Vector2i(50, 50));
 
-        window.setVerticalSyncEnabled(true);
+    window.setVerticalSyncEnabled(true);
 
-        // Criando as salas
-        RoomManager room_manager;
+    // Criando as salas
+    RoomManager room_manager;
 
+    try {
         GameRoom game_room(window, room_manager);
         UpgradeRoom upgrade_room(window, room_manager);
 
@@ -71,13 +76,8 @@ int main() {
         }
 
         room_manager.close();
-    }
-    catch (const std::exception& e) {
+    } catch (const std::exception &e) {
         std::cerr << "ERRO CRITICO: " << e.what() << std::endl;
-        return 1;
-    }
-    catch (...) {
-        std::cerr << "ERRO DESCONHECIDO OCORREU!" << std::endl;
         return 1;
     }
 

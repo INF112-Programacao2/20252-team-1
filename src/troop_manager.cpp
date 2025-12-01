@@ -456,11 +456,11 @@ std::array<TroopType, TROOP_ROWS * TROOP_COLS> TroopManager::get_troops() {
 }
 
 void TroopManager::set_troops(std::array<TroopType, TROOP_ROWS * TROOP_COLS> troops) {
-
     _projectiles.clear();
 
     for (int slot = 0; slot < troops.size(); slot++) {
         delete _troops[slot];
+        _troops[slot] = nullptr;
         _troops[slot] = instantiate_troop(slot, troops[slot]);
     }
 }

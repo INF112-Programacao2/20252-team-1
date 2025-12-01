@@ -4,12 +4,16 @@
 #include <stdexcept>
 
 void GameManager::reset() {
-    _points = 0;
+    _points = BASE_START_POINTS;
     _cooldown_multiplier = 1.0;
     _damage_multiplier = 1.0;
     _troop_damage_multiplier = 1.0;
     _point_multiplier = 1.0;
     _crit_chance = 0;
+
+    get_game_room().get_wall().set_max_life(BASE_WALL_LIFE);
+    get_game_room().get_wall().set_life(BASE_WALL_LIFE);
+    get_game_room().get_wall().set_spike_damage(0);
 }
 
 int GameManager::get_points() {
@@ -151,7 +155,6 @@ void GameManager::play_defeat_music() {
     }
 }
 
-
 void GameManager::set_cooldown_multiplier(double cooldown_multiplier) {
     _cooldown_multiplier = cooldown_multiplier;
 }
@@ -182,11 +185,11 @@ float GameManager::get_line_pos(int line) {
     return HUD_HEIGHT + PADDING_Y + TROOP_RADIUS + (line - 1) * GAP_Y;
 }
 
-void GameManager::set_game_room(GameRoom* room) {
+void GameManager::set_game_room(GameRoom *room) {
     _game_room = room;
 }
 
-GameRoom& GameManager::get_game_room() {
+GameRoom &GameManager::get_game_room() {
     return *_game_room;
 }
 

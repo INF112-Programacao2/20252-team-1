@@ -6,6 +6,9 @@
 
 // * constantes globais do projeto que fazem sentido compartilhar
 
+const int BASE_START_POINTS = 1250;
+const int BASE_WALL_LIFE = 1000;
+
 enum TroopType {
     None = -1,
 

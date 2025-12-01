@@ -1,23 +1,34 @@
 #include "game_saver.h"
 #include "troop.h"
 #include "game_manager.h"
+#include "globals.h"
 #include <iostream>
 #include <sstream>
 
 GameSaver::GameSaver(const std::string &save_file_path, GameRoom &game_room, UpgradeRoom &upgrade_room)
     : _save_file_path(save_file_path), _game_room(game_room), _upgrade_room(upgrade_room) {
-    new_game();
+    _wave_idx = 0;
+    _points = BASE_START_POINTS;
+    _wall_life = BASE_WALL_LIFE;
+    for (auto &troop_type : _troops) {
+        troop_type = TroopType::None;
+    }
+    for (auto &value : _upgrades) {
+        value = 0;
+    }
+    _field_troops.clear();
+
     update_game_state();
 }
 
 void GameSaver::new_game() {
     _wave_idx = 0;
-    _points = 1250;
-    _wall_life = 1000;
-    for (auto& troop_type : _troops) {
+    _points = BASE_START_POINTS;
+    _wall_life = BASE_WALL_LIFE;
+    for (auto &troop_type : _troops) {
         troop_type = TroopType::None;
     }
-    for (auto& value : _upgrades) {
+    for (auto &value : _upgrades) {
         value = 0;
     }
     _field_troops.clear();
@@ -87,7 +98,7 @@ void GameSaver::save() {
 }
 
 void GameSaver::load() {
-    _save_file.open(_save_file_path);
+    _save_file.open(_save_file_path, std::ios::in);
     if (!_save_file.is_open()) {
         // Nao possui arquivo de save ainda, saindo
         update_game_state(); // atualiza com valores default

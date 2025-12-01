@@ -1,6 +1,6 @@
 #include <iostream>
 #include <cmath>
-#include <stdexcept> 
+#include <stdexcept>
 #include "game_room.h"
 #include "globals.h"
 #include "text_button.h"
@@ -60,8 +60,7 @@ void GameRoom::run(double dt, const std::vector<sf::Event> &event_queue) {
                 // pausa musica do jogo
                 if (_paused) {
                     GameManager::get_instance().pause_game_music();
-                }
-                else {
+                } else {
                     GameManager::get_instance().resume_game_music();
                 }
             }
@@ -83,8 +82,7 @@ void GameRoom::run(double dt, const std::vector<sf::Event> &event_queue) {
             if (_visual_effects[i]->is_finished()) {
                 std::swap(_visual_effects[i], _visual_effects.back());
                 _visual_effects.pop_back();
-            }
-            else {
+            } else {
                 i++;
             }
         }
@@ -108,7 +106,7 @@ void GameRoom::run(double dt, const std::vector<sf::Event> &event_queue) {
     _troop_manager.draw();
 
     // desenhando efeitos visuais (desenha por cima de tudo no campo, mas abaixo da HUD)
-    for (auto& effect : _visual_effects) {
+    for (auto &effect : _visual_effects) {
         effect->draw();
     }
 
@@ -148,8 +146,7 @@ void GameRoom::run(double dt, const std::vector<sf::Event> &event_queue) {
 
         TextButton option_1("Voltar ao menu", _font, 50, [this]() {
             GameManager::get_instance().stop_all_music(); // para musica de vitoria
-            _room_manager.change_room("main_menu");
-            }, *this);
+            _room_manager.change_room("main_menu"); }, *this);
         option_1.center();
         option_1.offset_position(sf::Vector2f(0, 50));
         option_1.run(event_queue);
@@ -161,8 +158,7 @@ void GameRoom::run(double dt, const std::vector<sf::Event> &event_queue) {
 
         option_1.draw();
         option_2.draw();
-    }
-    else if( _game_over) {
+    } else if (_game_over) {
         if (!_music_played) {
             GameManager::get_instance().play_defeat_music(); // toca musica de derrota sem loopar
             _music_played = true;
@@ -183,8 +179,7 @@ void GameRoom::run(double dt, const std::vector<sf::Event> &event_queue) {
         TextButton option_1("Voltar ao menu", _font, 50, [this]() { 
             GameManager::get_instance().stop_all_music(); // para musica de derrota
             _room_manager.change_room("main_menu");                                                         
-            _game_over = false;
-            }, *this);
+            _game_over = false; }, *this);
         option_1.center();
         option_1.offset_position(sf::Vector2f(0, 50));
         option_1.run(event_queue);
@@ -196,9 +191,7 @@ void GameRoom::run(double dt, const std::vector<sf::Event> &event_queue) {
 
         option_1.draw();
         option_2.draw();
-    }
-
-    else if (_paused) {
+    } else if (_paused) {
         // desenhando fundo preto do menu de pause
         sf::RectangleShape pause_rect((sf::Vector2f)DESKTOP_SIZE);
         pause_rect.setFillColor(sf::Color(0, 0, 0, 150));
@@ -211,26 +204,24 @@ void GameRoom::run(double dt, const std::vector<sf::Event> &event_queue) {
         pause_text.setPosition(DESKTOP_SIZE.x / 2, DESKTOP_SIZE.y / 2 - 150);
         _window.draw(pause_text);
 
-        TextButton option_1("Continuar", _font, 50, [this]() { 
+        TextButton option_1("Continuar", _font, 50, [this]() {
             this->_paused = false;
             GameManager::get_instance().resume_game_music(); // continua musica
-            }, *this);
+        },
+                            *this);
         option_1.center();
-        option_1.offset_position(sf::Vector2f(0, -30)); 
+        option_1.offset_position(sf::Vector2f(0, -30));
         option_1.run(event_queue);
 
         TextButton option_2("Voltar ao menu", _font, 50, [this]() {
             this->_paused = false;
             GameManager::get_instance().stop_all_music(); // para musica do jogo
-            _room_manager.change_room("main_menu");
-            }, *this);
+            _room_manager.change_room("main_menu"); }, *this);
         option_2.center();
         option_2.offset_position(sf::Vector2f(0, 70));
         option_2.run(event_queue);
 
-        TextButton option_3("Salvar e Sair", _font, 50, [this]() {
-            this->_window.close();
-            }, *this);
+        TextButton option_3("Salvar e Sair", _font, 50, [this]() { this->_window.close(); }, *this);
         option_3.center();
         option_3.offset_position(sf::Vector2f(0, 170));
         option_3.run(event_queue);

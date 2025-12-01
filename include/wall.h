@@ -68,6 +68,7 @@ public:
 
     void increase_life(int amount);
 
+    void set_spike_damage(int amount);
     void increase_spike_damage(int amount);
 
     bool game_over();

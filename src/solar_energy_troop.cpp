@@ -18,7 +18,7 @@ SolarEnergyTroop::SolarEnergyTroop(sf::Vector2f position, int line, double coold
 bool SolarEnergyTroop::fire() {
     // spawna texto informando quantos pontos gerou
     std::stringstream s;
-    s << "+" << _increase_points;
+    s << "+" << _increase_points * GameManager::get_instance().get_point_multiplier();
 
     _points_text.set_string(s.str());
     float rand_x = (std::rand() / (float)RAND_MAX) * 40 - 20;

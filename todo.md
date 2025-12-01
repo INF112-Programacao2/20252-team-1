@@ -1,8 +1,6 @@
 # Bug ou Feature?
 
 # Bugs:
-- continuar às vezes não carrega as últimas tropas -> N consegui reproduzir
-- O painel solar n atualiza o texto flutuante de pontos depois de um upgrade, mas dá os pontos certos eu acho
 
 # Refatoração:
 

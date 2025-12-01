@@ -16,7 +16,7 @@ Wall::Wall(int base_life, int spike_damage, Room &room)
       _flash_timer(.15), _shape({WALL_WIDTH, DESKTOP_SIZE.y - HUD_HEIGHT}),
       _damage_text(sf::Vector2f(WALL_POSITION_X + WALL_WIDTH, DESKTOP_SIZE.y * .5), 1.0, room) {
 
-    //variavel para conferir fim de jogo
+    // variavel para conferir fim de jogo
     _is_destroyed = false;
 
     _flash_timer.update(1); // avanca no tempo pra nao piscar na inicializacao
@@ -59,7 +59,7 @@ void Wall::run(double dt) {
     _burning_timer.update(dt);
     _flash_timer.update(dt);
     _particle_timer.update(dt);
-    _damage_text.run(dt);      
+    _damage_text.run(dt);
 
     // logica do dano de fogo (damage over time) e visual
     if (_burning_time > 0) {
@@ -67,7 +67,7 @@ void Wall::run(double dt) {
 
         // spawn de particular do fogo
         if (_particle_timer.get_seconds_elapsed() > 0.05) {
-            GameRoom& game_room = dynamic_cast<GameRoom&>(_room);
+            GameRoom &game_room = dynamic_cast<GameRoom &>(_room);
 
             // area aleatoria dentro do muro
             float random_x = WALL_POSITION_X + (std::rand() % (int)WALL_WIDTH);
@@ -75,11 +75,10 @@ void Wall::run(double dt) {
 
             // cores variadas para o fogo
             sf::Color fire_colors[] = {
-                sf::Color(255, 69, 0),   // tons de laranja
-                sf::Color(255, 140, 0),  
-                sf::Color(255, 215, 0),  
-                sf::Color(255, 100, 50)  
-            };
+                sf::Color(255, 69, 0), // tons de laranja
+                sf::Color(255, 140, 0),
+                sf::Color(255, 215, 0),
+                sf::Color(255, 100, 50)};
 
             sf::Color chosen_color = fire_colors[std::rand() % 4];
             chosen_color.a = 150 + (std::rand() % 100); // variacao de alpha
@@ -91,8 +90,7 @@ void Wall::run(double dt) {
                 size,
                 0.8, // duracao
                 chosen_color,
-                _room
-            ));
+                _room));
 
             _particle_timer.restart();
         }
@@ -257,6 +255,10 @@ void Wall::increase_max_life(int amount) {
 
 void Wall::increase_life(int amount) {
     _health.increase_life(amount);
+}
+
+void Wall::set_spike_damage(int damage) {
+    _spike_damage = damage;
 }
 
 void Wall::increase_spike_damage(int amount) {
