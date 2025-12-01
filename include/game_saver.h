@@ -43,6 +43,8 @@ private:
 public:
     GameSaver(const std::string &save_file_path, GameRoom& game_room, UpgradeRoom& upgrade_room);
 
+    void new_game();
+
     /// Salva o estado atual DO JOGO para o arquivo e salva na classe
     void save();
 

@@ -165,6 +165,11 @@ int Wall::get_life() {
 
 void Wall::set_life(int amount) {
     _health.set_life(amount);
+
+    if (_health.get_life() > 0) {
+        _is_destroyed = false;
+        _burning_time = 0;
+    }
 }
 
 int Wall::get_max_life() {

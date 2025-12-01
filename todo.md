@@ -3,7 +3,6 @@
 # Bugs:
 - Fullscreen não funciona em todos os PCs e nem na versão compilada para windows
 - Menu de pause não aparece na UpgradeRoom (obviamente porque não foi implementado lá)
-- Sair do jogo sem jogar reseta o save (porque não deveria estar salvando no final do jogo)
 
 # Refatoração:
 
@@ -14,10 +13,8 @@
 - Mais upgrades
 - Tela de menu inicial (por tutorial e créditos)
 - Música
-- Logica de ganhar e perder o jogo (salvar a wave anterior à vitória)
-- Efeitos de fogo melhores no muro
+- Logica de ganhar o jogo (salvar a wave anterior à vitória)
 - Balancear a dificuldade
-- Efeito de gradiente na healthbar do muro
 - Tutorial e Créditos
 
 # Sugestões de upgrades:

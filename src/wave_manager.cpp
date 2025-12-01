@@ -359,6 +359,10 @@ void WaveManager::set_wave_idx(int wave_idx) {
     // define a nova wave
     _wave_idx = wave_idx;
 
+    _enemys.clear();
+
+    _projectiles.clear();
+
     // reseta os estados das subwaves
     _subwave_idx = 0;
     _spawned_in_subwave = 0;

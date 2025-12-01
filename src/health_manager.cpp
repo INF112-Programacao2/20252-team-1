@@ -7,6 +7,10 @@ HealthManager::~HealthManager() = default;
 
 void HealthManager::set_life(int new_life) {
     _life = std::max(0, std::min(_max_life, new_life));
+
+    if (_life > 0 ) {
+        _died = false;
+    }
     if (!_died && _life == 0 && _on_death_callback) {
         _died = true;
         _on_death_callback();
