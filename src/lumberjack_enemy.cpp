@@ -33,3 +33,19 @@ void LumberjackEnemy::attack(FieldTroop* field_troop) {
 bool LumberjackEnemy::load_texture(const std::string &file_path) {
     return _texture.loadFromFile(file_path);
 }
+
+double LumberjackEnemy::get_type_multiplier(ProjectileType type) {
+    switch (type) {
+    case ProjectileType::AnteaterProjectileType:
+        return 1.05;
+    case ProjectileType::ElephantProjectileType:
+        return 0.5;
+    case ProjectileType::DolphinProjectileType:
+        return 0.75;
+    case ProjectileType::GuardProjectileType:
+        return 1.5;
+
+    default:
+        return 1.0;
+    }
+}

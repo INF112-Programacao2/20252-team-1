@@ -30,7 +30,6 @@ Wall::Wall(int base_life, int spike_damage, Room &room)
 Wall::~Wall() = default;
 
 void Wall::destroy() {
-    std::cout << "O muro foi de arrasta pra cima" << std::endl;
     _is_destroyed = true;
 }
 
@@ -127,14 +126,20 @@ void Wall::draw() {
 }
 
 void Wall::hit(EnemyProjectile &projectile) {
+    int raw_damage = projectile.get_damage();
+    int final_damage = static_cast<int>(raw_damage * (1.0 - _resistance));
+    // o muro sempre vai tomar pelo menos 1 de dano
+    if (final_damage < 1)
+        final_damage = 1;
+
     // texto mostrando o dano
-    sf::Text text(std::to_string(projectile.get_damage()), GameManager::get_instance().get_font(), 20);
+    sf::Text text(std::to_string(final_damage), GameManager::get_instance().get_font(), 20);
     text.setFillColor(sf::Color::Red);
     _damage_text.set_text(text);
     _damage_text.set_position(projectile.get_position());
     _damage_text.restart();
 
-    _health.decrease_life(projectile.get_damage());
+    _health.decrease_life(final_damage);
     _flash_timer.restart();
 
     auto enemy = projectile.get_parent();
@@ -144,14 +149,18 @@ void Wall::hit(EnemyProjectile &projectile) {
 }
 
 void Wall::hit(Enemy &enemy, int damage) {
+    int final_damage = static_cast<int>(damage * (1.0 - _resistance));
+    if (final_damage < 1)
+        final_damage = 1;
+
     // texto mostrando o dano
-    sf::Text text(std::to_string(damage), GameManager::get_instance().get_font(), 20);
+    sf::Text text(std::to_string(final_damage), GameManager::get_instance().get_font(), 20);
     text.setFillColor(sf::Color::Red);
     _damage_text.set_text(text);
     _damage_text.set_position(enemy.get_position() - sf::Vector2f(75, 0));
     _damage_text.restart();
 
-    _health.decrease_life(damage);
+    _health.decrease_life(final_damage);
     _flash_timer.restart();
 
     enemy.damage(_spike_damage);
@@ -221,7 +230,7 @@ void Wall::draw_wall_health_bar() {
     // texto da barra de vida
     sf::Text label_text;
     label_text.setFont(font);
-    label_text.setString("Muro:");
+    label_text.setString("Floresta:");
     label_text.setCharacterSize(24);
     label_text.setFillColor(sf::Color::White);
     sf::FloatRect label_bounds = label_text.getLocalBounds();
@@ -263,6 +272,10 @@ void Wall::set_spike_damage(int damage) {
 
 void Wall::increase_spike_damage(int amount) {
     _spike_damage += amount;
+}
+
+void Wall::increase_resistance(double amount) {
+    _resistance += amount;
 }
 
 sf::Texture &Wall::get_texture() {

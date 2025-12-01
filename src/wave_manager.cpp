@@ -62,24 +62,24 @@ void WaveManager::setup_waves() {
     // empresario
 
     // WAVE 1
-    _waves_config[0][0] = {5, 6.0f, {100.f, 0.f, 0.f, 0.f, 0.f, 0.f, 0.f}};  // subwave 1
-    _waves_config[0][1] = {8, 5.5f, {80.f, 0.f, 20.f, 0.f, 0.f, 0.f, 0.f}};  // subwave 2
-    _waves_config[0][2] = {10, 5.0f, {70.f, 0.f, 30.f, 0.f, 0.f, 0.f, 0.f}}; // subwave 3
+    _waves_config[0][0] = {4, 9.0f, {100.f, 0.f, 0.f, 0.f, 0.f, 0.f, 0.f}};    // subwave 1
+    _waves_config[0][1] = {8, 4.0f, {70.f, 0.f, 30.f, 0.f, 0.f, 0.f, 0.f}};    // subwave 2
+    _waves_config[0][2] = {10, 4.0f, {60.f, 10.f, 30.f, 0.f, 0.f, 0.f, 0.f}};  // subwave 3
 
     // WAVE 2
-    _waves_config[1][0] = {15, 4.5f, {60.f, 10.f, 30.f, 0.f, 0.f, 0.f, 0.f}};
-    _waves_config[1][1] = {20, 4.0f, {50.f, 10.f, 30.f, 10.f, 0.f, 0.f, 0.f}};
-    _waves_config[1][2] = {22, 3.5f, {40.f, 20.f, 30.f, 10.f, 0.f, 0.f, 0.f}};
+    _waves_config[1][0] = {15, 3.5f, {55.f, 15.f, 30.f, 0.f, 0.f, 0.f, 0.f}};
+    _waves_config[1][1] = {20, 3.0f, {50.f, 20.f, 30.f, 0.f, 0.f, 0.f, 0.f}};
+    _waves_config[1][2] = {25, 3.0f, {40.f, 20.f, 25.f, 15.f, 0.f, 0.f, 0.f}};
 
     // WAVE 3
-    _waves_config[2][0] = {25, 3.0f, {30.f, 30.f, 30.f, 10.f, 0.f, 0.f, 0.f}};
-    _waves_config[2][1] = {28, 2.5f, {20.f, 25.f, 25.f, 25.f, 5.f, 0.f, 0.f}};
-    _waves_config[2][2] = {30, 2.0f, {10.f, 20.f, 30.f, 25.f, 15.f, 0.f, 0.f}};
+    _waves_config[2][0] = {25, 3.0f, {30.f, 20.f, 25.f, 25.f, 0.f, 0.f, 0.f}};
+    _waves_config[2][1] = {30, 2.5f, {25.f, 15.f, 35.f, 30.f, 5.f, 0.f, 10.f}};
+    _waves_config[2][2] = {35, 2.5f, {20.f, 10.f, 25.f, 30.f, 5.f, 0.f, 15.f}};
 
     // WAVE 4
-    _waves_config[3][0] = {35, 1.5f, {10.f, 20.f, 30.f, 30.f, 10.f, 0.f, 0.f}};
-    _waves_config[3][1] = {40, 1.0f, {5.f, 15.f, 30.f, 30.f, 20.f, 0.f, 0.f}};
-    _waves_config[3][2] = {50, 0.5f, {5.f, 10.f, 25.f, 30.f, 30.f, 0.f, 0.f}};
+    _waves_config[3][0] = {40, 2.5f, {10.f, 10.f, 25.f, 35.f, 15.f, 0.f, 15.f}};
+    _waves_config[3][1] = {45, 2.5f, {5.f, 10.f, 25.f, 35.f, 20.f, 0.f, 20.f}};
+    _waves_config[3][2] = {50, 2.0f, {10.f, 10.f, 25.f, 30.f, 30.f, 0.f, 30.f}};
 }
 
 EnemyType WaveManager::pick_weighted_enemy(const std::array<float, ENEMY_COUNT> &probs) {
@@ -109,44 +109,46 @@ EnemyType WaveManager::pick_weighted_enemy(const std::array<float, ENEMY_COUNT> 
 
 void WaveManager::spawn_enemy(EnemyType enemy_type, int line) {
     // multiplicador de dificuldade que aumenta a cada wave que avanca
-    double difficulty_multiplier = 1.0 + (_wave_idx * 0.25);
+    double damage_multiplier = 1.0 + (_wave_idx * 0.5);
+    double health_multiplier = 1.0 + (_wave_idx * 0.5);
+    double speed_multiplier = 1.0 + (_wave_idx * 0.08);
 
     switch (enemy_type) {
     case EnemyType::Lumberjack:
         // vida, dano, linha, velocidade, cooldown, pontos, sala
-        _enemys.push_back(std::make_shared<LumberjackEnemy>(150 * difficulty_multiplier,
-                                                            25 * difficulty_multiplier, line, 50.0, 3.0, 20, _room));
+        _enemys.push_back(std::make_shared<LumberjackEnemy>(125 * health_multiplier,
+                          25 * damage_multiplier, line, 43.0 * speed_multiplier, 3.0, 20, _room));
         break;
 
     case EnemyType::FireEnemyType:
         // vida, dano, linha, velocidade, cooldown, pontos, burn_timer, sala
-        _enemys.push_back(std::make_shared<FireEnemy>(100 * difficulty_multiplier,
-                                                      15 * difficulty_multiplier, line, 150.0, 0, 15, 2, _room));
+        _enemys.push_back(std::make_shared<FireEnemy>(75 * health_multiplier,
+                          40 * damage_multiplier, line, 150.0, 0, 15, 2, _room));
         break;
 
     case EnemyType::Hunter:
         // vida, dano, linha, velocidade, cooldown, pontos, sala
-        _enemys.push_back(std::make_shared<HunterEnemy>(75 * difficulty_multiplier,
-                                                        20 * difficulty_multiplier, line, 50.0, 6.0, 30, _room));
+        _enemys.push_back(std::make_shared<HunterEnemy>(80 * health_multiplier,
+                          30 * damage_multiplier, line, 45.0 * speed_multiplier, 5.0, 30, _room));
         break;
 
     case EnemyType::Excavator:
         // vida, dano , linha, velocidade, cooldown, pontos, sala
-        _enemys.push_back(std::make_shared<ExcavatorEnemy>(300 * difficulty_multiplier,
-                                                           1 * difficulty_multiplier, line, 30.0, 1, 50, _room));
+        _enemys.push_back(std::make_shared<ExcavatorEnemy>(600 * health_multiplier,
+                          1 * damage_multiplier, line, 35.0 * speed_multiplier, 0.75, 50, _room));
         break;
 
     case EnemyType::Trashman:
         // vida, dano , linha, velocidade, cooldown, pontos, sala
-        _enemys.push_back(std::make_shared<TrashmanEnemy>(200 * difficulty_multiplier,
-                                                          35 * difficulty_multiplier, line, 40.0, 5.0, 60, _room));
+        _enemys.push_back(std::make_shared<TrashmanEnemy>(200 * health_multiplier,
+                          35 * damage_multiplier, line, 40.0 * speed_multiplier, 6.0, 60, _room));
         break;
 
     case EnemyType::Businessman:
         // vida, dano , linha, velocidade, cooldown, cura, raio de cura, pontos, sala
-        _enemys.push_back(std::make_shared<BusinessmanEnemy>(100 * difficulty_multiplier,
-                                                             5 * difficulty_multiplier, line, 60.0, 4.0, 5 * difficulty_multiplier,
-                                                             200 * difficulty_multiplier, 80, _room));
+        _enemys.push_back(std::make_shared<BusinessmanEnemy>(150 * health_multiplier,
+                          5 * damage_multiplier, line, 60.0, 4.0, 10 * health_multiplier,
+                          200 * damage_multiplier, 80, _room));
         break;
 
     case EnemyType::Trash:

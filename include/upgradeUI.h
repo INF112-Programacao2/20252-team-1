@@ -24,6 +24,7 @@ private:
     sf::Text _level_label;
     sf::CircleShape _level_circle;
     DissolvingText _feedback_text;
+    static sf::Texture _bg_texture;
 public:
     UpgradeUI(std::string nome, int preco, int incremento, int level, int max_levels, std::string descricao,
         sf::Vector2f position, Room &room, std::function<void()> on_buy_callback);
@@ -34,6 +35,7 @@ public:
     void reset_feedback();
     int get_level() const;
     void set_level(int level);
+    static bool load_texture(const std::string& path);
 };
 
 #endif

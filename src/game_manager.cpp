@@ -10,6 +10,7 @@ void GameManager::reset() {
     _troop_damage_multiplier = 1.0;
     _point_multiplier = 1.0;
     _crit_chance = 0;
+    _special_ability_multiplier = 1.0;
 
     get_game_room().get_wall().set_max_life(BASE_WALL_LIFE);
     get_game_room().get_wall().set_life(BASE_WALL_LIFE);
@@ -60,6 +61,14 @@ void GameManager::set_crit_chance(int chance) {
         chance = 100;
     }
     _crit_chance = chance;
+}
+
+double GameManager::get_special_ability_multiplier() {
+    return _special_ability_multiplier;
+}
+
+void GameManager::set_special_ability_multiplier(double value) {
+    _special_ability_multiplier = value;
 }
 
 double GameManager::get_point_multiplier() {

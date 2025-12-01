@@ -55,8 +55,10 @@ double FireEnemy::get_type_multiplier(ProjectileType type) {
     switch (type) {
     case ProjectileType::ElephantProjectileType:
         return 5.0; // critico
+    case ProjectileType::DolphinProjectileType:
+        return 2.0;
 
     default:
-        return 1.0;
+        return 0.25;
     }
 }

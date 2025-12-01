@@ -11,7 +11,7 @@ ExcavatorEnemy::ExcavatorEnemy(int base_life, int damage, int line, double speed
 
     _current_damage = damage;     // Comeca com o dano base do construtor
     _max_damage = damage * 100.0; // O dano maximo eh 100x o inicial (sujeito a mudancas)
-    _ramp_up_rate = 2.0;          // Aumenta 2 de dano a cada hit
+    _ramp_up_rate = 3.0;          // Aumenta 3 de dano a cada hit
 
     float width = (height * _texture.getSize().x) / _texture.getSize().y;
     _shape.setSize({width, height});
@@ -58,4 +58,20 @@ void ExcavatorEnemy::attack(FieldTroop* field_troop) {
 
 bool ExcavatorEnemy::load_texture(const std::string &file_path) {
     return _texture.loadFromFile(file_path);
+}
+
+double ExcavatorEnemy::get_type_multiplier(ProjectileType type) {
+    switch (type) {
+    case ProjectileType::MonkeyProjectileType:
+        return 0.75;
+    case ProjectileType::AnteaterProjectileType:
+        return 0.50;
+    case ProjectileType::DolphinProjectileType:
+        return 2.0;
+    case ProjectileType::GuardProjectileType:
+        return 2.0;
+
+    default:
+        return 1.0;
+    }
 }

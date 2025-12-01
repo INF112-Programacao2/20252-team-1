@@ -28,7 +28,7 @@ enum TroopType {
 
 // Mudar sempre que adicionar uma troop nova:
 const int TROOP_COUNT = 9;
-const int TROOP_PRICES[TROOP_COUNT] = {250, 250, 350, 400, 400, 500, 1500, 200, 300};
+const int TROOP_PRICES[TROOP_COUNT] = {250, 250, 550, 400, 600, 500, 1000, 400, 500};
 
 enum ProjectileType {
     EnemyBaseProjectile = 0,
@@ -53,7 +53,7 @@ enum EnemyType {
 };
 const int ENEMY_COUNT = 7; // Mudar sempre que aparecer um inimigo novo
 
-const int UPGRADE_COUNT = 7;
+const int UPGRADE_COUNT = 9;
 
 const sf::Vector2u DESKTOP_SIZE = sf::Vector2u(
     sf::VideoMode::getDesktopMode().width, sf::VideoMode::getDesktopMode().height);

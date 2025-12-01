@@ -126,6 +126,11 @@ void GameRoom::run(double dt, const std::vector<sf::Event> &event_queue) {
 
     _window.draw(points_text);
 
+    // Mostra a wave
+    sf::Text wave_text("Onda: " + std::to_string(_wave_manager.get_wave_idx() + 1), _font, 40);
+    wave_text.setPosition(sf::Vector2f(170, 50)); 
+    _window.draw(wave_text);
+
     // logica de vitoria
     if (_wave_manager.is_completed()) {
         if (!_music_played) {

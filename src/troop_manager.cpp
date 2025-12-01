@@ -352,7 +352,7 @@ FieldTroop *TroopManager::instantiate_field_troop(sf::Vector2f position, TroopTy
 
     case TroopType::Tree:
         // vida, posicao, sala
-        return new TreeTroop(50, position, _room);
+        return new TreeTroop(200, position, _room);
 
     default:
         // std::cerr << '(' << troop_type << ") FieldTroop nao implementada!" << std::endl;

@@ -11,6 +11,8 @@ SquirrelProjectile::SquirrelProjectile(sf::Vector2f position, std::weak_ptr<Enem
     : TroopProjectile(position, target, damage, speed, room, ProjectileType::SquirrelProjectileType), _shape({30, 30}) {
     _radius = radius;
 
+    _radius = radius * GameManager::get_instance().get_special_ability_multiplier();;
+
     _shape.setTexture(&_texture);
     // centraliza a origem para facilitar rotacao e posicionamento
     _shape.setOrigin(_shape.getGlobalBounds().getSize() * .5f);

@@ -12,6 +12,8 @@ private:
     sf::Font _font;
     std::array<UpgradeUI, UPGRADE_COUNT> _upgrades; //! mudar a quantidade no "globals.h"
     sf::Texture _hud_background;
+    sf::Texture _bg_texture;
+    sf::Sprite _bg_sprite;
 
 public:
     UpgradeRoom(sf::RenderWindow &window, RoomManager &room_manager);
