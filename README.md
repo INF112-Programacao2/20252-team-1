@@ -1,13 +1,24 @@
 # DENETER
 
-Um jogo de tower defense inspirado em Plants vs Zombies com temática ambiental e com presença de upgrades para deixar a gameplay mais interessante.
+Deneter é um jogo em que você precisa defender a floresta contra lenhadores, escavadores, queimadas
+e outros perigos! Para concluir essa missão, você contará com a ajuda dos amigos da floresta e
+de diversos upgrades poderosos!
+
+É um jogo de tower defense inspirado em Plants vs Zombies, com a presença de algumas melhorias
+para deixar o jogo mais interessante e progressivo.
+
+<img width="1915" height="1044" alt="image" src="https://github.com/user-attachments/assets/b134aa94-c530-4d76-87f7-4e219922b6b6" />
+
+<img width="1913" height="1043" alt="image" src="https://github.com/user-attachments/assets/f5bc68f4-3a9c-4e64-941c-b9a17495a8bf" />
+
+
 
 # Grupo 1:
-- Davi Aziz Santos Salazar
 - Davi Nobre Oliveira
-- Enzo de Freitas Alencar
 - Gabriel Silvério Tavares
 - Pedro Henrique Carvalho Martins
+- Davi Aziz Santos Salazar
+- Enzo de Freitas Alencar
 
 # Como compilar:
 **NO LINUX**:
@@ -40,10 +51,11 @@ Um jogo de tower defense inspirado em Plants vs Zombies com temática ambiental 
 
 
 # Controles:
-**ESC:** pausa o jogo
+**ESC:** Pausa o jogo.
 
-**MOUSE ESQUERDO:** para comprar e posicionar as tropas
+**MOUSE ESQUERDO:** Compra e posiciona as tropas. Também é usado para comprar upgrades.
 
-**MOUSE DIREITO:** remove uma tropa se o mouse estiver em cima dela ou cancela a compra
+**MOUSE DIREITO:** Remove uma tropa do espaço dela se o mouse estiver em cima da tropa.
+                   Também é usado para cancelar a compra.
 
-**TAB:** abre a sala de upgrades e sai dela também
+**TAB:** Alterna entre a sala de upgrades e a sala principal do jogo.
