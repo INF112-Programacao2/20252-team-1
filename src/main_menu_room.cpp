@@ -46,7 +46,7 @@ MainMenuRoom::MainMenuRoom(sf::RenderWindow &window, RoomManager &room_manager)
     // callbacks
     _continue_button.set_on_click_callback([this]() { this->change_room("game", true); });
     _new_game_button.set_on_click_callback([this]() { this->change_room("game", false); });
-    _tutorial_button.set_on_click_callback([this]() {});
+    _tutorial_button.set_on_click_callback([this]() { this->change_room("tutorial", false); });
     _credits_button.set_on_click_callback([this]() { this->change_room("Creditos", false); });
     _exit_button.set_on_click_callback([this]() { this->get_window().close(); });
 }

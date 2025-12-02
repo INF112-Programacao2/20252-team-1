@@ -26,8 +26,8 @@ GameRoom::GameRoom(sf::RenderWindow &window, RoomManager &room_manager)
         throw std::runtime_error("Erro abrindo asset do background (assets/background.png)");
     }
 
-    if (!_background2.loadFromFile("assets/background22.png")) {
-        throw std::runtime_error("Erro abrindo asset do background2 (assets/background22.png)");
+    if (!_background2.loadFromFile("assets/background2.png")) {
+        throw std::runtime_error("Erro abrindo asset do background2 (assets/background2.png)");
     }
 
     if (!_hud_background.loadFromFile("assets/hud.png")) {

@@ -2,6 +2,7 @@
 #define ROOM_H
 
 #include <SFML/Graphics.hpp>
+#include <vector>
 
 class RoomManager;
 

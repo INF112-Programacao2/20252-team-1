@@ -8,6 +8,7 @@
 #include "upgrade_room.h"
 #include "game_saver.h"
 #include "credits_room.h"
+#include "tutorial_room.h"
 
 int main() {
     std::srand(std::time(0));
@@ -22,7 +23,7 @@ int main() {
     }
 
     const bool FULLSCREEN = true; //! Use false somente para debug
-    const bool WINDOWS = false;    //! DEBUG, coloque true se esta compilando para windows
+    const bool WINDOWS = false;   //! DEBUG, coloque true se esta compilando para windows
 
     // deixa em tela cheia
     sf::VideoMode desktop = sf::VideoMode::getDesktopMode();
@@ -51,6 +52,7 @@ int main() {
         // Criando o game saver (quem decide se vai carregar ou nao e o main menu)
         GameSaver game_saver("save.txt", game_room, upgrade_room);
         MainMenuRoom main_menu_room(window, room_manager);
+        TutorialRoom tutorial_room(window, room_manager);
 
         GameManager::get_instance().set_game_saver(&game_saver);
 
@@ -58,6 +60,7 @@ int main() {
         room_manager.add_room("game", &game_room);
         room_manager.add_room("upgrade", &upgrade_room);
         room_manager.add_room("Creditos", &credits_room);
+        room_manager.add_room("tutorial", &tutorial_room);
         room_manager.change_room("main_menu");
 
         sf::Clock delta_clock; // calcula o delta time (segundos entre o ultimo frame)
@@ -66,7 +69,7 @@ int main() {
         while (window.isOpen()) {
             sf::Event event;
             while (window.pollEvent(event)) {
-                if (event.type == sf::Event::Closed) {
+                if (event.type == sf::Event::Closed || event.key.code == sf::Keyboard::R) {
                     window.close();
                 }
 
