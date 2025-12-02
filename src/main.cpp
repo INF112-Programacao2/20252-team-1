@@ -22,7 +22,7 @@ int main() {
     }
 
     const bool FULLSCREEN = true; //! Use false somente para debug
-    const bool WINDOWS = true;    //! DEBUG, coloque true se esta compilando para windows
+    const bool WINDOWS = false;    //! DEBUG, coloque true se esta compilando para windows
 
     // deixa em tela cheia
     sf::VideoMode desktop = sf::VideoMode::getDesktopMode();
