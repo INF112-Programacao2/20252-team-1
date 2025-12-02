@@ -71,14 +71,14 @@ void WaveManager::setup_waves() {
     _waves_config[1][2] = {25, 3.0f, {40.f, 20.f, 25.f, 15.f, 0.f, 0.f, 0.f}};
 
     // WAVE 3
-    _waves_config[2][0] = {25, 3.0f, {30.f, 20.f, 25.f, 25.f, 0.f, 0.f, 0.f}};
+    _waves_config[2][0] = {25, 2.5f, {30.f, 20.f, 25.f, 25.f, 0.f, 0.f, 0.f}};
     _waves_config[2][1] = {30, 2.5f, {25.f, 15.f, 35.f, 30.f, 5.f, 0.f, 10.f}};
-    _waves_config[2][2] = {35, 2.5f, {20.f, 10.f, 25.f, 30.f, 5.f, 0.f, 15.f}};
+    _waves_config[2][2] = {35, 2.0f, {20.f, 10.f, 25.f, 30.f, 5.f, 0.f, 15.f}};
 
     // WAVE 4
-    _waves_config[3][0] = {40, 2.5f, {10.f, 10.f, 25.f, 35.f, 15.f, 0.f, 15.f}};
-    _waves_config[3][1] = {45, 2.5f, {5.f, 10.f, 25.f, 35.f, 20.f, 0.f, 20.f}};
-    _waves_config[3][2] = {50, 2.0f, {10.f, 10.f, 25.f, 30.f, 30.f, 0.f, 30.f}};
+    _waves_config[3][0] = {40, 2.0f, {10.f, 10.f, 25.f, 35.f, 15.f, 0.f, 15.f}};
+    _waves_config[3][1] = {45, 1.75f, {5.f, 10.f, 25.f, 35.f, 20.f, 0.f, 20.f}};
+    _waves_config[3][2] = {50, 1.5f, {10.f, 10.f, 25.f, 30.f, 30.f, 0.f, 30.f}};
 }
 
 EnemyType WaveManager::pick_weighted_enemy(const std::array<float, ENEMY_COUNT> &probs) {
