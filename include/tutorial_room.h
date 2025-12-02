@@ -13,7 +13,7 @@ private:
     sf::Sprite _return_arrow;
     sf::RectangleShape _current_slide;
     sf::RectangleShape _left_arrow;
-    sf::RectangleShape _left_arrow;
+    sf::RectangleShape _right_arrow;
     int _slide_idx = 0;
 
 public:

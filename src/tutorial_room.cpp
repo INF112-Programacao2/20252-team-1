@@ -25,6 +25,17 @@ TutorialRoom::TutorialRoom(sf::RenderWindow &window, RoomManager &room_manager)
     _return_arrow.setTexture(_arrow_texture);
     _return_arrow.setScale(0.25f, 0.25f);
     _return_arrow.setPosition(10.f, 10.f);
+
+    _left_arrow.setSize({120, 100});
+    _right_arrow.setSize({120, 100});
+
+    _left_arrow.setTexture(&_arrow_texture);
+    _right_arrow.setTexture(&_arrow_texture);
+
+    _right_arrow.scale(-1, 1);
+
+    _left_arrow.setPosition(DESKTOP_SIZE.x - 300.f, DESKTOP_SIZE.y - 150.f);
+    _right_arrow.setPosition(DESKTOP_SIZE.x - 50.f, DESKTOP_SIZE.y - 150.f);
 }
 
 void TutorialRoom::start() {
@@ -35,14 +46,15 @@ void TutorialRoom::run(double dt, const std::vector<sf::Event> &event_queue) {
     sf::Vector2i mouse_pos = get_mouse_position();
     bool is_hovering = _return_arrow.getGlobalBounds().contains((sf::Vector2f)mouse_pos);
 
+    bool clicked = false;
     for (const sf::Event &event : event_queue) {
-        bool clicked_button = event.type == sf::Event::MouseButtonReleased &&
-                              event.mouseButton.button == sf::Mouse::Left &&
-                              is_hovering;
+        clicked |= event.type == sf::Event::MouseButtonReleased &&
+                   event.mouseButton.button == sf::Mouse::Left;
+
         bool esc_pressed = event.type == sf::Event::KeyReleased &&
                            event.key.code == sf::Keyboard::Escape;
 
-        if (clicked_button || esc_pressed) {
+        if ((clicked && is_hovering) || esc_pressed) {
             _room_manager.rollback_room();
         }
 
@@ -59,12 +71,18 @@ void TutorialRoom::run(double dt, const std::vector<sf::Event> &event_queue) {
         }
     }
 
-    // volta
-    _slide_idx = std::max(0, _slide_idx - 1);
-    _current_slide.setTexture(&_slides[_slide_idx]);
-    // avanca
-    _slide_idx = std::min(SLIDE_COUNT - 1, _slide_idx + 1);
-    _current_slide.setTexture(&_slides[_slide_idx]);
+    bool hover_left = _left_arrow.getGlobalBounds().contains((sf::Vector2f)get_mouse_position());
+    bool hover_right = _right_arrow.getGlobalBounds().contains((sf::Vector2f)get_mouse_position());
+
+    if (hover_left && clicked) {
+        // volta
+        _slide_idx = std::max(0, _slide_idx - 1);
+        _current_slide.setTexture(&_slides[_slide_idx]);
+    } else if (hover_right && clicked) {
+        // avanca
+        _slide_idx = std::min(SLIDE_COUNT - 1, _slide_idx + 1);
+        _current_slide.setTexture(&_slides[_slide_idx]);
+    }
 
     draw();
 }
@@ -77,7 +95,13 @@ void TutorialRoom::draw() {
 
     // setinhas pra controlar o slide:
     bool hover_left = _left_arrow.getGlobalBounds().contains((sf::Vector2f)get_mouse_position());
-    bool hover_left = _left_arrow.getGlobalBounds().contains((sf::Vector2f)get_mouse_position());
+    bool hover_right = _right_arrow.getGlobalBounds().contains((sf::Vector2f)get_mouse_position());
+
+    _left_arrow.setFillColor(hover_left ? sf::Color(150, 150, 150) : sf::Color::White);
+    _right_arrow.setFillColor(hover_right ? sf::Color(150, 150, 150) : sf::Color::White);
+
+    _window.draw(_left_arrow);
+    _window.draw(_right_arrow);
 
     // botao de voltar para menu principal:
     bool hover = _return_arrow.getGlobalBounds().contains((sf::Vector2f)get_mouse_position());
