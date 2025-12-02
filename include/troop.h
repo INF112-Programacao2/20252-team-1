@@ -28,11 +28,9 @@ public:
     virtual void run(double dt);
 
     /// Ativa a habilidade
-    //! nao e virtual pura por debug
-    virtual bool fire();
+    virtual bool fire() = 0;
 
-    //! nao e virtual pura por debug
-    virtual void draw();
+    virtual void draw() = 0;
 
     TroopType get_type();
 };

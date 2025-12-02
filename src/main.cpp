@@ -22,7 +22,7 @@ int main() {
     }
 
     const bool FULLSCREEN = true; //! Use false somente para debug
-    const bool WINDOWS = false;   //! DEBUG, coloque true se esta compilando para windows
+    const bool WINDOWS = true;    //! DEBUG, coloque true se esta compilando para windows
 
     // deixa em tela cheia
     sf::VideoMode desktop = sf::VideoMode::getDesktopMode();
@@ -59,7 +59,6 @@ int main() {
         room_manager.add_room("upgrade", &upgrade_room);
         room_manager.add_room("Creditos", &credits_room);
         room_manager.change_room("main_menu");
-        
 
         sf::Clock delta_clock; // calcula o delta time (segundos entre o ultimo frame)
 
@@ -67,9 +66,7 @@ int main() {
         while (window.isOpen()) {
             sf::Event event;
             while (window.pollEvent(event)) {
-                //! fecha a janela quando aperta 'R' ou clica no botao (somente debug)
-                if ((event.type == sf::Event::Closed) ||
-                    (event.type == sf::Event::KeyReleased && event.key.code == sf::Keyboard::R)) {
+                if (event.type == sf::Event::Closed) {
                     window.close();
                 }
 

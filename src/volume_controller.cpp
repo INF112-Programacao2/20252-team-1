@@ -4,8 +4,8 @@
 const float gap = 25;
 const float s_size = 50;
 const float bar_width = 300;
-sf::Rect<float> plus_rect(DESKTOP_SIZE.x - s_size - 2 * gap, DESKTOP_SIZE.y - 125, s_size, s_size);
-sf::Rect<float> minus_rect(DESKTOP_SIZE.x - 3 * s_size - 4 * gap - bar_width, DESKTOP_SIZE.y - 125, s_size, s_size);
+sf::Rect<float> plus_rect(DESKTOP_SIZE.x - s_size - 2 * gap, DESKTOP_SIZE.y - 125.f, s_size, s_size);
+sf::Rect<float> minus_rect(DESKTOP_SIZE.x - 3 * s_size - 4 * gap - bar_width, DESKTOP_SIZE.y - 125.f, s_size, s_size);
 
 VolumeController::VolumeController(Room &room) : _room(room) {
     if (!_plus_icon.loadFromFile("assets/mais.png")) {
@@ -60,7 +60,7 @@ void VolumeController::draw() {
     sf::RectangleShape volume_bar_bg({bar_width, 30});
     sf::RectangleShape volume_bar_fg({bar_width * t, 30});
 
-    volume_bar_bg.setPosition({DESKTOP_SIZE.x - s_size - bar_width - 3 * gap, DESKTOP_SIZE.y - 115});
+    volume_bar_bg.setPosition({DESKTOP_SIZE.x - s_size - bar_width - 3 * gap, DESKTOP_SIZE.y - 115.f});
     volume_bar_fg.setPosition(volume_bar_bg.getPosition());
 
     volume_bar_bg.setFillColor(sf::Color(100, 100, 100));

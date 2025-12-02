@@ -22,7 +22,6 @@ void Projectile::destroy() {
     _destroyed = true;
 }
 
-// somente debug
 void Projectile::draw() {
     _shape.setPosition(_position);
     _room.get_window().draw(_shape);

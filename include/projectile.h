@@ -27,7 +27,6 @@ public:
     // movimenta, atualiza direcao, checa se colidiu, da dano e aplica efeito
     virtual void run(double dt) = 0;
 
-    //! nao e virtual puro ainda por debug
     virtual void draw();
 
     bool is_destroyed();

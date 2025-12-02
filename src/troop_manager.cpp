@@ -11,7 +11,6 @@
 #include "globals.h"
 #include "anteater.h"
 #include "tree_troop.h"
-#include <iostream>
 #include <cmath>
 #include <stdexcept>
 

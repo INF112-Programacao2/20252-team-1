@@ -1,12 +1,11 @@
 #include "credits_room.h"
 #include "game_manager.h"
 #include "room_manager.h"
-#include <iostream>  
 #include <stdexcept>
 
-CreditsRoom::CreditsRoom(sf::RenderWindow& window, RoomManager& room_manager) :
-    Room(window, room_manager),
-    _font(GameManager::get_instance().get_font()) {
+CreditsRoom::CreditsRoom(sf::RenderWindow &window, RoomManager &room_manager)
+    : Room(window, room_manager),
+      _font(GameManager::get_instance().get_font()) {
 
     // carregando titulo
     if (!_title_texture.loadFromFile("assets/deneter.png")) {
@@ -17,8 +16,8 @@ CreditsRoom::CreditsRoom(sf::RenderWindow& window, RoomManager& room_manager) :
     // centraliza o titulo no topo
     sf::FloatRect title_bounds = _title_sprite.getLocalBounds();
     _title_sprite.setOrigin(title_bounds.left + title_bounds.width / 2.0f,
-        title_bounds.top + title_bounds.height / 2.0f);
-    _title_sprite.setPosition(static_cast<float>(window.getSize().x) / 2.0f, 100.0f);
+                            title_bounds.top + title_bounds.height / 2.0f);
+    _title_sprite.setPosition(static_cast<float>(window.getSize().x) / 2.0f, 200.0f);
 
     if (!_background_texture.loadFromFile("assets/creditos.png")) {
         throw std::runtime_error("Erro ao carregar asset de background (assets/creditos.png)");
@@ -51,11 +50,11 @@ CreditsRoom::CreditsRoom(sf::RenderWindow& window, RoomManager& room_manager) :
 
     sf::FloatRect header_bounds = _credits_text.getLocalBounds();
     _credits_text.setOrigin(header_bounds.left + header_bounds.width / 2.0f,
-        header_bounds.top + header_bounds.height / 3.0f);
-    _credits_text.setPosition(static_cast<float>(window.getSize().x) / 2.0f, 300.0f);
+                            header_bounds.top + header_bounds.height / 3.0f);
+    _credits_text.setPosition(static_cast<float>(window.getSize().x) / 2.0f, 400.0f);
 
     _names_text.setFont(_font);
-    _names_text.setString("Davi Aziz Santos Salazar\n\nDavi Nobre Oliveira\n\nEnzo de Freitas Alencar\n\nGabriel Silvério Tavares\n\nPedro Henrique Carvalho Martins");
+    _names_text.setString("Davi Aziz Santos Salazar\n\nDavi Nobre Oliveira\n\nEnzo de Freitas Alencar\n\nGabriel Silverio Tavares\n\nPedro Henrique Carvalho Martins");
     _names_text.setCharacterSize(30);
     _names_text.setFillColor(sf::Color::White);
     _names_text.setOutlineColor(sf::Color::Black);
@@ -63,8 +62,8 @@ CreditsRoom::CreditsRoom(sf::RenderWindow& window, RoomManager& room_manager) :
 
     sf::FloatRect names_bounds = _names_text.getLocalBounds();
     _names_text.setOrigin(names_bounds.left + names_bounds.width / 2.0f,
-        names_bounds.top + names_bounds.height / 3.0f);
-    _names_text.setPosition(static_cast<float>(window.getSize().x) / 2.0f, 550.0f);
+                          names_bounds.top + names_bounds.height / 3.0f);
+    _names_text.setPosition(static_cast<float>(window.getSize().x) / 2.0f, 650.0f);
 }
 
 void CreditsRoom::change_room(std::string room_name) {
@@ -75,11 +74,11 @@ void CreditsRoom::start() {
     GameManager::get_instance().play_menu_music();
 }
 
-void CreditsRoom::run(double _dt, const std::vector<sf::Event>& event_queue) {
+void CreditsRoom::run(double _dt, const std::vector<sf::Event> &event_queue) {
     sf::Vector2i mouse_pos = get_mouse_position();
     bool is_hovering = _arrow_sprite.getGlobalBounds().contains((sf::Vector2f)mouse_pos);
 
-    for (const sf::Event& event : event_queue) {
+    for (const sf::Event &event : event_queue) {
         if (event.type == sf::Event::MouseButtonReleased &&
             event.mouseButton.button == sf::Mouse::Left &&
             is_hovering) {
@@ -103,8 +102,7 @@ void CreditsRoom::draw() {
     sf::Vector2i mouse_pos = get_mouse_position();
     if (_arrow_sprite.getGlobalBounds().contains((sf::Vector2f)mouse_pos)) {
         _arrow_sprite.setColor(sf::Color(150, 150, 150));
-    }
-    else {
+    } else {
         _arrow_sprite.setColor(sf::Color::White);
     }
 

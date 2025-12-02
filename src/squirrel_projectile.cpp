@@ -3,7 +3,6 @@
 #include "wave_manager.h"
 #include "game_manager.h"
 #include "visual_effect.h"
-#include <iostream>
 
 sf::Texture SquirrelProjectile::_texture;
 

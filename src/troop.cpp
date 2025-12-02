@@ -18,29 +18,6 @@ void Troop::run(double dt) {
     }
 }
 
-bool Troop::fire() {
-    // atira no inimigo mais perto
-    GameRoom &game_room = dynamic_cast<GameRoom &>(_room);
-    std::shared_ptr<Enemy> target = game_room.get_wave_manager().get_closest_enemy_on_line(_line);
-
-    if (target) {
-        game_room.get_troop_manager().spawn_projectile(std::make_unique<TroopProjectile>(
-            _position + sf::Vector2f(50, 50), target, 30, 300.0, _room, ProjectileType::TroopBaseProjectile));
-
-        return true;
-    }
-
-    return false;
-}
-
-void Troop::draw() {
-    sf::CircleShape circle(50.0);
-    circle.setPosition(_position);
-    circle.setFillColor(sf::Color::Red);
-
-    _room.get_window().draw(circle);
-}
-
 TroopType Troop::get_type() {
     return _type;
 }

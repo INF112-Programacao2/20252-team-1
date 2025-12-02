@@ -4,7 +4,6 @@
 #include "globals.h"
 #include "room_manager.h"
 #include "wall.h"
-#include <iostream>
 #include <cmath>
 #include <stdexcept>
 
@@ -18,7 +17,7 @@ UpgradeRoom::UpgradeRoom(sf::RenderWindow &window, RoomManager &room_manager)
               0,                                                   // Nivel atual
               3,                                                   // Nivel maximo
               "Aumenta o dano geral que os inimigos levam em 10%", // Descricao
-              sf::Vector2f(1275, 170),                             // Posicao
+              sf::Vector2f(1595, 170),                             // Posicao
               *this,                                               // Room
 
               []() { // Funcao do upgrade
@@ -34,7 +33,7 @@ UpgradeRoom::UpgradeRoom(sf::RenderWindow &window, RoomManager &room_manager)
               0,                                                 // Nivel atual
               5,                                                 // Nivel máximo
               "Reduz o tempo base de recarga das tropas em 10%", // Descricao
-              sf::Vector2f(375, 170),                            // Posição
+              sf::Vector2f(455, 170),                            // Posição
               *this,                                             // Room
 
               []() { // Funcao do upgrade
@@ -70,7 +69,7 @@ UpgradeRoom::UpgradeRoom(sf::RenderWindow &window, RoomManager &room_manager)
               0,
               3,
               "Agora a floresta tem espinhos! Sempre que um inimigo causar dano nela, este inimigo vai receber dano dos espinhos. +15 de dano por nivel",
-              sf::Vector2f(975, 170),
+              sf::Vector2f(1215, 170),
               *this,
 
               []() {
@@ -81,11 +80,11 @@ UpgradeRoom::UpgradeRoom(sf::RenderWindow &window, RoomManager &room_manager)
           UpgradeUI(
               "Investidor",
               1000,
-              3000,
+              2200,
               0,
               5,
               "Aumenta o ganho total de pontos de todas as fontes em 10%",
-              sf::Vector2f(1575, 170),
+              sf::Vector2f(75, 570),
               *this,
 
               []() {
@@ -100,7 +99,7 @@ UpgradeRoom::UpgradeRoom(sf::RenderWindow &window, RoomManager &room_manager)
               0,
               5,
               "Aumenta o dano causado pelas tropas em 20%",
-              sf::Vector2f(675, 170),
+              sf::Vector2f(835, 170),
               *this,
               []() {
                   GameManager &gm = GameManager::get_instance();
@@ -114,7 +113,7 @@ UpgradeRoom::UpgradeRoom(sf::RenderWindow &window, RoomManager &room_manager)
               0,
               3,
               "As tropas tem +10% de chance de causar o dobro de dano",
-              sf::Vector2f(75, 570),
+              sf::Vector2f(455, 570),
               *this,
               []() {
                   GameManager &gm = GameManager::get_instance();
@@ -128,7 +127,7 @@ UpgradeRoom::UpgradeRoom(sf::RenderWindow &window, RoomManager &room_manager)
               0,
               5,
               "Aumenta a resistencia da floresta em 10%",
-              sf::Vector2f(375, 570),
+              sf::Vector2f(835, 570),
               *this,
               []() {
                   GameManager &gm = GameManager::get_instance();
@@ -142,7 +141,7 @@ UpgradeRoom::UpgradeRoom(sf::RenderWindow &window, RoomManager &room_manager)
               0,
               5,
               "Aumenta a eficacia das habilidades especiais das tropas (lentidao, atordoamento, area) em 10%",
-              sf::Vector2f(675, 570),
+              sf::Vector2f(1215, 570),
               *this,
               []() {
                   GameManager &gm = GameManager::get_instance();
@@ -160,14 +159,13 @@ UpgradeRoom::UpgradeRoom(sf::RenderWindow &window, RoomManager &room_manager)
     _hud_background.setRepeated(true);
 
     if (!UpgradeUI::load_texture("assets/madeira.png")) {
-        std::cerr << "Erro abrindo o asset do upgrade!\n";
-        std::exit(1);
+        throw std::runtime_error("Erro abrindo o asset do upgrade!\n");
     }
 
     if (!_bg_texture.loadFromFile("assets/folhasbg.png")) {
-        std::cerr << "Erro abrindo o asset do background de upgrades!\n";
-        std::exit(1);
+        throw std::runtime_error("Erro abrindo o asset do background de upgrades!\n");
     }
+
     _bg_sprite.setTexture(_bg_texture);
     float scaleX = (float)DESKTOP_SIZE.x / _bg_texture.getSize().x;
     float scaleY = (float)DESKTOP_SIZE.y / _bg_texture.getSize().y;

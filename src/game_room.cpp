@@ -1,4 +1,3 @@
-#include <iostream>
 #include <cmath>
 #include <stdexcept>
 #include "game_room.h"
@@ -129,7 +128,7 @@ void GameRoom::run(double dt, const std::vector<sf::Event> &event_queue) {
 
     // Mostra a wave
     sf::Text wave_text("Onda: " + std::to_string(_wave_manager.get_wave_idx() + 1), _font, 40);
-    wave_text.setPosition(sf::Vector2f(170, 50));
+    wave_text.setPosition(sf::Vector2f(30, 50));
     _window.draw(wave_text);
 
     // logica de vitoria
@@ -239,11 +238,6 @@ void GameRoom::run(double dt, const std::vector<sf::Event> &event_queue) {
         _volume_control.run(event_queue);
         _volume_control.draw();
     }
-
-    // !DEBUG (MOSTRA FRAMERATE)
-    sf::Text fps(std::to_string(round(1.0 / dt)).substr(0, 5), _font, 30);
-    fps.setPosition(sf::Vector2f(50, 50));
-    _window.draw(fps);
 
     _window.display();
 }

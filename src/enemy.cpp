@@ -2,7 +2,6 @@
 #include "game_room.h"
 #include "game_manager.h"
 #include "globals.h"
-#include <iostream>
 
 const float height = 100.0;
 

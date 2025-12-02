@@ -7,7 +7,6 @@
 #include "game_room.h"
 #include "visual_effect.h"
 #include <algorithm>
-#include <iostream> //! DEBUG
 
 sf::Texture Wall::_texture;
 

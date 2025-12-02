@@ -2,7 +2,6 @@
 #include "game_room.h"
 #include "visual_effect.h"
 #include <cmath>
-#include <iostream>
 
 sf::Texture BusinessmanEnemy::_texture;
 sf::Texture BusinessmanEnemy::_projectile_texture;
