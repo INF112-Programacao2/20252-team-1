@@ -10,6 +10,8 @@
 class MainMenuRoom : public Room {
 private:
     sf::Font _font;
+    sf::Texture _title_texture;
+    sf::Sprite _title_sprite;
     TextButton _continue_button;
     TextButton _new_game_button;
     TextButton _tutorial_button;
@@ -18,7 +20,7 @@ private:
     VolumeController _volume_controller;
 
 public:
-    MainMenuRoom(sf::RenderWindow &window, RoomManager &room_manager);
+    MainMenuRoom(sf::RenderWindow& window, RoomManager& room_manager);
 
     ~MainMenuRoom() = default;
 
@@ -26,7 +28,7 @@ public:
 
     void start();
 
-    void run(double dt, const std::vector<sf::Event> &event_queue);
+    void run(double dt, const std::vector<sf::Event>& event_queue);
 
     void draw();
 

@@ -4,17 +4,26 @@
 #include <SFML/Graphics.hpp>
 #include <string>
 #include "room.h"
-#include "text_button.h"
 
 class CreditsRoom : public Room {
 private:
     sf::Font _font;
-    sf::Text _title_text;
+
+    sf::Texture _title_texture;
+    sf::Sprite _title_sprite;
+
+    sf::Texture _background_texture;
+    sf::Sprite _background_sprite;
+
     sf::Text _credits_text;
-    TextButton _menu_button;
+    sf::Text _names_text;
+
+    // para o botao de voltar no topo esquerdo
+    sf::Texture _arrow_texture;
+    sf::Sprite _arrow_sprite;
 
 public:
-    CreditsRoom(sf::RenderWindow &window, RoomManager &room_manager);
+    CreditsRoom(sf::RenderWindow& window, RoomManager& room_manager);
 
     ~CreditsRoom() = default;
 
@@ -22,7 +31,7 @@ public:
 
     void start();
 
-    void run(double dt, const std::vector<sf::Event> &event_queue);
+    void run(double dt, const std::vector<sf::Event>& event_queue);
 
     void draw();
 

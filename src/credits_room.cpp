@@ -2,36 +2,69 @@
 #include "game_manager.h"
 #include "room_manager.h"
 #include <iostream>  
+#include <stdexcept>
 
-CreditsRoom::CreditsRoom(sf::RenderWindow &window, RoomManager &room_manager): 
+CreditsRoom::CreditsRoom(sf::RenderWindow& window, RoomManager& room_manager) :
     Room(window, room_manager),
-    _font(GameManager::get_instance().get_font()),
-    _menu_button("Menu Principal", _font, 30, *this) {
+    _font(GameManager::get_instance().get_font()) {
 
-    // titulo
-    _title_text.setFont(_font);
-    _title_text.setString("Creditos");
-    _title_text.setCharacterSize(90);
-    _title_text.setFillColor(sf::Color::White);
-    sf::FloatRect title_bounds = _title_text.getLocalBounds();
-    _title_text.setOrigin(title_bounds.left + title_bounds.width / 2.0f,
-                          title_bounds.top + title_bounds.height / 2.0f);
-    _title_text.setPosition(static_cast<float>(window.getSize().x) / 2.0f, 100.0f);
+    // carregando titulo
+    if (!_title_texture.loadFromFile("assets/deneter.png")) {
+        throw std::runtime_error("Erro ao carregar asset do titulo (assets/deneter.png)");
+    }
+    _title_sprite.setTexture(_title_texture);
 
-    // creditos
+    // centraliza o titulo no topo
+    sf::FloatRect title_bounds = _title_sprite.getLocalBounds();
+    _title_sprite.setOrigin(title_bounds.left + title_bounds.width / 2.0f,
+        title_bounds.top + title_bounds.height / 2.0f);
+    _title_sprite.setPosition(static_cast<float>(window.getSize().x) / 2.0f, 100.0f);
+
+    if (!_background_texture.loadFromFile("assets/creditos.png")) {
+        throw std::runtime_error("Erro ao carregar asset de background (assets/creditos.png)");
+    }
+    _background_sprite.setTexture(_background_texture);
+
+    // ajustador de escala
+    sf::Vector2u window_size = window.getSize();
+    sf::Vector2u texture_size = _background_texture.getSize();
+    float scale_x = static_cast<float>(window_size.x) / texture_size.x;
+    float scale_y = static_cast<float>(window_size.y) / texture_size.y;
+    _background_sprite.setScale(scale_x, scale_y);
+
+    if (!_arrow_texture.loadFromFile("assets/left arrow.png")) {
+        throw std::runtime_error("Erro ao carregar asset da seta (assets/left arrow.png)");
+    }
+    _arrow_sprite.setTexture(_arrow_texture);
+
+    _arrow_sprite.setScale(0.25f, 0.25f);
+
+    _arrow_sprite.setPosition(10.f, 10.f);
+
+    // texto dos creditos
     _credits_text.setFont(_font);
-    _credits_text.setString("Desenvolvido por:\n- Davi\n- Davi\n- Enzo\n- Gabriel\n- Pedro");
-    _credits_text.setCharacterSize(30);
+    _credits_text.setString("Desenvolvido por:");
+    _credits_text.setCharacterSize(60);
     _credits_text.setFillColor(sf::Color::White);
-    sf::FloatRect credits_bounds = _credits_text.getLocalBounds();
-    _credits_text.setOrigin(credits_bounds.left + credits_bounds.width / 2.0f,
-                            credits_bounds.top + credits_bounds.height / 2.0f);
-    _credits_text.setPosition(static_cast<float>(window.getSize().x) / 2.0f, 500.0f);
+    _credits_text.setOutlineColor(sf::Color::Black);
+    _credits_text.setOutlineThickness(2.0f);
 
-    // botao de menu
-    _menu_button.center();
-    _menu_button.offset_position(sf::Vector2f(0, 500));
-    _menu_button.set_on_click_callback([this]() { this->change_room("main_menu"); });
+    sf::FloatRect header_bounds = _credits_text.getLocalBounds();
+    _credits_text.setOrigin(header_bounds.left + header_bounds.width / 2.0f,
+        header_bounds.top + header_bounds.height / 3.0f);
+    _credits_text.setPosition(static_cast<float>(window.getSize().x) / 2.0f, 300.0f);
+
+    _names_text.setFont(_font);
+    _names_text.setString("Davi Aziz Santos Salazar\n\nDavi Nobre Oliveira\n\nEnzo de Freitas Alencar\n\nGabriel Silvério Tavares\n\nPedro Henrique Carvalho Martins");
+    _names_text.setCharacterSize(30);
+    _names_text.setFillColor(sf::Color::White);
+    _names_text.setOutlineColor(sf::Color::Black);
+    _names_text.setOutlineThickness(2.0f);
+
+    sf::FloatRect names_bounds = _names_text.getLocalBounds();
+    _names_text.setOrigin(names_bounds.left + names_bounds.width / 2.0f,
+        names_bounds.top + names_bounds.height / 3.0f);
+    _names_text.setPosition(static_cast<float>(window.getSize().x) / 2.0f, 550.0f);
 }
 
 void CreditsRoom::change_room(std::string room_name) {
@@ -39,25 +72,43 @@ void CreditsRoom::change_room(std::string room_name) {
 }
 
 void CreditsRoom::start() {
-    // comeca musica do jogo
-    GameManager::get_instance().play_game_music();
+    GameManager::get_instance().play_menu_music();
 }
 
-void CreditsRoom::run(double _dt, const std::vector<sf::Event> &event_queue) {
-    _menu_button.run(event_queue);
+void CreditsRoom::run(double _dt, const std::vector<sf::Event>& event_queue) {
+    sf::Vector2i mouse_pos = get_mouse_position();
+    bool is_hovering = _arrow_sprite.getGlobalBounds().contains((sf::Vector2f)mouse_pos);
+
+    for (const sf::Event& event : event_queue) {
+        if (event.type == sf::Event::MouseButtonReleased &&
+            event.mouseButton.button == sf::Mouse::Left &&
+            is_hovering) {
+
+            this->change_room("main_menu");
+        }
+    }
 
     draw();
 }
 
 void CreditsRoom::draw() {
-    std::cout << "Drawing Credits Room\n" << std::endl; //! DEBUG
     get_window().clear(sf::Color::Black);
 
-    _window.draw(_title_text);
+    _window.draw(_background_sprite);
+    _window.draw(_title_sprite);
     _window.draw(_credits_text);
+    _window.draw(_names_text);
 
-    _menu_button.draw();
+    // efeito hover pro botao da seta
+    sf::Vector2i mouse_pos = get_mouse_position();
+    if (_arrow_sprite.getGlobalBounds().contains((sf::Vector2f)mouse_pos)) {
+        _arrow_sprite.setColor(sf::Color(150, 150, 150));
+    }
+    else {
+        _arrow_sprite.setColor(sf::Color::White);
+    }
+
+    _window.draw(_arrow_sprite);
 
     get_window().display();
 }
-
