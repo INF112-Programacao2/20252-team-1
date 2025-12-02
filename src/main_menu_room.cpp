@@ -5,17 +5,30 @@
 
 const int font_size = 50;
 
-MainMenuRoom::MainMenuRoom(sf::RenderWindow &window, RoomManager &room_manager)
+MainMenuRoom::MainMenuRoom(sf::RenderWindow& window, RoomManager& room_manager)
     : Room(window, room_manager),
-      _font(GameManager::get_instance().get_font()),
-      _continue_button("Continuar Jogo", _font, font_size, *this),
-      _new_game_button("Novo Jogo", _font, font_size, *this),
-      _tutorial_button("Tutorial", _font, font_size, *this),
-      _credits_button("Creditos", _font, font_size, *this),
-      _exit_button("Sair", _font, font_size, *this),
-      _volume_controller(*this) {
+    _font(GameManager::get_instance().get_font()),
+    _continue_button("Continuar Jogo", _font, font_size, *this),
+    _new_game_button("Novo Jogo", _font, font_size, *this),
+    _tutorial_button("Tutorial", _font, font_size, *this),
+    _credits_button("Creditos", _font, font_size, *this),
+    _exit_button("Sair", _font, font_size, *this),
+    _volume_controller(*this) {
 
-    // Carregando Textura do Titulo
+    // carregando background
+    if (!_background_texture.loadFromFile("assets/menu.png")) {
+        throw std::runtime_error("Erro ao carregar asset do background (assets/menu.png)");
+    }
+    _background_sprite.setTexture(_background_texture);
+
+    // ajusta escala do background
+    sf::Vector2u window_size = window.getSize();
+    sf::Vector2u texture_size = _background_texture.getSize();
+    float scale_x = static_cast<float>(window_size.x) / texture_size.x;
+    float scale_y = static_cast<float>(window_size.y) / texture_size.y;
+    _background_sprite.setScale(scale_x, scale_y);
+
+    // carregando textura do titulo
     if (!_title_texture.loadFromFile("assets/deneter.png")) {
         throw std::runtime_error("Erro ao carregar asset do titulo (assets/deneter.png)");
     }
@@ -24,7 +37,7 @@ MainMenuRoom::MainMenuRoom(sf::RenderWindow &window, RoomManager &room_manager)
     // Centraliza o titulo e coloca um pouco acima dos botoes
     sf::FloatRect title_bounds = _title_sprite.getLocalBounds();
     _title_sprite.setOrigin(title_bounds.left + title_bounds.width / 2.0f,
-                            title_bounds.top + title_bounds.height / 2.0f);
+        title_bounds.top + title_bounds.height / 2.0f);
 
     // Posiciona no meio da tela horizontalmente, e deslocado para cima verticalmente
     _title_sprite.setPosition(window.getSize().x / 2.0f, 200.f);
@@ -42,6 +55,16 @@ MainMenuRoom::MainMenuRoom(sf::RenderWindow &window, RoomManager &room_manager)
     _tutorial_button.offset_position(sf::Vector2f(0, 100));
     _credits_button.offset_position(sf::Vector2f(0, 200));
     _exit_button.offset_position(sf::Vector2f(0, 300));
+
+    // adiciona outline preto aos botoes
+    sf::Color outline_color = sf::Color::Black;
+    float outline_thickness = 3.0f;
+
+    _continue_button.set_outline(outline_color, outline_thickness);
+    _new_game_button.set_outline(outline_color, outline_thickness);
+    _tutorial_button.set_outline(outline_color, outline_thickness);
+    _credits_button.set_outline(outline_color, outline_thickness);
+    _exit_button.set_outline(outline_color, outline_thickness);
 
     // callbacks
     _continue_button.set_on_click_callback([this]() { this->change_room("game", true); });
@@ -65,7 +88,7 @@ void MainMenuRoom::change_room(std::string room_name, bool load_save) {
     _room_manager.change_room(room_name);
 }
 
-void MainMenuRoom::run(double _dt, const std::vector<sf::Event> &event_queue) {
+void MainMenuRoom::run(double _dt, const std::vector<sf::Event>& event_queue) {
     _continue_button.run(event_queue);
     _new_game_button.run(event_queue);
     _tutorial_button.run(event_queue);
@@ -78,9 +101,12 @@ void MainMenuRoom::run(double _dt, const std::vector<sf::Event> &event_queue) {
 }
 
 void MainMenuRoom::draw() {
-    get_window().clear(sf::Color(20, 20, 100));
+    get_window().clear(sf::Color::Black);
 
-    // Desenha o titulo
+    // desenha o background
+    _window.draw(_background_sprite);
+
+    // desenha o titulo
     _window.draw(_title_sprite);
 
     _continue_button.draw();

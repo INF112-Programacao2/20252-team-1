@@ -11,12 +11,12 @@ private:
     sf::Text _draw_text;
     sf::Vector2f _position;
     std::function<void()> _on_click_callback; // funcao pra chamar quando for clicado
-    Room &_room;
+    Room& _room;
 
 public:
-    TextButton(std::string text, sf::Font &font, int font_size, Room &room);
-    TextButton(std::string text, sf::Font &font, int font_size,
-               std::function<void()> on_click_callback, Room &room);
+    TextButton(std::string text, sf::Font& font, int font_size, Room& room);
+    TextButton(std::string text, sf::Font& font, int font_size,
+        std::function<void()> on_click_callback, Room& room);
 
     sf::Vector2f get_position();
 
@@ -28,10 +28,13 @@ public:
     /// Centraliza no meio da tela o texto
     void center();
 
+    // define o contorno do texto
+    void set_outline(sf::Color color, float thickness);
+
     void set_on_click_callback(std::function<void()> on_click_callback);
 
     /// Roda todo frame pra checar se o botao foi pressionado
-    void run(const std::vector<sf::Event> &event_queue);
+    void run(const std::vector<sf::Event>& event_queue);
 
     void draw();
 

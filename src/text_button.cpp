@@ -1,15 +1,15 @@
 #include "text_button.h"
 #include "globals.h"
 
-TextButton::TextButton(std::string text, sf::Font &font, int font_size, Room &room)
+TextButton::TextButton(std::string text, sf::Font& font, int font_size, Room& room)
     : _room(room) {
     _draw_text.setString(text);
     _draw_text.setFont(font);
     _draw_text.setCharacterSize(font_size);
 }
 
-TextButton::TextButton(std::string text, sf::Font &font, int font_size,
-                       std::function<void()> on_click_callback, Room &room)
+TextButton::TextButton(std::string text, sf::Font& font, int font_size,
+    std::function<void()> on_click_callback, Room& room)
     : TextButton(text, font, font_size, room) {
     _on_click_callback = std::move(on_click_callback);
 }
@@ -31,12 +31,17 @@ void TextButton::center() {
     _position = (sf::Vector2f)DESKTOP_SIZE * .5f - offset;
 }
 
+void TextButton::set_outline(sf::Color color, float thickness) {
+    _draw_text.setOutlineColor(color);
+    _draw_text.setOutlineThickness(thickness);
+}
+
 void TextButton::set_on_click_callback(std::function<void()> on_click_callback) {
     _on_click_callback = std::move(on_click_callback);
 }
 
-void TextButton::run(const std::vector<sf::Event> &event_queue) {
-    for (const sf::Event &event : event_queue) {
+void TextButton::run(const std::vector<sf::Event>& event_queue) {
+    for (const sf::Event& event : event_queue) {
         if (event.type == sf::Event::MouseButtonReleased &&
             event.mouseButton.button == sf::Mouse::Left &&
             position_meeting(_room.get_mouse_position()) &&

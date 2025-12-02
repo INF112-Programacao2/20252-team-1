@@ -149,6 +149,14 @@ void GameRoom::run(double dt, const std::vector<sf::Event> &event_queue) {
         win_text.setPosition(DESKTOP_SIZE.x / 2, DESKTOP_SIZE.y / 2 - 100);
         _window.draw(win_text);
 
+        // texto secreto
+        sf::Text secret_text("Definitivamente Nao e o Trabalho do Ricardo", _font, 40);
+        secret_text.setFillColor(sf::Color(255, 215, 0)); // dourado
+        sf::FloatRect secret_bounds = secret_text.getLocalBounds();
+        secret_text.setOrigin(secret_bounds.width / 2, secret_bounds.height / 2);
+        secret_text.setPosition(DESKTOP_SIZE.x / 2, DESKTOP_SIZE.y / 2 - 60);
+        _window.draw(secret_text);
+
         TextButton option_1("Voltar ao menu", _font, 50, [this]() {
             GameManager::get_instance().stop_all_music(); // para musica de vitoria
             _room_manager.change_room("main_menu"); }, *this);

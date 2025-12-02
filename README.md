@@ -9,6 +9,36 @@ Um jogo de tower defense inspirado em Plants vs Zombies com temática ambiental 
 - Gabriel Silvério Tavares
 - Pedro Henrique Carvalho Martins
 
+# Como compilar:
+**NO LINUX**:
+
+1. Instale a biblioteca SFML 2.6.1
+1.1 Você pode caso queira instalar via terminal com o comando: sudo apt-get install libsfml-dev
+1.2 Confira sua versão com o comando: apt show libsfml-dev
+
+2. Navegue até a pasta do projeto via terminal
+2.1 Use o comando: make run
+
+
+**NO WINDOWS**:
+
+1. Instale a biblioteca SFML 2.6.1
+1.1 O site possui as versões antigas
+1.2 Inclua a pasta do SFML em include
+
+2. Instale Mingw 13.1.0 compatível com SFML 2.6.1
+2.1 Configure Mingw propriamente (use PATH do sistema, inclua os arquivos de biblioteca estática em lib do Mingw se necessário)
+2.2 Confira sua versão com o comando: g++ --version
+
+3. Inclua os .dlls do SFML na pasta do executável
+
+4. No main.cpp, mude const bool WINDOWS = false; para const bool WINDOWS = true;
+
+5. Navegue até a pasta do projeto via terminal
+5.1 Use o comando: make run ou mingw32-make run
+
+
+
 # Controles:
 **ESC:** pausa o jogo
 

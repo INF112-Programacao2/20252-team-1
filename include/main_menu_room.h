@@ -12,6 +12,8 @@ private:
     sf::Font _font;
     sf::Texture _title_texture;
     sf::Sprite _title_sprite;
+    sf::Texture _background_texture;
+    sf::Sprite _background_sprite;
     TextButton _continue_button;
     TextButton _new_game_button;
     TextButton _tutorial_button;
