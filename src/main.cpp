@@ -69,7 +69,7 @@ int main() {
         while (window.isOpen()) {
             sf::Event event;
             while (window.pollEvent(event)) {
-                if (event.type == sf::Event::Closed || event.key.code == sf::Keyboard::R) {
+                if (event.type == sf::Event::Closed) {
                     window.close();
                 }
 

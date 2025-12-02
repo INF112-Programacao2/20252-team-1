@@ -3,6 +3,7 @@
 
 #include <SFML/Graphics.hpp>
 #include <vector>
+#include <cmath>
 
 class RoomManager;
 
@@ -28,7 +29,12 @@ public:
     // Roda toda vez que a sala e fechada, tem que dar override
     virtual void end() = 0;
 
-    sf::Vector2i get_mouse_position() { return sf::Mouse::getPosition(_window); };
+    sf::Vector2i get_mouse_position() { 
+        sf::Vector2i pos = sf::Mouse::getPosition(_window);
+        pos.x = std::max(1, pos.x);
+        pos.y = std::max(1, pos.y);
+        return pos;
+    }
 
     sf::RenderWindow &get_window() { return _window; }
 
